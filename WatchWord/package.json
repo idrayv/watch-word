@@ -21,9 +21,12 @@
     "zone.js": "^0.7.7"
   },
   "devDependencies": {
+    "express": "^4.15.2",
+    "body-parser": "^1.17.1",
     "@types/core-js": "^0.9.35",
     "@types/node": "^6.0.46",
     "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.5",
     "q": "^1.4.1",
     "rimraf": "^2.6.1",
     "typescript": "^2.2.1"
