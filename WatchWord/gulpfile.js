@@ -1,17 +1,19 @@
 ﻿var gulp = require('gulp'),
     Q = require('q'),
     ts = require('gulp-typescript'),
+    less = require('gulp-less'),
+    path = require('path'),
     rimraf = require('rimraf');
 
-gulp.task('clean:lib', function (cb) {
+gulp.task('clean-lib', function (cb) {
     return rimraf('./wwwroot/lib/', cb);
 });
 
-gulp.task('clean:app', function (cb) {
+gulp.task('clean-app', function (cb) {
     return rimraf('./wwwroot/app/', cb);
 });
 
-gulp.task('copy:lib', ['clean:lib'], function () {
+gulp.task('copy-lib', ['clean-lib'], function () {
     var libs = [
         "@angular",
         "systemjs",
@@ -38,12 +40,24 @@ gulp.task('copy:lib', ['clean:lib'], function () {
     return Q.all(promises);
 });
 
-gulp.task('ts', ['clean:app'], function () {
-    var tsProject = ts.createProject('tsconfig.json');
-    var tsResult = gulp.src("Scripts/**/*.ts") // or tsProject.src() 
-        .pipe(tsProject());
-
-    return tsResult.js.pipe(gulp.dest('wwwroot'));
+gulp.task('copy-html', ['clean-app'], function () {
+    return gulp.src('app/**/*.html')
+        .pipe(gulp.dest('wwwroot/app/'));
 });
 
-gulp.task('default', ['copy:lib', 'ts']);
+gulp.task('less', ['copy-html'], function () {
+    return gulp.src('app/less/**/*.less')
+        .pipe(less({
+        }))
+        .pipe(gulp.dest('wwwroot/css'));
+});
+
+gulp.task('build-app', ['less'], function () {
+    var tsProject = ts.createProject('tsconfig.json');
+    var tsResult = gulp.src("app/**/*.ts")
+        .pipe(tsProject());
+
+    return tsResult.js.pipe(gulp.dest('wwwroot/app'));
+});
+
+gulp.task('default', ['copy-lib', 'build-app']);

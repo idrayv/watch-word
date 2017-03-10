@@ -26,8 +26,10 @@ bld/
 .vs/
 WatchWord/wwwroot/lib
 WatchWord/wwwroot/app
+WatchWord/wwwroot/css
 wwwroot/lib
 wwwroot/app
+wwwroot/css
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
