@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WatchWord.Infrastructure;
 
 namespace WatchWord
 {
@@ -38,6 +35,8 @@ namespace WatchWord
             loggerFactory.AddDebug();
 
             app.UseDefaultFiles();
+            //for angular 2 PathRoutingStategy
+            app.UseMiddleware<Angular2Middleware>();
             app.UseStaticFiles();
             app.UseMvc();
         }

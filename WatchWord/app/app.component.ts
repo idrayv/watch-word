@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'watch-word',
-  templateUrl: "app/component.html",
+  templateUrl: "app/app.template.html",
 })
 
-export class AppComponent { name = 'WatchWord'; }
+export class AppComponent { }
