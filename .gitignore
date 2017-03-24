@@ -31,6 +31,9 @@ wwwroot/lib
 wwwroot/app
 wwwroot/css
 
+# Web Deploy
+*.pubxml
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
