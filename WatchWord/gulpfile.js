@@ -21,7 +21,6 @@ gulp.task('copy-lib', ['clean-lib'], function () {
         "systemjs",
         "core-js",
         "zone.js",
-        "reflect-metadata",
         "rxjs"
     ];
 
@@ -65,7 +64,7 @@ gulp.task('copy-ts', ['clean-app'], function () {
 });
 
 var buildAppDeps;
-if (cfg.appConfig.isDebug == true) {
+if (cfg.appConfig.isDebug === true) {
     // Copy *.ts if debug
     buildAppDeps = ['less', 'copy-ts'];
 } else {
@@ -79,7 +78,7 @@ gulp.task('compile-ts', buildAppDeps, function () {
         .pipe(tsProject());
 
     var tsResultJs = tsResult.js;
-    if (cfg.appConfig.isDebug == true) {
+    if (cfg.appConfig.isDebug === true) {
         // Generete map if debug
         tsResultJs = tsResultJs.pipe(sourcemaps.write({
             sourceRoot: function (file) {
