@@ -1,10 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WatchWord.Domain.Entity;
+using WatchWord.Domain.Identity;
 
 namespace WatchWord.DataAccess
 {
-    class WatchWordContext : DbContext
+    public class WatchWordContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
+        private readonly IOptions<DatabaseOptions> _databaseOptions;
+
         /// <summary>Gets or sets the words.</summary>
         public DbSet<Word> Words { get; set; }
 
@@ -29,15 +34,25 @@ namespace WatchWord.DataAccess
         /// <summary>Gets or sets translations.</summary>
         public DbSet<Translation> Translations { get; set; }
 
-        public WatchWordContext()
+        protected WatchWordContext()
         {
-            Database.EnsureCreated();
+        }
+
+        public WatchWordContext(IOptions<DatabaseOptions> databaseOptions)
+        {
+            _databaseOptions = databaseOptions;
+
+            Init();
+        }
+
+        private void Init()
+        {
+            Database.Migrate();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DRAYV-PC\SQLEXPRESS;Database=WatchWord;Integrated Security=SSPI;MultipleActiveResultSets=true",
-                options => options.EnableRetryOnFailure());
+            optionsBuilder.UseSqlServer(_databaseOptions.Value.ConnectionString);
         }
     }
 }
