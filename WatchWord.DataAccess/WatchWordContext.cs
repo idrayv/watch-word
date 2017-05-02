@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using WatchWord.Domain.Entity;
 using WatchWord.Domain.Identity;
@@ -8,7 +9,7 @@ namespace WatchWord.DataAccess
 {
     public class WatchWordContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
-        private readonly IOptions<DatabaseOptions> _databaseOptions;
+        private readonly IConfiguration _configuration;
 
         /// <summary>Gets or sets the words.</summary>
         public DbSet<Word> Words { get; set; }
@@ -38,9 +39,9 @@ namespace WatchWord.DataAccess
         {
         }
 
-        public WatchWordContext(IOptions<DatabaseOptions> databaseOptions)
+        public WatchWordContext(IConfiguration configuration)
         {
-            _databaseOptions = databaseOptions;
+            _configuration = configuration;
 
             Init();
         }
@@ -52,7 +53,7 @@ namespace WatchWord.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_databaseOptions.Value.ConnectionString);
+            optionsBuilder.UseSqlServer(_configuration["DatabaseSettings:ConnectionString"]);
         }
     }
 }

@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using WatchWord.Domain.Identity;
+using WatchWord.DataAccess;
+using WatchWord.Domain.Entity;
+using Microsoft.Extensions.Configuration;
 
 namespace WatchWord.Controllers
 {
@@ -10,13 +13,16 @@ namespace WatchWord.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IConfiguration _configuration;
 
         public ValuesController(
         UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager,
+        IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
         // GET api/values
@@ -26,18 +32,25 @@ namespace WatchWord.Controllers
             var user = new ApplicationUser { UserName = "test", Email = "test@test.com" };
             var result = await _userManager.CreateAsync(user, "12345");
 
-            //using (var db = new WatchWordContext())
-            //{
-            //    var word = new Word { TheWord = "test" };
-            //    db.Words.Add(word);
-            //    db.SaveChanges();
-            //}
+            using (var db = new WatchWordContext(_configuration))
+            {
+                var word = new Word { TheWord = "test" };
+                db.Words.Add(word);
+                db.SaveChanges();
+            }
 
             if (result.Succeeded)
             {
                 return new string[] { "Succeeded!" };
+            } else
+            {
+                var errors = new List<string> { };
+                foreach(var error in result.Errors)
+                {
+                    errors.Add(error.Description);
+                }
+                return errors.ToArray();
             }
-            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5

@@ -30,11 +30,8 @@ namespace WatchWord
             // Options
             services.AddOptions();
 
-            // Database options
-            services.Configure<DatabaseOptions>(options =>
-            {
-                options.ConnectionString = Configuration["DatabaseSettings:ConnectionString"];
-            });
+            // Configuration
+            services.AddSingleton<IConfiguration>(Configuration);
 
             // Database context for identity
             services.AddDbContext<WatchWordContext>();
