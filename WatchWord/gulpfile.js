@@ -51,6 +51,11 @@ gulp.task('copy-html', ['copy-js'], function () {
         .pipe(gulp.dest('wwwroot/app/'));
 });
 
+gulp.task('only-copy-html', [], function () {
+    return gulp.src('app/**/*.html')
+        .pipe(gulp.dest('wwwroot/app/'));
+});
+
 gulp.task('less', ['copy-html'], function () {
     return gulp.src('app/less/**/*.less')
         .pipe(less({
@@ -59,6 +64,11 @@ gulp.task('less', ['copy-html'], function () {
 });
 
 gulp.task('copy-ts', ['clean-app'], function () {
+    return gulp.src('app/**/*.ts')
+        .pipe(gulp.dest('wwwroot/app/'));
+});
+
+gulp.task('only-copy-ts', [], function () {
     return gulp.src('app/**/*.ts')
         .pipe(gulp.dest('wwwroot/app/'));
 });
@@ -87,6 +97,24 @@ gulp.task('compile-ts', buildAppDeps, function () {
             }
         }));
     }
+
+    return tsResultJs.pipe(gulp.dest('wwwroot/app'));
+});
+
+gulp.task('only-compile-ts', ['only-copy-ts'], function () {
+    var tsProject = ts.createProject('tsconfig.json');
+    var tsResult = gulp.src("app/**/*.ts")
+        .pipe(sourcemaps.init())
+        .pipe(tsProject());
+
+    var tsResultJs = tsResult.js;
+
+    tsResultJs = tsResultJs.pipe(sourcemaps.write({
+        sourceRoot: function (file) {
+            var sourceFile = path.join(file.cwd, file.sourceMap.file);
+            return path.relative(path.dirname(sourceFile), file.cwd);
+        }
+    }));
 
     return tsResultJs.pipe(gulp.dest('wwwroot/app'));
 });

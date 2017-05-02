@@ -1,0 +1,30 @@
+﻿<div>
+    <form novalidate #form="ngForm" (ngSubmit)="formSubmit(form)">
+        <div>
+            <label>Name:
+                <input type="text" required minlength="10" [(ngModel)]="material.name" name="name" />
+            </label>
+        </div>
+        <div>
+            <label>
+                Description:
+                <input type="text" required minlength="20" [(ngModel)]="material.description" name="description" />
+            </label>
+        </div>
+        <div>
+            <label>
+                Image:
+                <input type="file" (change)="imageInserted($event)"/>
+            </label>
+        </div>
+        <div>
+            <label>
+                Subtitles:
+                <input type="file" (change)="subtitlesInserted($event)" />
+            </label>
+        </div>
+        <div>
+            <input type="submit" value="Send" />
+        </div>
+    </form>
+</div>
