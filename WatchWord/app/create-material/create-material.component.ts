@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Material } from "./material";
-import { MaterialType } from "./material";
+import { MaterialModel } from "./material-model";
+import { MaterialType } from "./material-model";
 import { NgForm } from "@angular/forms";
 
 @Component({
@@ -8,10 +8,10 @@ import { NgForm } from "@angular/forms";
 })
 
 export class CreateMaterialComponent {
-    public material: Material;
+    public material: MaterialModel;
 
     constructor() {
-        this.material = new Material();
+        this.material = new MaterialModel();
     }
 
     public formSubmit(form: NgForm): void {

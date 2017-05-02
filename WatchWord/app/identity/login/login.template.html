@@ -1,0 +1,18 @@
+﻿<div>
+    <form novalidate #form="ngForm" (submit)="login(form)">
+        <div>
+            <label>Login:
+                <input type="text" minlength="15" required [(ngModel)]="model.login" name="login">
+            </label>
+        </div>
+        <div>
+            <label>
+                Password:
+                <input type="text" minlength="15" required [(ngModel)]="model.password" name="password"/>
+            </label>
+        </div>
+        <div>
+            <input type="submit" value="LogIn" />
+        </div>
+    </form>
+</div>

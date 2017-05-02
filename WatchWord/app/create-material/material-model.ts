@@ -1,4 +1,4 @@
-﻿export class Material {
+﻿export class MaterialModel {
     public materialType: MaterialType;
 
     public name: string;
