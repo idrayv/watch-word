@@ -12,6 +12,7 @@ export class RegisterFormControl extends FormControl {
 
     getValidationMessages() {
         let messages: string[] = [];
+
         if (this.errors) {
             for (let errorName in this.errors) {
                 switch (errorName) {
@@ -19,17 +20,18 @@ export class RegisterFormControl extends FormControl {
                         messages.push(`${this.label} must be filled in!`);
                         break;
                     case "minlength":
-                        messages.push(`A ${this.label} must be at least ${this.errors['minlength'].requiredLength} characters!`);
+                        messages.push(`${this.label} must be at least ${this.errors['minlength'].requiredLength} characters!`);
                         break;
                     case "maxlength":
-                        messages.push(`A ${this.label} must be less than ${this.errors['maxlength'].requiredLength} characters!`);
+                        messages.push(`${this.label} must be less than ${this.errors['maxlength'].requiredLength} characters!`);
                         break;
                     case "pattern":
-                        messages.push(`The ${this.label} is invalid!`);
+                        messages.push(`${this.label} is invalid!`);
                         break;
                 }
             }
         }
+
         return messages;
     }
 }
@@ -37,24 +39,18 @@ export class RegisterFormControl extends FormControl {
 export class RegisterFormGroup extends FormGroup {
     constructor() {
         super({
-            login: new RegisterFormControl("Login", "login", "", Validators.compose(
-                [
-                    Validators.required,
-                    Validators.maxLength(20)
-                ]
-            )),
-            password: new RegisterFormControl("Password", "password", "", Validators.compose(
-                [
-                    Validators.required,
-                    Validators.minLength(4)
-                ]
-            )),
-            email: new RegisterFormControl("Email", "email", "", Validators.compose(
-                [
-                    Validators.required,
-                    Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-                ]
-            ))
+            login: new RegisterFormControl("Login", "login", "", Validators.compose([
+                Validators.required,
+                Validators.maxLength(20)
+            ])),
+            password: new RegisterFormControl("Password", "password", "", Validators.compose([
+                Validators.required,
+                Validators.minLength(4)
+            ])),
+            email: new RegisterFormControl("Email", "email", "", Validators.compose([
+                Validators.required,
+                Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+            ]))
         })
     }
 
