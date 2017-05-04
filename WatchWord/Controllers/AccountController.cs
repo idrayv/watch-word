@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WatchWord.Domain.Identity;
 
 namespace WatchWord.Controllers
 {
+    [Route("api/[controller]")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -23,8 +25,8 @@ namespace WatchWord.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<string> Register(string login, string email, string password)
+        [Route("register")]
+        public async Task<string> Register(string login = "", string email = "", string password = "")
         {
             var user = new ApplicationUser { UserName = login, Email = email };
             var result = await _userManager.CreateAsync(user, password);
@@ -43,25 +45,26 @@ namespace WatchWord.Controllers
                     registerModel.Errors.Add(error.Description);
                 }
             }
-            return JsonConvert.SerializeObject(registerModel); ;
+            return JsonConvert.SerializeObject(registerModel);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string login, string password)
+        [Route("login")]
+        public async Task<string> Login(string login = "", string password = "")
         {
             var result = await _signInManager.PasswordSignInAsync(login, password, true, lockoutOnFailure: false);
+
             var loginModel = new AuthModel();
             if (result.Succeeded)
             {
                 loginModel.Succeeded = true;
             }
-            if (result.RequiresTwoFactor)
+            else if (result.RequiresTwoFactor)
             {
                 loginModel.Succeeded = false;
             }
-            if (result.IsLockedOut)
+            else if (result.IsLockedOut)
             {
                 loginModel.Succeeded = false;
                 loginModel.Errors.Add("User account locked out.");
@@ -72,7 +75,28 @@ namespace WatchWord.Controllers
                 loginModel.Errors.Add("Invalid login attempt.");
             }
 
-            return View(loginModel);
+            return JsonConvert.SerializeObject(loginModel);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("logout")]
+        public string Logout()
+        {
+            var result = _signInManager.SignOutAsync();
+            var logoutModel = new AuthModel();
+
+            if (result.IsCompleted)
+            {
+                logoutModel.Succeeded = true;
+            }
+            else
+            {
+                logoutModel.Succeeded = false;
+                logoutModel.Errors.Add(result.Exception.ToString());
+            }
+
+            return JsonConvert.SerializeObject(logoutModel);
         }
     }
 
@@ -80,5 +104,10 @@ namespace WatchWord.Controllers
     {
         public bool Succeeded { get; set; }
         public List<string> Errors { get; set; }
+
+        public AuthModel()
+        {
+            Errors = new List<string>();
+        }
     }
 }

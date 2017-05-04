@@ -57,8 +57,8 @@ namespace WatchWord
 
                 // Cookie settings
                 options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(30);
-                options.Cookies.ApplicationCookie.LoginPath = "/Account/LogIn";
-                options.Cookies.ApplicationCookie.LogoutPath = "/Account/LogOff";
+                options.Cookies.ApplicationCookie.LoginPath = "/identity/login";
+                options.Cookies.ApplicationCookie.LogoutPath = "/identity/logoff";
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
@@ -78,6 +78,7 @@ namespace WatchWord
             // Angular 2 PathRoutingStategy
             app.UseMiddleware<Angular2Middleware>();
             app.UseStaticFiles();
+            app.UseIdentity();
             app.UseMvc();
         }
     }
