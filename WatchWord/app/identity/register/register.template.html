@@ -1,1 +1,41 @@
-﻿Register
+﻿<form novalidate [formGroup]="form">
+    <div>
+        <label>
+            Login:
+            <input name="login" formControlName="login" [(ngModel)]="model.login" />
+        </label>
+        <ul class="text-danger list-unstyled"
+            *ngIf="(formSubmitted || form.controls['login'].dirty) && form.controls['login'].invalid">
+            <li *ngFor="let error of form.controls['login'].getValidationMessages()">
+                {{error}}
+            </li>
+        </ul>
+    </div>
+    <div>
+        <label>
+            Password:
+            <input name="password" formControlName="password" [(ngModel)]="model.password" />
+        </label>
+        <ul class="text-danger list-unstyled"
+            *ngIf="(formSubmitted || form.controls['password'].dirty) && form.controls['password'].invalid">
+            <li *ngFor="let error of form.controls['password'].getValidationMessages()">
+                {{error}}
+            </li>
+        </ul>
+    </div>
+    <div>
+        <label>
+            Email:
+            <input name="email" formControlName="email" [(ngModel)]="model.email" />
+        </label>
+        <ul class="text-danger list-unstyled"
+            *ngIf="(formSubmitted || form.controls['email'].dirty) && form.controls['email'].invalid">
+            <li *ngFor="let error of form.controls['email'].getValidationMessages()">
+                {{error}}
+            </li>
+        </ul>
+    </div>
+    <div>
+        <input type="button" value="Register" (click)="submit(form)"/>
+    </div>
+</form>

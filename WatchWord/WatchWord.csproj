@@ -26,8 +26,5 @@
     <ProjectReference Include="..\WatchWord.DataAccess\WatchWord.DataAccess.csproj" />
     <ProjectReference Include="..\WatchWord.Service\WatchWord.Service.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="app\identity\register\" />
-  </ItemGroup>
 
 </Project>
