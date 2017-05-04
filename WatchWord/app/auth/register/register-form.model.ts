@@ -9,22 +9,23 @@ export class RegisterFormControl extends FormControl {
         this.label = label;
         this.modelProperty = property;
     }
+
     getValidationMessages() {
         let messages: string[] = [];
         if (this.errors) {
             for (let errorName in this.errors) {
                 switch (errorName) {
                     case "required":
-                        messages.push(`You must enter a ${this.label}`);
+                        messages.push(`${this.label} must be filled in!`);
                         break;
                     case "minlength":
-                        messages.push(`A ${this.label} must be at least ${this.errors['minlength'].requiredLength} characters`);
+                        messages.push(`A ${this.label} must be at least ${this.errors['minlength'].requiredLength} characters!`);
                         break;
                     case "maxlength":
-                        messages.push(`A ${this.label} must be no more than ${this.errors['maxlength'].requiredLength} characters`);
+                        messages.push(`A ${this.label} must be less than ${this.errors['maxlength'].requiredLength} characters!`);
                         break;
                     case "pattern":
-                        messages.push(`The ${this.label} contains illegal characters`);
+                        messages.push(`The ${this.label} is invalid!`);
                         break;
                 }
             }
@@ -51,7 +52,7 @@ export class RegisterFormGroup extends FormGroup {
             email: new RegisterFormControl("Email", "email", "", Validators.compose(
                 [
                     Validators.required,
-                    Validators.pattern('^(([^<>()\[\]\\.,;:\s@"]+ (\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                    Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
                 ]
             ))
         })

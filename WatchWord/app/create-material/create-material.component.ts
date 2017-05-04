@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MaterialModel } from "./material-model";
-import { MaterialType } from "./material-model";
+import { MaterialModel } from "./material.model";
+import { MaterialType } from "./material.model";
 import { NgForm } from "@angular/forms";
 
 @Component({

@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WatchWord.Domain.Identity;
+using WatchWord.Infrastructure;
 
 namespace WatchWord.Controllers
 {
@@ -25,12 +24,12 @@ namespace WatchWord.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("register")]
-        public async Task<string> Register(string login = "", string email = "", string password = "")
+        [Route("Register")]
+        public async Task<string> Register([FromBody] AuthRequestModel authModel)
         {
-            var user = new ApplicationUser { UserName = login, Email = email };
-            var result = await _userManager.CreateAsync(user, password);
-            var registerModel = new AuthModel();
+            var user = new ApplicationUser { UserName = authModel.Login, Email = authModel.Email };
+            var result = await _userManager.CreateAsync(user, authModel.Password);
+            var registerModel = new AuthResponseModel();
 
             if (result.Succeeded)
             {
@@ -45,17 +44,18 @@ namespace WatchWord.Controllers
                     registerModel.Errors.Add(error.Description);
                 }
             }
-            return JsonConvert.SerializeObject(registerModel);
+
+            return ApiJsonSerializer.Serialize(registerModel);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("login")]
-        public async Task<string> Login(string login = "", string password = "")
+        [Route("Login")]
+        public async Task<string> Login([FromBody] AuthRequestModel authModel)
         {
-            var result = await _signInManager.PasswordSignInAsync(login, password, true, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(authModel.Login, authModel.Password, true, lockoutOnFailure: false);
 
-            var loginModel = new AuthModel();
+            var loginModel = new AuthResponseModel();
             if (result.Succeeded)
             {
                 loginModel.Succeeded = true;
@@ -75,16 +75,16 @@ namespace WatchWord.Controllers
                 loginModel.Errors.Add("Invalid login attempt.");
             }
 
-            return JsonConvert.SerializeObject(loginModel);
+            return ApiJsonSerializer.Serialize(loginModel);
         }
 
         [HttpPost]
         [Authorize]
-        [Route("logout")]
+        [Route("Logout")]
         public string Logout()
         {
             var result = _signInManager.SignOutAsync();
-            var logoutModel = new AuthModel();
+            var logoutModel = new AuthResponseModel();
 
             if (result.IsCompleted)
             {
@@ -96,16 +96,23 @@ namespace WatchWord.Controllers
                 logoutModel.Errors.Add(result.Exception.ToString());
             }
 
-            return JsonConvert.SerializeObject(logoutModel);
+            return ApiJsonSerializer.Serialize(logoutModel);
         }
     }
 
-    public class AuthModel
+    public class AuthRequestModel
+    {
+        public string Login { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class AuthResponseModel
     {
         public bool Succeeded { get; set; }
         public List<string> Errors { get; set; }
 
-        public AuthModel()
+        public AuthResponseModel()
         {
             Errors = new List<string>();
         }

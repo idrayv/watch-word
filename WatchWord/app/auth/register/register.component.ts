@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
-import { RegisterFormGroup } from "./form.model";
-import { RegisterModel } from "./register-model";
+import { RegisterFormGroup } from "./register-form.model";
+import { RegisterModel } from "../auth.models";
 
 @Component({
-    templateUrl: "app/identity/register/register.template.html"
+    templateUrl: "app/auth/register/register.template.html"
 })
 
 export class RegisterComponent {
@@ -19,7 +19,6 @@ export class RegisterComponent {
     }
 
     submit(form: NgForm) {
-        debugger;
         this.formSubmitted = true;
         if (form.valid) {
             form.reset();

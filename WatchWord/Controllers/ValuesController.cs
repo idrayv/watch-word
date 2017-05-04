@@ -80,7 +80,7 @@ namespace WatchWord.Controllers
         }
 
         // POST api/values/AllowAnonymous
-        [HttpPost]  
+        [HttpGet]  
         [AllowAnonymous]
         [Route("AllowAnonymous")]
         public string AllowAnonymous()
@@ -89,7 +89,7 @@ namespace WatchWord.Controllers
         }
 
         // POST api/values/Authorize
-        [HttpPost]
+        [HttpGet]
         [Authorize]
         [Route("Authorize")]
         public string Authorize()

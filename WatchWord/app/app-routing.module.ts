@@ -7,8 +7,8 @@ export const routes: Routes = [
     { path: 'dictionaries', loadChildren: 'app/dictionaries/dictionaries.module#DictionariesModule' },
     { path: 'materials', loadChildren: 'app/materials/materials.module#MaterialsModule' },
     { path: 'create-material', loadChildren: 'app/create-material/create-material.module#CreateMaterialModule' },
-    { path: 'login', loadChildren: 'app/identity/login/login.module#LoginModule' },
-    { path: 'register', loadChildren: 'app/identity/register/register.module#RegisterModule' }
+    { path: 'login', loadChildren: 'app/auth/login/login.module#LoginModule' },
+    { path: 'register', loadChildren: 'app/auth/register/register.module#RegisterModule' }
 ];
 
 @NgModule({
