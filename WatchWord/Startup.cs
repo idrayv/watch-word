@@ -7,6 +7,9 @@ using Microsoft.Extensions.Logging;
 using WatchWord.Infrastructure;
 using WatchWord.DataAccess;
 using WatchWord.Domain.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace WatchWord
 {
@@ -62,6 +65,24 @@ namespace WatchWord
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
+
+                // 401 error handler
+                options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToLogin = ctx =>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/api") &&
+                            ctx.Response.StatusCode == (int)HttpStatusCode.OK)
+                        {
+                            ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                        return Task.FromResult(0);
+                    }
+                };
             });
 
             // Add framework services.

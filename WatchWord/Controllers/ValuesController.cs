@@ -5,6 +5,7 @@ using WatchWord.Domain.Identity;
 using WatchWord.DataAccess;
 using WatchWord.Domain.Entity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WatchWord.Controllers
 {
@@ -76,6 +77,24 @@ namespace WatchWord.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        // POST api/values/AllowAnonymous
+        [HttpPost]  
+        [AllowAnonymous]
+        [Route("AllowAnonymous")]
+        public string AllowAnonymous()
+        {
+            return "AllowAnonymous";
+        }
+
+        // POST api/values/Authorize
+        [HttpPost]
+        [Authorize]
+        [Route("Authorize")]
+        public string Authorize()
+        {
+            return "Authorize";
         }
     }
 }
