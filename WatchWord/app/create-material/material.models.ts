@@ -14,3 +14,9 @@ export enum MaterialType {
     Film,
     Series
 }
+
+export class ParseResponseModel {
+    public succeeded: boolean;
+    public errors: string[];
+    public words: string[];
+}

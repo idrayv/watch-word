@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MaterialModel } from "./material.model";
-import { MaterialType } from "./material.model";
+import { MaterialType, MaterialModel, ParseResponseModel } from "./material.models";
 import { NgForm } from "@angular/forms";
+import { CreateMaterialService } from "./create-material.service";
 
 @Component({
     templateUrl: "app/create-material/create-material.template.html"
@@ -10,12 +10,25 @@ import { NgForm } from "@angular/forms";
 export class CreateMaterialComponent {
     public material: MaterialModel;
 
-    constructor() {
+    constructor(private createMaterialService: CreateMaterialService) {
         this.material = new MaterialModel();
     }
 
     public formSubmit(form: NgForm): void {
-
+        this.createMaterialService.parseSubtitles(this.material.subtitles).subscribe(
+            response => {
+                if (response.succeeded) {
+                    console.log(response.words);
+                } else {
+                    response.errors.forEach(error => {
+                        console.log(error);
+                    });
+                }
+            },
+            err => {
+                console.log("parse error");
+            }
+        );
     }
 
     public imageInserted(event): void {
