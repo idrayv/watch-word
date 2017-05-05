@@ -1,18 +1,34 @@
 ﻿<div>
-    <form novalidate #form="ngForm" (submit)="login(form)">
+    <form novalidate #form="ngForm" (submit)="logIn(form)">
         <div>
             <label>Login:
-                <input type="text" required [(ngModel)]="model.login" name="login">
+                <input type="text" required maxlength="20" [(ngModel)]="model.login" name="login" #login="ngModel">
             </label>
+            <div *ngIf="(formSubmited || login.dirty) && login.invalid">
+                <ul *ngFor="let error of validationErrors(login)">
+                    <li>{{error}}</li>
+                </ul>
+            </div>
         </div>
         <div>
             <label>
                 Password:
-                <input type="text" required [(ngModel)]="model.password" name="password"/>
+                <input type="text" required minlength="4" [(ngModel)]="model.password" name="password" #password="ngModel"/>
             </label>
+            <div *ngIf="(formSubmited || password.dirty) && password.invalid">
+                <ul *ngFor="let error of validationErrors(password)">
+                    <li>{{error}}</li>
+                </ul>
+            </div>
         </div>
         <div>
             <input type="submit" value="LogIn" />
+        </div>
+        <div *ngIf="authenticationErrors.length !== 0">
+            <ul *ngFor="let error of authenticationErrors">
+                {{error}}
+            </ul>
+            {{error}}
         </div>
     </form>
 </div>

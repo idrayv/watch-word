@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgForm } from "@angular/forms";
+import { NgForm, NgModel } from "@angular/forms";
 import { LoginModel } from "../auth.models";
 import { AuthService } from "../auth.service";
 
@@ -10,26 +10,50 @@ import { AuthService } from "../auth.service";
 export class LoginComponent {
     public model: LoginModel;
 
+    public formSubmited: boolean;
+
+    public authenticationErrors: Array<string>
+
     constructor(private auth: AuthService) {
         this.model = new LoginModel();
+        this.formSubmited = false;
+        this.authenticationErrors = new Array<string>();
     }
 
-    public login(form: NgForm): void {
+    public logIn(form: NgForm): void {
+        this.formSubmited = true;
         if (form.valid) {
             this.auth.authenticate(this.model).subscribe(
                 response => {
                     if (response.succeeded) {
                         console.log("auth ok");
+                        // todo redirect
                     } else {
-                        response.errors.forEach(error => {
-                            console.log(error);
-                        });
+                        this.authenticationErrors = response.errors;
                     }
                 },
                 err => {
-                    console.log("auth error");
+                    this.authenticationErrors.push("Authentification error occured!");
                 }
             );
+            this.formSubmited = false;
+            form.reset();
         }
+    }
+    public validationErrors(state: NgModel): Array<string> {
+        let errors: Array<string> = new Array<string>();
+        let name = state.name;
+        if (state.invalid) {
+            for (var error in state.errors) {
+                switch (error) {
+                    case "minlength":
+                        errors.push(`${name} must be at least ${state.errors[error].requiredLength} characters!`);
+                        break;
+                    case "required":
+                        errors.push(`${name} must be filled in!`);
+                }
+            }
+        }
+        return errors;
     }
 }

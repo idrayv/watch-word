@@ -38,4 +38,10 @@
     <div>
         <input type="button" value="Register" (click)="submit(form)"/>
     </div>
+    <div *ngIf="registrationErrors.length !== 0">
+        <ul *ngFor="let error of registrationErrors">
+            {{error}}
+        </ul>
+        {{error}}
+    </div>
 </form>
