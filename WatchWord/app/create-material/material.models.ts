@@ -7,7 +7,7 @@
 
     public image: File
 
-    public subtitles: File;
+    public words: Array<string>;
 }
 
 export enum MaterialType {

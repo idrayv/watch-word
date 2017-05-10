@@ -1,4 +1,11 @@
-﻿<div>
+﻿<div *ngIf="serverErrors.length !== 0">
+    <ul *ngFor="let error of serverErrors">
+        <li>
+            {{error}}
+        </li>
+    </ul>
+</div>
+<div>
     <form novalidate #form="ngForm" (ngSubmit)="formSubmit(form)">
         <div>
             <label>Name:
@@ -16,6 +23,11 @@
                 Image:
                 <input type="file" (change)="imageInserted($event)"/>
             </label>
+            <div *ngIf="imageError" >
+                <ul>
+                    <li>{{imageError}}</li>
+                </ul>
+            </div>
         </div>
         <div>
             <label>
@@ -23,8 +35,21 @@
                 <input type="file" (change)="subtitlesInserted($event)" />
             </label>
         </div>
+        <div *ngIf="subtitlesError">
+            <ul>
+                <li>{{subtitlesError}}</li>
+            </ul>
+        </div>
         <div>
             <input type="submit" value="Send" />
         </div>
+        <div *ngIf="imagePreview">
+            <img [src]="imagePreview"/>
+        </div>
     </form>
+</div>
+<div *ngIf="material.words && material.words.length !== 0">
+    <span *ngFor="let word of material.words">
+        {{word}}
+    </span>
 </div>
