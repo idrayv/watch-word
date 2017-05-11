@@ -25,11 +25,15 @@ export class AuthService {
         return this.http.post(this.baseUrl + "/account/register", registerModel)
             .map((res: Response) => res.json());
     }
+
+    logout(): Observable<AuthResponseModel> {
+        return this.http.post(this.baseUrl + "/account/logout", {})
+            .map((res: Response) => res.json());
+    }
 }
 
 @Injectable()
 export class AuthHttpService extends Http {
-
     constructor(backend: XHRBackend, defaultOptions: RequestOptions) {
         super(backend, defaultOptions);
     }

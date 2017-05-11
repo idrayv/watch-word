@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { AuthHttpService } from './auth/auth.service'
-
+import { AuthHttpService, AuthService } from './auth/auth.service'
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
+import { UserService } from './auth/user.service';
 
 @NgModule({
     imports: [
@@ -17,6 +17,8 @@ import { AppRoutingModule } from './app-routing.module';
         AppComponent
     ],
     providers: [
+        UserService,
+        AuthService,
         { provide: Http, useClass: AuthHttpService }
     ],
     bootstrap: [AppComponent]

@@ -3,8 +3,14 @@
     <a routerLink="dictionaries" routerLinkActive="active">Dictionaries</a>
     <a routerLink="materials" routerLinkActive="active">Materials</a>
     <a routerLink="create-material" routerLinkActive="active">Create material</a>
-    <a routerLink="login" routerLinkActive="active">Login</a>
-    <a routerLink="register" routerLinkActive="active">Register</a>
+    <div *ngIf="userModel.isLoggedIn">
+        <div routerLinkActive="active">{{userModel.name}}</div>
+        <div (click)="logOut()">Sign out</div>
+    </div>
+    <div *ngIf="!userModel.isLoggedIn">
+        <a routerLink="login" routerLinkActive="active">Sign in</a>
+        <a routerLink="register" routerLinkActive="active">Sign up</a>
+    </div>
 </nav>
 
 <router-outlet></router-outlet>

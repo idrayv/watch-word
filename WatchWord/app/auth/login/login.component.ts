@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { NgForm, NgModel } from "@angular/forms";
-import { LoginModel } from "../auth.models";
+import { LoginModel, UserModel } from "../auth.models";
 import { AuthService } from "../auth.service";
+import { UserService } from "../user.service";
+import { Router } from '@angular/router';
 
 @Component({
     templateUrl: "app/auth/login/login.template.html"
@@ -14,7 +16,7 @@ export class LoginComponent {
 
     public authenticationErrors: Array<string>
 
-    constructor(private auth: AuthService) {
+    constructor(private auth: AuthService, private userService: UserService, private router: Router) {
         this.model = new LoginModel();
         this.formSubmited = false;
         this.authenticationErrors = new Array<string>();
@@ -23,11 +25,12 @@ export class LoginComponent {
     public logIn(form: NgForm): void {
         this.formSubmited = true;
         if (form.valid) {
+            let login = this.model.login;
             this.auth.authenticate(this.model).subscribe(
                 response => {
                     if (response.succeeded) {
-                        console.log("auth ok");
-                        // todo redirect
+                        this.userService.setUser(new UserModel(login, true));
+                        this.router.navigate(['home']);
                     } else {
                         this.authenticationErrors = response.errors;
                     }

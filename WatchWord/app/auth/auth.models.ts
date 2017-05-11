@@ -13,3 +13,13 @@ export class RegisterModel {
     public email: string;
     public password: string;
 }
+
+export class UserModel {
+    constructor(name: string, isLoggedIn: boolean) {
+        this.name = name;
+        this.isLoggedIn = isLoggedIn;
+    }
+
+    public name: string;
+    public isLoggedIn: boolean;
+}
