@@ -10,6 +10,7 @@ using WatchWord.Domain.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace WatchWord
 {
@@ -32,6 +33,20 @@ namespace WatchWord
         {
             // Options
             services.AddOptions();
+
+            // CORS: Only for Dev
+            var isDebug = Configuration.GetValue<bool>("Config:EnableCors");
+            if (isDebug)
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("CorsPolicy",
+                        builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+                });
+            }
 
             // Configuration
             services.AddSingleton<IConfiguration>(Configuration);
@@ -62,6 +77,9 @@ namespace WatchWord
                 options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(30);
                 options.Cookies.ApplicationCookie.LoginPath = "/identity/login";
                 options.Cookies.ApplicationCookie.LogoutPath = "/identity/logoff";
+
+                // : Only for Dev
+                options.Cookies.ApplicationCookie.CookieSecure = CookieSecurePolicy.SameAsRequest;
 
                 // User settings
                 options.User.RequireUniqueEmail = true;
@@ -94,6 +112,13 @@ namespace WatchWord
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            // CORS: Only for Dev
+            var isDebug = Configuration.GetValue<bool>("Config:EnableCors");
+            if (isDebug)
+            {
+                app.UseCors("CorsPolicy");
+            }
 
             app.UseDefaultFiles();
             // Angular 2 PathRoutingStategy

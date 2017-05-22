@@ -39,6 +39,9 @@ export class AuthHttpService extends Http {
     }
 
     request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
+        if (cfg.isDebug) {
+            (<Request>url).withCredentials = true;
+        }
         return super.request(url, options).catch((error: Response) => {
             if (error.status === 401 || error.status === 403) {
                 console.log('The authentication session expires or the user is not authorised. Force refresh of the current page.');
