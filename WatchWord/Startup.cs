@@ -11,6 +11,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using WatchWord.Service;
+using WatchWord.Service.Abstract;
+using WatchWord.DataAccess.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace WatchWord
 {
@@ -50,6 +54,10 @@ namespace WatchWord
 
             // Configuration
             services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddSingleton<IMaterialsService, MaterialsService>();
+            services.AddSingleton<MaterialsRepository, MaterialsRepository>();
+            services.AddSingleton<DbContext, WatchWordContext>();
 
             // Database context for identity
             services.AddDbContext<WatchWordContext>();
