@@ -6,24 +6,35 @@
     </ul>
 </div>
 <div>
-    <form novalidate #form="ngForm" (ngSubmit)="formSubmit(form)">
+    <form novalidate #form="ngForm">
         <div>
-            <label>Name:
-                <input type="text" required minlength="10" [(ngModel)]="material.name" name="name" />
+            <label>
+                Name:
+                <input type="text" required [(ngModel)]="material.name" name="name" #name="ngModel" />
             </label>
+            <div *ngIf="(formSubmited || name.dirty) && name.invalid">
+                <ul *ngFor="let error of validationErrors(name)">
+                    <li>{{error}}</li>
+                </ul>
+            </div>
         </div>
         <div>
             <label>
                 Description:
-                <input type="text" required minlength="20" [(ngModel)]="material.description" name="description" />
+                <input type="text" required [(ngModel)]="material.description" name="description" #description="ngModel" />
             </label>
+            <div *ngIf="(formSubmited || description.dirty) && description.invalid">
+                <ul *ngFor="let error of validationErrors(description)">
+                    <li>{{error}}</li>
+                </ul>
+            </div>
         </div>
         <div>
             <label>
                 Image:
-                <input type="file" (change)="imageInserted($event)"/>
+                <input type="file" (change)="imageInserted($event)" />
             </label>
-            <div *ngIf="imageError" >
+            <div *ngIf="imageError">
                 <ul>
                     <li>{{imageError}}</li>
                 </ul>
@@ -41,15 +52,15 @@
             </ul>
         </div>
         <div>
-            <input type="submit" value="Send" />
+            <input type="button" value="Send" (click)="createMaterial(form)"/>
         </div>
         <div *ngIf="imagePreview">
-            <img [src]="imagePreview"/>
+            <img [src]="imagePreview" />
         </div>
     </form>
 </div>
 <div *ngIf="material.words && material.words.length !== 0">
     <span *ngFor="let word of material.words">
-        {{word}}
+        {{word.theWord}}
     </span>
 </div>

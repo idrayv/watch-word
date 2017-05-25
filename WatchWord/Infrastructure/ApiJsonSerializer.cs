@@ -1,8 +1,19 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
 
 namespace WatchWord.Infrastructure
 {
+    public static class JsonHelper {
+        public static string FirstCharacterToLower(string str)
+        {
+            if (String.IsNullOrEmpty(str) || Char.IsLower(str, 0))
+                return str;
+
+            return Char.ToLowerInvariant(str[0]) + str.Substring(1);
+        }
+    }
+
     public static class ApiJsonSerializer
     {
         private static JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings();
@@ -22,7 +33,7 @@ namespace WatchWord.Infrastructure
     {
         protected override string ResolvePropertyName(string propertyName)
         {
-            return propertyName.ToLower();
+            return JsonHelper.FirstCharacterToLower(propertyName);
         }
     }
 }

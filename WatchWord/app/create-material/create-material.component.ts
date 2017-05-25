@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MaterialType, MaterialModel, ParseResponseModel } from "./material.models";
-import { NgForm } from "@angular/forms";
+import { MaterialType, MaterialModel, ParseResponseModel, Word } from "./create-material.models";
+import { NgForm, NgModel } from "@angular/forms";
 import { CreateMaterialService } from "./create-material.service";
 
 @Component({
@@ -9,14 +9,11 @@ import { CreateMaterialService } from "./create-material.service";
 
 export class CreateMaterialComponent {
     public material: MaterialModel;
-
     public imagePreview: string;
-
     public imageError: string;
-
     public subtitlesError: string;
-
     public serverErrors: Array<string>;
+    public formSubmited = false;
 
     constructor(private createMaterialService: CreateMaterialService) {
         this.material = new MaterialModel();
@@ -84,7 +81,7 @@ export class CreateMaterialComponent {
             this.createMaterialService.parseSubtitles(subtitles).subscribe(
                 response => {
                     if (response.succeeded) {
-                        this.material.words = response.words;
+                        this.material.words = response.words.map((w) => { let word = new Word(); word.theWord = w.theWord; word.count = w.count; return word; });
                         this.serverErrors = new Array<string>();
                     } else {
                         this.serverErrors = response.errors;
@@ -92,7 +89,7 @@ export class CreateMaterialComponent {
                     }
                 },
                 err => {
-                    this.serverErrors.push("Connection error");
+                    this.serverErrors = new Array<string>("Connection error");
                     this.clearWords();
                 }
             );
@@ -103,6 +100,42 @@ export class CreateMaterialComponent {
     }
 
     private clearWords(): void {
-        this.material.words = new Array<string>();
+        this.material.words = new Array<Word>();
+    }
+
+    public validationErrors(state: NgModel): Array<string> {
+        let errors: Array<string> = new Array<string>();
+        let name = state.name;
+        if (state.invalid) {
+            for (var error in state.errors) {
+                switch (error) {
+                    case "minlength":
+                        errors.push(`${name} must be at least ${state.errors[error].requiredLength} characters!`);
+                        break;
+                    case "required":
+                        errors.push(`${name} must be filled in!`);
+                }
+            }
+        }
+        return errors;
+    }
+    public createMaterial(form: NgForm): void {
+        this.formSubmited = true;
+        if (form.valid) {
+            this.createMaterialService.createMaterial(this.material).subscribe(
+                response => {
+                    if (response.succeeded) {
+                        console.log('success');
+                    } else {
+                        console.log('error');
+                    }
+                },
+                err => {
+                    console.log('connection error');
+                }
+            );
+            this.formSubmited = false;
+            form.reset();
+        }
     }
 }

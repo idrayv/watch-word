@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using WatchWord.Service;
-using System.Linq;
 using WatchWord.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -35,12 +34,11 @@ namespace WatchWord.Controllers
             {
                 var stream = file.OpenReadStream();
                 var words = _parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
-                var wordsList = words.Select(word => word.TheWord).ToList();
 
-                if (wordsList.Count > 0)
+                if (words.Count > 0)
                 {
                     responseModel.Succeeded = true;
-                    responseModel.Words = wordsList;
+                    responseModel.Words = words;
                 }
                 else
                 {
@@ -60,12 +58,12 @@ namespace WatchWord.Controllers
         public class ParseResponseModel
         {
             public bool Succeeded { get; set; }
-            public List<string> Words { get; set; }
+            public List<Word> Words { get; set; }
             public List<string> Errors { get; set; }
 
             public ParseResponseModel()
             {
-                Words = new List<string>();
+                Words = new List<Word>();
                 Errors = new List<string>();
             }
         }
