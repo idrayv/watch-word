@@ -29,7 +29,7 @@ export class RegisterComponent {
             let login = this.model.login;
             this.auth.register(this.model).subscribe(
                 response => {
-                    if (response.succeeded) {
+                    if (response.success) {
                         this.userService.setUser(new UserModel(login, true));
                         this.router.navigate(['home']);
                     } else {

@@ -80,7 +80,7 @@ export class CreateMaterialComponent {
         if (this.validateSubtitles(subtitles)) {
             this.createMaterialService.parseSubtitles(subtitles).subscribe(
                 response => {
-                    if (response.succeeded) {
+                    if (response.success) {
                         this.material.words = response.words.map((w) => { let word = new Word(); word.theWord = w.theWord; word.count = w.count; return word; });
                         this.serverErrors = new Array<string>();
                     } else {
@@ -124,7 +124,7 @@ export class CreateMaterialComponent {
         if (form.valid) {
             this.createMaterialService.createMaterial(this.material).subscribe(
                 response => {
-                    if (response.succeeded) {
+                    if (response.success) {
                         console.log('success');
                     } else {
                         console.log('error');

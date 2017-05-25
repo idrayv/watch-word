@@ -1,15 +1,14 @@
-﻿<nav>
-    <a routerLink="" routerLinkActive="active">Home</a>
-    <a routerLink="dictionaries" routerLinkActive="active">Dictionaries</a>
-    <a routerLink="materials" routerLinkActive="active">Materials</a>
-    <a routerLink="create-material" routerLinkActive="active">Create material</a>
-    <div *ngIf="userModel.isLoggedIn">
-        <div routerLinkActive="active">{{userModel.name}}</div>
-        <div (click)="logOut()">Sign out</div>
-    </div>
-    <div *ngIf="!userModel.isLoggedIn">
-        <a routerLink="login" routerLinkActive="active">Sign in</a>
-        <a routerLink="register" routerLinkActive="active">Sign up</a>
+﻿<nav class="ui inverted menu">
+    <a class="item" routerLink="" routerLinkActive="active">Home</a>
+    <a class="item" routerLink="dictionaries" routerLinkActive="active">Dictionaries</a>
+    <a class="item" routerLink="materials" routerLinkActive="active">Materials</a>
+    <a class="item" routerLink="create-material" routerLinkActive="active">Create material</a>
+
+    <div class="right menu">
+        <a *ngIf="userModel.isLoggedIn" class="item" routerLinkActive="active">{{userModel.name}}</a>
+        <a *ngIf="userModel.isLoggedIn" class="item" (click)="logOut()">Sign out</a>
+        <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="login" routerLinkActive="active">Sign in</a>
+        <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="register" routerLinkActive="active">Sign up</a>
     </div>
 </nav>
 

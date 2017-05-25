@@ -21,7 +21,9 @@ gulp.task('copy-lib', ['clean-lib'], function () {
         "systemjs",
         "core-js",
         "zone.js",
-        "rxjs"
+        "rxjs",
+        "jquery",
+        "semantic-ui"
     ];
 
     var promises = [];
@@ -53,8 +55,7 @@ gulp.task('copy-html', ['copy-js'], function () {
 
 gulp.task('less', ['copy-html'], function () {
     return gulp.src('app/less/**/*.less')
-        .pipe(less({
-        }))
+        .pipe(less({}))
         .pipe(gulp.dest('wwwroot/css'));
 });
 
@@ -101,6 +102,12 @@ gulp.task('only-copy-html', [], function () {
         .pipe(gulp.dest('wwwroot/app/'));
 });
 
+gulp.task('only-less', [], function () {
+    return gulp.src('app/less/**/*.less')
+        .pipe(less({}))
+        .pipe(gulp.dest('wwwroot/css'));
+});
+
 gulp.task('only-copy-ts', [], function () {
     return gulp.src('app/**/*.ts')
         .pipe(gulp.dest('wwwroot/app/'));
@@ -128,6 +135,7 @@ gulp.task('watch-dogs', function () {
     gulp.watch("app/**/*.ts", ['only-compile-ts']);
     gulp.watch("app/**/*.html", ['only-copy-html']);
     gulp.watch("app/**/*.js", ['only-copy-js']);
+    gulp.watch("app/less/**/*.less", ['only-less']);
 });
 
 gulp.task('default', ['copy-lib', 'compile-ts']);

@@ -28,7 +28,7 @@ export class LoginComponent {
             let login = this.model.login;
             this.auth.authenticate(this.model).subscribe(
                 response => {
-                    if (response.succeeded) {
+                    if (response.success) {
                         this.userService.setUser(new UserModel(login, true));
                         this.router.navigate(['home']);
                     } else {

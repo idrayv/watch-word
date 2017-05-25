@@ -1,5 +1,5 @@
 ﻿export class AuthResponseModel {
-    public succeeded: boolean;
+    public success: boolean;
     public errors: string[];
 }
 

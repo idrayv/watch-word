@@ -17,7 +17,7 @@ export enum MaterialType {
 }
 
 export class ParseResponseModel {
-    public succeeded: boolean;
+    public success: boolean;
     public errors: string[];
     public words: Array<Word>;
 }

@@ -24,7 +24,7 @@ export class AppComponent implements OnDestroy {
     public logOut() {
         this.authService.logout().subscribe(
             response => {
-                if (response.succeeded) {
+                if (response.success) {
                     this.userService.setUser(new UserModel('', false));
                 } else {
                     console.log(response.errors);

@@ -3,9 +3,9 @@ using WatchWord.Service;
 using WatchWord.Domain.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 using WatchWord.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using WatchWord.Models;
 
 namespace WatchWord.Controllers
 {
@@ -27,7 +27,7 @@ namespace WatchWord.Controllers
             var responseModel = new ParseResponseModel();
             if (file.Length > 35000000)
             {
-                responseModel.Succeeded = false;
+                responseModel.Success = false;
                 responseModel.Errors.Add("Subtitles file too big!");
             }
             else if (file.Length > 0)
@@ -37,35 +37,22 @@ namespace WatchWord.Controllers
 
                 if (words.Count > 0)
                 {
-                    responseModel.Succeeded = true;
+                    responseModel.Success = true;
                     responseModel.Words = words;
                 }
                 else
                 {
-                    responseModel.Succeeded = false;
+                    responseModel.Success = false;
                     responseModel.Errors.Add("Empty subtitles file!");
                 }
             }
             else
             {
-                responseModel.Succeeded = false;
+                responseModel.Success = false;
                 responseModel.Errors.Add("Empty subtitles file!");
             }
 
             return ApiJsonSerializer.Serialize(responseModel);
-        }
-
-        public class ParseResponseModel
-        {
-            public bool Succeeded { get; set; }
-            public List<Word> Words { get; set; }
-            public List<string> Errors { get; set; }
-
-            public ParseResponseModel()
-            {
-                Words = new List<Word>();
-                Errors = new List<string>();
-            }
         }
     }
 }
