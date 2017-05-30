@@ -1,15 +1,22 @@
-﻿<nav class="ui inverted menu">
-    <a class="item" routerLink="" routerLinkActive="active">Home</a>
-    <a class="item" routerLink="dictionaries" routerLinkActive="active">Dictionaries</a>
-    <a class="item" routerLink="materials" routerLinkActive="active">Materials</a>
-    <a class="item" routerLink="create-material" routerLinkActive="active">Create material</a>
+<nav class="ui stackable inverted menu">
+    <div class="ui container">
+        <a id="logo-menu-item" class="header item" routerLink="" routerLinkActive="active">
+            <img id="logo-menu-image" class="logo" src="../content/film.png" alt="">
+            WatchWord
+        </a>
+        <a class="item" routerLink="dictionaries" routerLinkActive="active">Dictionaries</a>
+        <a class="item" routerLink="materials" routerLinkActive="active">Materials</a>
+        <a class="item" routerLink="create-material" routerLinkActive="active">Create material</a>
 
-    <div class="right menu">
-        <a *ngIf="userModel.isLoggedIn" class="item" routerLinkActive="active">{{userModel.name}}</a>
-        <a *ngIf="userModel.isLoggedIn" class="item" (click)="logOut()">Sign out</a>
-        <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="login" routerLinkActive="active">Sign in</a>
-        <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="register" routerLinkActive="active">Sign up</a>
+        <div class="right menu">
+            <a *ngIf="userModel.isLoggedIn" class="item" routerLinkActive="active">{{userModel.name}}</a>
+            <a *ngIf="userModel.isLoggedIn" class="item" (click)="logOut()">Sign out</a>
+            <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="login" routerLinkActive="active">Sign in</a>
+            <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="register" routerLinkActive="active">Sign up</a>
+        </div>
     </div>
 </nav>
 
-<router-outlet></router-outlet>
+<div class="ui main container">
+    <router-outlet></router-outlet>
+</div>
