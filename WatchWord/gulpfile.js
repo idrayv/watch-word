@@ -131,11 +131,9 @@ gulp.task('only-compile-ts', ['only-copy-ts'], function () {
     return tsResultJs.pipe(gulp.dest('wwwroot/app'));
 });
 
-gulp.task('watch-dogs', function () {
+gulp.task('default', ['copy-lib', 'compile-ts'], function () {
     gulp.watch("app/**/*.ts", ['only-compile-ts']);
     gulp.watch("app/**/*.html", ['only-copy-html']);
     gulp.watch("app/**/*.js", ['only-copy-js']);
     gulp.watch("app/less/**/*.less", ['only-less']);
 });
-
-gulp.task('default', ['copy-lib', 'compile-ts']);

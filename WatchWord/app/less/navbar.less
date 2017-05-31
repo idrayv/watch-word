@@ -12,8 +12,16 @@
     margin-left: -2em;
 }
 
-@media only screen and (min-width: 320px) and (max-width: 767px) {
+@media only screen and (max-width: 767px) {
     #logo-menu-image {
         margin-left: 0em;
+    }
+}
+
+// fixed in 2.2.11 semantic ui
+@media only screen and (max-width: 767px) {
+    .ui.stackable.menu .right.menu,
+    .ui.stackable.menu .left.menu {
+        flex-direction: column;
     }
 }
