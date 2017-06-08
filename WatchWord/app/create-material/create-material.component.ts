@@ -8,99 +8,21 @@ import { CreateMaterialService } from "./create-material.service";
 })
 
 export class CreateMaterialComponent {
-    public material: MaterialModel;
-    public imagePreview: string;
-    public imageError: string;
-    public subtitlesError: string;
-    public serverErrors: Array<string>;
+    public material: MaterialModel = new MaterialModel();;
     public formSubmited = false;
+    public imagePreview: string = "";
 
     constructor(private createMaterialService: CreateMaterialService) {
-        this.material = new MaterialModel();
-        this.imagePreview = "";
-        this.imageError = "";
-        this.subtitlesError = "";
-        this.serverErrors = new Array<string>();
     }
 
-    private validateImage(image: File): boolean {
-        let error: string;
-        if (!image) {
-            this.imageError = "";
-            return false;
-        }
-        if (image.type !== 'image/jpeg' && image.type !== 'image/png') {
-            this.imageError = "Invalid image format";
-            return false;
-        }
-        if (image.size > 2000000) {
-            this.imageError = "The image is too large";
-            return false;
-        }
-        this.imageError = "";
-        return true;
-    }
-
-    private validateSubtitles(subtitles: File): boolean {
-        let error: string;
-        if (!subtitles) {
-            this.imageError = "";
-            return false;
-        }
-        if (subtitles.size > 30000000) {
-            this.subtitlesError = "The subtitles file is too large";
-            return false;
-        }
-        this.subtitlesError = "";
-        return true;
-    }
-
-
-    public formSubmit(form: NgForm): void {
-        /* empty logic */
-    }
-
-    public imageInserted(event): void {
-        let image: File = <File>event.srcElement.files[0];
-        if (this.validateImage(image)) {
-            this.material.image = image;
+    public createImagePreview(model: NgModel) {
+        if (model.valid) {
             let reader = new FileReader();
             reader.onload = (e) => {
                 this.imagePreview = (<any>e.target).result;
             }
-            reader.readAsDataURL(image);
-        } else {
-            this.imagePreview = "";
-            event.target.value = "";
+            reader.readAsDataURL(<File>model.model);
         }
-    }
-
-    public subtitlesInserted(event): void {
-        let subtitles: File = <File>event.srcElement.files[0];
-        if (this.validateSubtitles(subtitles)) {
-            this.createMaterialService.parseSubtitles(subtitles).subscribe(
-                response => {
-                    if (response.success) {
-                        this.material.words = response.words.map((w) => { let word = new Word(); word.theWord = w.theWord; word.count = w.count; return word; });
-                        this.serverErrors = new Array<string>();
-                    } else {
-                        this.serverErrors = response.errors;
-                        this.clearWords();
-                    }
-                },
-                err => {
-                    this.serverErrors = new Array<string>("Connection error");
-                    this.clearWords();
-                }
-            );
-        } else {
-            event.target.value = "";
-            this.clearWords();
-        }
-    }
-
-    private clearWords(): void {
-        this.material.words = new Array<Word>();
     }
 
     public validationErrors(state: NgModel): Array<string> {
@@ -114,11 +36,19 @@ export class CreateMaterialComponent {
                         break;
                     case "required":
                         errors.push(`${name} must be filled in!`);
+                        break;
+                    case "fileType":
+                        errors.push(`The content type of this attachment is not allowed. Supported types: ${state.errors[error].join(', ')}`);
+                        break;
+                    case "subtitlesInput":
+                        (<Array<string>>state.errors[error]).forEach((er) => errors.push(er));
+                        break;
                 }
             }
         }
         return errors;
     }
+
     public createMaterial(form: NgForm): void {
         this.formSubmited = true;
         if (form.valid) {

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\app\components\file-input\file-input.component.js" />
+    <Content Include="wwwroot\app\components\file-input\file-input.component.js.map" />
+    <Content Include="wwwroot\app\components\file-input\file-input.component.ts" />
+    <Content Include="wwwroot\app\components\file-input\file-input.template.html" />
     <Content Include="wwwroot\index.html" />
     <Content Include="wwwroot\systemjs.config.js" />
   </ItemGroup>

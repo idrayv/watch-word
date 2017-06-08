@@ -1,11 +1,4 @@
-﻿<div *ngIf="serverErrors.length !== 0">
-    <ul *ngFor="let error of serverErrors">
-        <li>
-            {{error}}
-        </li>
-    </ul>
-</div>
-<div>
+﻿<div>
     <form novalidate #form="ngForm">
         <div>
             <label>
@@ -30,10 +23,6 @@
             </div>
         </div>
         <div>
-            <label>
-                Image:
-                <input type="file" (change)="imageInserted($event)" />
-            </label>
             <div *ngIf="imageError">
                 <ul>
                     <li>{{imageError}}</li>
@@ -43,18 +32,29 @@
         <div>
             <label>
                 Subtitles:
-                <input type="file" (change)="subtitlesInserted($event)" />
+                <subtitles-input [(ngModel)]="material.words" name="subtitles" #subtitles="ngModel" required></subtitles-input>
             </label>
         </div>
-        <div *ngIf="subtitlesError">
-            <ul>
-                <li>{{subtitlesError}}</li>
+        <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
+            <ul *ngFor="let error of validationErrors(subtitles)">
+                <li>{{error}}</li>
             </ul>
         </div>
         <div>
-            <input type="button" value="Send" (click)="createMaterial(form)"/>
+            <label>
+                Image:
+                <file-input name="image" fileType="image/jpeg;image/png" required [(ngModel)]="material.image" #image="ngModel" (change)="createImagePreview(image)"></file-input>
+            </label>
+            <div *ngIf="(formSubmited || image.dirty) && image.invalid">
+                <ul *ngFor="let error of validationErrors(image)">
+                    <li>{{error}}</li>
+                </ul>
+            </div>
         </div>
-        <div *ngIf="imagePreview">
+        <div>
+            <input type="button" value="Send" (click)="createMaterial(form)" />
+        </div>
+        <div *ngIf="image.valid && imagePreview">
             <img [src]="imagePreview" />
         </div>
     </form>
