@@ -1,25 +1,24 @@
 ﻿import { Component, ElementRef, forwardRef, Output, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
 import { MaterialService } from "../../material/material.service";
-import { Word } from '../../material/material.models';
 
 @Component({
-    selector: 'subtitles-input',
-    templateUrl: "app/components/subtitles-input/subtitles-input.template.html",
+    selector: 'image-input',
+    templateUrl: "app/components/image-input/image-input.template.html",
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => SubtitlesInputComponent),
+            useExisting: forwardRef(() => ImageInputComponent),
             multi: true
         },
         {
             provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => SubtitlesInputComponent),
+            useExisting: forwardRef(() => ImageInputComponent),
             multi: true
         }
     ]
 })
-export class SubtitlesInputComponent implements ControlValueAccessor, Validator {
+export class ImageInputComponent implements ControlValueAccessor, Validator {
     private onChangeCallback: Function;
     private serverErrors: Array<string> = [];
 
@@ -28,29 +27,30 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
     @ViewChild('file')
     fileInput: ElementRef;
 
-    writeValue(subbtitles: Array<Word>): void {
+    writeValue(image: string): void {
 
     }
 
-    fileChanged() {
-        let file: File = this.fileInput.nativeElement.files[0];
-        let words: Array<Word> = [];
-        this.materialService.parseSubtitles(file).subscribe(
+    fileChanged(): void {
+        let file = this.fileInput.nativeElement.files[0];
+        let base64: string = "";
+        this.materialService.parseImage(file).subscribe(
             response => {
                 if (response.success) {
-                    words = response.words.map((w) => { let word = new Word(); word.theWord = w.theWord; word.count = w.count; return word; });
+                    base64 = "data:image/png;base64," + response.base64;
                     this.serverErrors = [];
 
                 } else {
                     this.serverErrors = response.errors;
                 }
-                this.onChangeCallback(words);
+                this.onChangeCallback(base64);
             },
             err => {
                 this.serverErrors = new Array<string>("Connection error");
-                this.onChangeCallback(words);
+                this.onChangeCallback(base64);
             }
         );
+
     }
 
     registerOnChange(fn: any): void {
@@ -69,7 +69,7 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
         if (c.value && this.serverErrors.length === 0) {
             return null;
         }
-        return { "subtitlesInput": this.serverErrors };
+        return { "imageInput": this.serverErrors };
     }
 
     registerOnValidatorChange(fn: () => void): void {

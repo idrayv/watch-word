@@ -4,7 +4,6 @@ using System.IO;
 using WatchWord.Domain.Entity;
 using WatchWord.Models;
 using WatchWord.Service.Abstract;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,27 +22,26 @@ namespace WatchWord.Controllers
         public async Task<string> Create(MaterialRequestModel material)
         {
             BaseResponseModel response = new BaseResponseModel { Success = true };
-            int rowsAffected;
+            int rowsAffected = 0;
 
             if (ControllerContext.ModelState.IsValid)
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    using (var imageStream = material.Image.OpenReadStream())
+                    try
                     {
-                        imageStream.CopyTo(memoryStream);
+                        rowsAffected = await _service.SaveMaterial(
+                            new Material
+                            {
+                                Name = material.Name,
+                                Description = material.Description,
+                                Words = material.Words,
+                                Type = material.Type,
+                                Image = material.Image
+                            }
+                        );
                     }
-                    rowsAffected = await _service.SaveMaterial(
-                        new Material
-                        {
-                            Name = material.Name,
-                            Description = material.Description,
-                            MimeType = material.Image.ContentType,
-                            Words = material.Words,
-                            Type = material.Type,
-                            Image = memoryStream.ToArray()
-                        }
-                    );
+                    catch { }
                     if (rowsAffected == 0)
                     {
                         response.Success = false;

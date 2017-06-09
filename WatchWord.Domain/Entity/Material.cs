@@ -25,10 +25,7 @@ namespace WatchWord.Domain.Entity
         public string Description { get; set; }
 
         /// <summary>Gets or sets the image of the material.</summary>
-        public byte[] Image { get; set; }
-
-        /// <summary>Gets or sets mime type of material image.</summary>
-        public string MimeType { get; set; }
+        public string Image { get; set; }
 
         /// <summary>Gets or sets the creator of the material.</summary>
         public Account Owner { get; set; }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using WatchWord.Domain.Entity;
 using WatchWord.ModelBinders;
@@ -16,6 +15,6 @@ namespace WatchWord.Models
         [ModelBinder(BinderType = typeof(MaterialModelBinder))]
         public List<Word> Words { get; set; }
 
-        public IFormFile Image { get; set; }
+        public string Image { get; set; }
     }
 }

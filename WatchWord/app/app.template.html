@@ -6,7 +6,7 @@
         </a>
         <a class="item" routerLink="dictionaries" routerLinkActive="active">Dictionaries</a>
         <a class="item" routerLink="materials" routerLinkActive="active">Materials</a>
-        <a class="item" routerLink="create-material" routerLinkActive="active">Create material</a>
+        <a class="item" [routerLink]="['/material/new']" routerLinkActive="active">Create material</a>
 
         <div class="right menu">
             <a *ngIf="userModel.isLoggedIn" class="item" routerLinkActive="active">{{userModel.name}}</a>

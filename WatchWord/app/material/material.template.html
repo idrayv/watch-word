@@ -43,7 +43,7 @@
         <div>
             <label>
                 Image:
-                <file-input name="image" fileType="image/jpeg;image/png" required [(ngModel)]="material.image" #image="ngModel" (change)="createImagePreview(image)"></file-input>
+                <image-input name="image" [(ngModel)]="material.image" #image="ngModel" required></image-input>
             </label>
             <div *ngIf="(formSubmited || image.dirty) && image.invalid">
                 <ul *ngFor="let error of validationErrors(image)">
@@ -54,10 +54,10 @@
         <div>
             <input type="button" value="Send" (click)="createMaterial(form)" />
         </div>
-        <div *ngIf="image.valid && imagePreview">
-            <img [src]="imagePreview" />
-        </div>
     </form>
+</div>
+<div *ngIf="material.image">
+    <img [src]="material.image" />
 </div>
 <div *ngIf="material.words && material.words.length !== 0">
     <span *ngFor="let word of material.words">

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using WatchWord.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using WatchWord.Models;
+using System.Collections.Generic;
 
 namespace WatchWord.Controllers
 {
@@ -24,32 +25,27 @@ namespace WatchWord.Controllers
         [Route("File")]
         public string File(IFormFile file)
         {
-            var responseModel = new ParseResponseModel();
-            if (file.Length > 35000000)
-            {
-                responseModel.Success = false;
-                responseModel.Errors.Add("Subtitles file too big!");
-            }
-            else if (file.Length > 0)
-            {
-                var stream = file.OpenReadStream();
-                var words = _parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
+            var responseModel = new ParseResponseModel { Success = false };
+            responseModel.Errors.Add("Empty subtitles file!");
 
-                if (words.Count > 0)
-                {
-                    responseModel.Success = true;
-                    responseModel.Words = words;
-                }
-                else
+            if (file != null)
+            {
+                if (file.Length > 35000000)
                 {
                     responseModel.Success = false;
-                    responseModel.Errors.Add("Empty subtitles file!");
+                    responseModel.Errors = new List<string> { "Subtitles file too big!" };
                 }
-            }
-            else
-            {
-                responseModel.Success = false;
-                responseModel.Errors.Add("Empty subtitles file!");
+                else if (file.Length > 0)
+                {
+                    var stream = file.OpenReadStream();
+                    var words = _parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
+
+                    if (words.Count > 0)
+                    {
+                        responseModel.Success = true;
+                        responseModel.Words = words;
+                    }
+                }
             }
 
             return ApiJsonSerializer.Serialize(responseModel);

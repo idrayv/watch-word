@@ -1,9 +1,9 @@
 ﻿import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
-import { CreateMaterialComponent } from './create-material.component'
+import { MaterialComponent } from './material.component'
 
 const routes: Routes = [
-    { path: '', component: CreateMaterialComponent }
+    { path: ':id', component: MaterialComponent }
 ]
 
 @NgModule({
@@ -11,4 +11,4 @@ const routes: Routes = [
     exports: [RouterModule]
 })
 
-export class CreateMaterialRoutingModule { }
+export class MaterialRoutingModule { }
