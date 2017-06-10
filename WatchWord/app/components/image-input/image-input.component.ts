@@ -50,7 +50,7 @@ export class ImageInputComponent implements ControlValueAccessor, Validator {
         this.materialService.parseImage(file).subscribe(
             response => {
                 if (response.success) {
-                    base64 = "data:image/png;base64," + response.base64;
+                    base64 = response.base64;
                     this.errors = [];
 
                 } else {

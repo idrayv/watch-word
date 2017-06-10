@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using WatchWord.Service;
 
 namespace WatchWord.Controllers
 {
@@ -17,7 +18,6 @@ namespace WatchWord.Controllers
         [Route("Parse")]
         public string Parse(IFormFile file)
         {
-            // TODO: Service and Resize
             var responseModel = new ImageResponseModel { Success = false };
             responseModel.Errors.Add("Empty image file!");
 
@@ -30,15 +30,7 @@ namespace WatchWord.Controllers
                 }
                 else if (file.Length > 0)
                 {
-                    var stream = file.OpenReadStream();
-                    String base64;
-                    using (var ms = new MemoryStream())
-                    {
-                        stream.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        base64 = Convert.ToBase64String(fileBytes);
-                    }
-
+                    var base64 = ImageService.ParseImageFile(file);
                     if (base64.Length > 0)
                     {
                         responseModel.Success = true;

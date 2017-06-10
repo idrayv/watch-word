@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
@@ -37,6 +36,5 @@ namespace WatchWord.Service
         {
             return _repository.GetCount();
         }
-
     }
 }

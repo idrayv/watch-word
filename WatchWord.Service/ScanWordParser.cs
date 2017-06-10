@@ -8,13 +8,13 @@ using WatchWord.Domain.Entity;
 namespace WatchWord.Service
 {
     /// <summary>Represents logic for parsing words in the files or streams.</summary>
-    public class ScanWordParser
+    public static class ScanWordParser
     {
         /// <summary>Scans the unique words in the StreamReader of the file.</summary>
         /// <param name="material">Material entity.</param>
         /// <param name="stream">Stream reader for the text file.</param>
         /// <returns>Unsorted collection of words in file.</returns>
-        public List<Word> ParseUnigueWordsInFile(Material material, StreamReader stream)
+        public static List<Word> ParseUnigueWordsInFile(Material material, StreamReader stream)
         {
             return ParseFile(material, stream, TypeResult.OnlyUniqueWordsInFile).Words;
         }
@@ -23,7 +23,7 @@ namespace WatchWord.Service
         /// <param name="material">Material entity.</param>
         /// <param name="stream">Stream reader for the text file.</param>
         /// <returns>Unsorted collection of word compositions in file.</returns>
-        public List<Composition> ParseAllWordsInFile(Material material, StreamReader stream)
+        public static List<Composition> ParseAllWordsInFile(Material material, StreamReader stream)
         {
             return ParseFile(material, stream, TypeResult.CompositionOfWords).Compositions;
         }
