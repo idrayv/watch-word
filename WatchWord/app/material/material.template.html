@@ -43,7 +43,7 @@
         <div>
             <label>
                 Image:
-                <image-input name="image" [(ngModel)]="material.image" #image="ngModel" required></image-input>
+                <image-input name="image" mimeTypes="image/jpeg;image/png" [(ngModel)]="material.image" #image="ngModel" required></image-input>
             </label>
             <div *ngIf="(formSubmited || image.dirty) && image.invalid">
                 <ul *ngFor="let error of validationErrors(image)">

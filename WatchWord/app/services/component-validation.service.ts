@@ -19,9 +19,6 @@ export class ComponentValidationService {
                     case "required":
                         errors.push(`${name} must be filled in!`);
                         break;
-                    case "fileType":
-                        errors.push(`Content type of this attachment is not allowed. Supported types: ${state.errors[error].join(', ')}`);
-                        break;
                     case "subtitlesInput":
                         (<Array<string>>state.errors[error]).forEach((er) => errors.push(er));
                         break;
