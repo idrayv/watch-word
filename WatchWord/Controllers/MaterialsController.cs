@@ -6,6 +6,7 @@ using WatchWord.Models;
 using WatchWord.Service.Abstract;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace WatchWord.Controllers
 {
@@ -55,6 +56,22 @@ namespace WatchWord.Controllers
                 response.Errors.AddRange(ControllerContext.ModelState.Values.SelectMany(e => e.Errors).Select(e => e.ErrorMessage));
             }
 
+            return response.ToJson();
+        }
+
+        [HttpGet]
+        [Route("GetMaterials")]
+        public string GetMaterials(int page, int count)
+        {
+            var response = new MaterialsResponseModel() { Success = true };
+            try
+            {
+                response.Materials = _service.GetMaterials(page, count);
+            }
+            catch
+            {
+                response.Errors.Add("Server error occurred.");
+            }
             return response.ToJson();
         }
     }

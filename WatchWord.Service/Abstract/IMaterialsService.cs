@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WatchWord.Domain.Entity;
 
 namespace WatchWord.Service.Abstract
@@ -18,6 +20,12 @@ namespace WatchWord.Service.Abstract
         /// <summary>Gets total count of the materials.</summary>
         /// <returns>Total count of the materials.</returns>
         int TotalCount();
+
+        /// <summary>Get materials from data storage</summary>
+        /// <param name="from">Position of the first material</param>
+        /// <param name="count">Count</param>
+        /// <returns>Collection of material</returns>
+        IEnumerable<Material> GetMaterials(int from, int count);
     }
 }
 

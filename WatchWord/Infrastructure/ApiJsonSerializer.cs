@@ -21,6 +21,7 @@ namespace WatchWord.Infrastructure
         static ApiJsonSerializer()
         {
             _jsonSerializerSettings.ContractResolver = new LowercaseContractResolver();
+            _jsonSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         }
 
         public static string Serialize(object data)
