@@ -1,11 +1,11 @@
 ﻿import { Component, ElementRef, forwardRef, Output, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
-import { MaterialService } from "../../material/material.service";
-import { Word } from '../../material/material.models';
+import { MaterialService } from "../../material.service";
+import { Word } from '../../material.models';
 
 @Component({
     selector: 'subtitles-input',
-    templateUrl: "app/components/subtitles-input/subtitles-input.template.html",
+    templateUrl: "app/material/components/subtitles-input/subtitles-input.template.html",
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

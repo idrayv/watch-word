@@ -74,5 +74,21 @@ namespace WatchWord.Controllers
             }
             return response.ToJson();
         }
+
+        [HttpGet]
+        [Route("GetCount")]
+        public string GetCount()
+        {
+            var response = new MaterialsCountResponseModel() { Success = true };
+            try
+            {
+                response.Count = _service.TotalCount();
+            }
+            catch
+            {
+                response.Errors.Add("Server error occurred.");
+            }
+            return response.ToJson();
+        }
     }
 }

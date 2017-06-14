@@ -1,10 +1,10 @@
 ﻿import { Component, ElementRef, forwardRef, Output, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
-import { MaterialService } from "../../material/material.service";
+import { MaterialService } from "../../material.service";
 
 @Component({
     selector: 'image-input[mimeTypes]',
-    templateUrl: "app/components/image-input/image-input.template.html",
+    templateUrl: "app/material/components/image-input/image-input.template.html",
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

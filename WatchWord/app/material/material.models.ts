@@ -1,4 +1,6 @@
-﻿export enum MaterialType {
+﻿import { BaseResponseModel } from "../abstract/models";
+
+export enum MaterialType {
     Film,
     Series
 }
@@ -14,16 +16,13 @@ export class MaterialModel {
     public description: string;
     public image: string
     public words: Array<Word>;
+
 }
 
-export class ParseResponseModel {
-    public success: boolean;
-    public errors: string[];
+export class ParseResponseModel extends BaseResponseModel {
     public words: Array<Word>;
 }
 
-export class ImageResponseModel {
-    public success: boolean;
-    public errors: string[];
+export class ImageResponseModel extends BaseResponseModel {
     public base64: string;
 }

@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { Http, Response } from "@angular/http";
-import { ParseResponseModel, ImageResponseModel, MaterialModel } from "./material.models";
+import { ParseResponseModel, ImageResponseModel, MaterialModel } from "../material/material.models";
 import "rxjs/add/operator/map";
 let cfg = require('../config').appConfig;
 
