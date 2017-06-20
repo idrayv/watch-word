@@ -1,9 +1,4 @@
-﻿export class AuthResponseModel {
-    public success: boolean;
-    public errors: string[];
-}
-
-export class LoginModel {
+﻿export class LoginModel {
     public login: string;
     public password: string;
 }

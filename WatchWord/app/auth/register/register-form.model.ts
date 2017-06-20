@@ -1,4 +1,4 @@
-﻿import { FormControl, FormGroup, Validators } from "@angular/forms";
+﻿import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 export class RegisterFormControl extends FormControl {
     public label: string;
@@ -16,16 +16,16 @@ export class RegisterFormControl extends FormControl {
         if (this.errors) {
             for (let errorName in this.errors) {
                 switch (errorName) {
-                    case "required":
+                    case 'required':
                         messages.push(`${this.label} must be filled in!`);
                         break;
-                    case "minlength":
+                    case 'minlength':
                         messages.push(`${this.label} must be at least ${this.errors['minlength'].requiredLength} characters!`);
                         break;
-                    case "maxlength":
+                    case 'maxlength':
                         messages.push(`${this.label} must be less than ${this.errors['maxlength'].requiredLength} characters!`);
                         break;
-                    case "pattern":
+                    case 'pattern':
                         messages.push(`${this.label} is invalid!`);
                         break;
                 }
@@ -39,15 +39,15 @@ export class RegisterFormControl extends FormControl {
 export class RegisterFormGroup extends FormGroup {
     constructor() {
         super({
-            login: new RegisterFormControl("Login", "login", "", Validators.compose([
+            login: new RegisterFormControl('Login', 'login', '', Validators.compose([
                 Validators.required,
                 Validators.maxLength(20)
             ])),
-            password: new RegisterFormControl("Password", "password", "", Validators.compose([
+            password: new RegisterFormControl('Password', 'password', '', Validators.compose([
                 Validators.required,
                 Validators.minLength(4)
             ])),
-            email: new RegisterFormControl("Email", "email", "", Validators.compose([
+            email: new RegisterFormControl('Email', 'email', '', Validators.compose([
                 Validators.required,
                 Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
             ]))

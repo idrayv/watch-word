@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './auth/user.service';
 import { AuthService } from './auth/auth.service';
 import { UserModel } from './auth/auth.models';
@@ -6,19 +6,21 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'watch-word',
-    templateUrl: "app/app.template.html"
+    templateUrl: 'app/app.template.html'
 })
 
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, OnInit {
     userModel: UserModel;
     subscription: Subscription;
 
-    constructor(private userService: UserService, private authService: AuthService) {
+    constructor(private userService: UserService, private authService: AuthService) { }
+
+    ngOnInit() {
         this.userModel = new UserModel('', false);
-        this.subscription = userService.getUserObservable().subscribe(user => {
+        this.subscription = this.userService.getUserObservable().subscribe(user => {
             this.userModel = user;
         });
-        userService.initializeUser();
+        this.userService.initializeUser();
     }
 
     public logOut() {
@@ -31,7 +33,7 @@ export class AppComponent implements OnDestroy {
                 }
             },
             err => {
-                console.log("Logout error occured!");
+                console.log('Logout error occured!');
             });
     }
 

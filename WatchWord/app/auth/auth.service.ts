@@ -1,8 +1,9 @@
-﻿import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Http, Response, Request, XHRBackend, RequestOptions, RequestOptionsArgs, Headers } from "@angular/http";
-import { AuthResponseModel, LoginModel, RegisterModel } from "./auth.models";
-import "rxjs/add/operator/map";
+﻿import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Http, Response, Request, XHRBackend, RequestOptions, RequestOptionsArgs, Headers } from '@angular/http';
+import { LoginModel, RegisterModel } from './auth.models';
+import { BaseResponseModel } from '../abstract/models';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 
@@ -10,24 +11,22 @@ let cfg = require('../config').appConfig;
 
 @Injectable()
 export class AuthService {
-    private baseUrl: string;
+    private baseUrl: string = cfg.apiRoute;
 
-    constructor(private http: Http) {
-        this.baseUrl = cfg.apiRoute;
-    }
+    constructor(private http: Http) { }
 
-    authenticate(loginModel: LoginModel): Observable<AuthResponseModel> {
-        return this.http.post(this.baseUrl + "/account/login", loginModel)
+    authenticate(loginModel: LoginModel): Observable<BaseResponseModel> {
+        return this.http.post(this.baseUrl + '/account/login', loginModel)
             .map((res: Response) => res.json());
     }
 
-    register(registerModel: RegisterModel): Observable<AuthResponseModel> {
-        return this.http.post(this.baseUrl + "/account/register", registerModel)
+    register(registerModel: RegisterModel): Observable<BaseResponseModel> {
+        return this.http.post(this.baseUrl + '/account/register', registerModel)
             .map((res: Response) => res.json());
     }
 
-    logout(): Observable<AuthResponseModel> {
-        return this.http.post(this.baseUrl + "/account/logout", {})
+    logout(): Observable<BaseResponseModel> {
+        return this.http.post(this.baseUrl + '/account/logout', {})
             .map((res: Response) => res.json());
     }
 }

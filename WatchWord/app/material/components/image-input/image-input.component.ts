@@ -1,10 +1,10 @@
-﻿import { Component, ElementRef, forwardRef, Output, ViewChild } from '@angular/core';
+﻿import { Component, ElementRef, forwardRef, Output, ViewChild, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
-import { MaterialService } from "../../material.service";
+import { MaterialService } from '../../material.service';
 
 @Component({
     selector: 'image-input[mimeTypes]',
-    templateUrl: "app/material/components/image-input/image-input.template.html",
+    templateUrl: 'app/material/components/image-input/image-input.template.html',
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -18,7 +18,8 @@ import { MaterialService } from "../../material.service";
         }
     ]
 })
-export class ImageInputComponent implements ControlValueAccessor, Validator {
+
+export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
     private onChangeCallback: Function;
     private errors: Array<string> = [];
     private types: Array<string> = [];
@@ -26,14 +27,12 @@ export class ImageInputComponent implements ControlValueAccessor, Validator {
     @ViewChild('file')
     fileInput: ElementRef;
 
-    constructor(private materialService: MaterialService, el: ElementRef) {
-        let attribute = el.nativeElement.attributes.getNamedItem('mimeTypes');
-        this.types = (<string>attribute.value).split(";");
-    }
+    constructor(private materialService: MaterialService, private el: ElementRef) { }
 
-    writeValue(image: string): void {
-
-    }
+    ngOnInit() {
+        let attribute = this.el.nativeElement.attributes.getNamedItem('mimeTypes');
+        this.types = (<string>attribute.value).split(';');
+    };
 
     fileChanged(): void {
         let file = this.fileInput.nativeElement.files[0];
@@ -41,12 +40,12 @@ export class ImageInputComponent implements ControlValueAccessor, Validator {
             this.callService(file);
         } else {
             this.addErrorsAndCleanInput([`Content type of this attachment is not allowed. Supported types: ${this.types.join(', ')}`]);
-            this.onChangeCallback("");
+            this.onChangeCallback('');
         }
     }
 
     callService(file: File): void {
-        let base64: string = "";
+        let base64: string = '';
         this.materialService.parseImage(file).subscribe(
             response => {
                 if (response.success) {
@@ -59,7 +58,7 @@ export class ImageInputComponent implements ControlValueAccessor, Validator {
                 this.onChangeCallback(base64);
             },
             err => {
-                this.addErrorsAndCleanInput(["Connection error"]);
+                this.addErrorsAndCleanInput(['Connection error']);
                 this.onChangeCallback(base64);
             }
         );
@@ -74,22 +73,15 @@ export class ImageInputComponent implements ControlValueAccessor, Validator {
         this.onChangeCallback = fn;
     }
 
-    registerOnTouched(fn: any): void {
-
-    }
-
-    setDisabledState(isDisabled: boolean): void {
-
-    }
-
     validate(c: AbstractControl): { [key: string]: any; } {
         if (c.value && this.errors.length === 0) {
             return null;
         }
-        return { "imageInput": this.errors };
+        return { 'imageInput': this.errors };
     }
 
-    registerOnValidatorChange(fn: () => void): void {
-
-    }
+    writeValue(image: string): void { }
+    registerOnTouched(fn: any): void { }
+    registerOnValidatorChange(fn: () => void): void { }
+    setDisabledState(isDisabled: boolean): void { }
 }

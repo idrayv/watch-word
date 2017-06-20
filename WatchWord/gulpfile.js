@@ -132,8 +132,8 @@ gulp.task('only-compile-ts', ['only-copy-ts'], function () {
 });
 
 gulp.task('default', ['copy-lib', 'compile-ts'], function () {
-    gulp.watch("app/**/*.ts", ['only-compile-ts']);
-    gulp.watch("app/**/*.html", ['only-copy-html']);
-    gulp.watch("app/**/*.js", ['only-copy-js']);
-    gulp.watch("app/less/**/*.less", ['only-less']);
+    gulp.watch("app/**/*.ts", { cwd: './' }, ['only-compile-ts']);
+    gulp.watch("app/**/*.html", { cwd: './' }, ['only-copy-html']);
+    gulp.watch("app/**/*.js", { cwd: './' }, ['only-copy-js']);
+    gulp.watch("app/less/**/*.less", { cwd: './' }, ['only-less']);
 });

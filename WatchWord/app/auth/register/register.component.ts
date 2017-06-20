@@ -1,27 +1,22 @@
-import { Component } from '@angular/core';
-import { NgForm } from "@angular/forms";
-import { RegisterFormGroup } from "./register-form.model";
-import { RegisterModel, UserModel } from "../auth.models";
-import { AuthService } from "../auth.service";
-import { UserService } from "../user.service";
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
+import { RegisterFormGroup } from './register-form.model';
+import { RegisterModel, UserModel } from '../auth.models';
 
 @Component({
-    templateUrl: "app/auth/register/register.template.html"
+    templateUrl: 'app/auth/register/register.template.html'
 })
 
 export class RegisterComponent {
-    model: RegisterModel;
-    form: RegisterFormGroup;
-    formSubmitted: boolean;
-    registrationErrors: Array<string>;
+    public model: RegisterModel = new RegisterModel();
+    public form: RegisterFormGroup = new RegisterFormGroup();
+    public formSubmitted: boolean = false;
+    public registrationErrors: Array<string> = new Array<string>();
 
-    constructor(private auth: AuthService, private userService: UserService, private router: Router) {
-        this.model = new RegisterModel();
-        this.form = new RegisterFormGroup();
-        this.formSubmitted = false;
-        this.registrationErrors = new Array<string>();
-    }
+    constructor(private auth: AuthService, private userService: UserService, private router: Router) { }
 
     submit(form: NgForm) {
         this.formSubmitted = true;
@@ -37,7 +32,7 @@ export class RegisterComponent {
                     }
                 },
                 err => {
-                    this.registrationErrors.push("Registration error occured!");
+                    this.registrationErrors.push('Registration error occured!');
                 }
             );
             form.reset();

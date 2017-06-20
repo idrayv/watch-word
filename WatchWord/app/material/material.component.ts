@@ -1,20 +1,19 @@
-import { NgForm, NgModel } from "@angular/forms";
+import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MaterialService } from "./material.service";
-import { ComponentValidation } from "../abstract/component-validation";
-import { MaterialType, MaterialModel, ParseResponseModel, Word } from "./material.models";
+import { MaterialService } from './material.service';
+import { ComponentValidation } from '../abstract/component-validation';
+import { MaterialType, MaterialModel, ParseResponseModel, Word } from './material.models';
 
 @Component({
-    templateUrl: "app/material/material.template.html"
+    templateUrl: 'app/material/material.template.html'
 })
 
 export class MaterialComponent extends ComponentValidation implements OnInit, OnDestroy {
     public id: number | string;
-    private routeSubscriber: any;
-
     public material: MaterialModel = new MaterialModel();;
-    public formSubmited = false;
+    public formSubmited = false
+    private routeSubscriber: any;
 
     constructor(private createMaterialService: MaterialService, private route: ActivatedRoute) {
         super();

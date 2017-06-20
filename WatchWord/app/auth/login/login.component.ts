@@ -1,25 +1,22 @@
-import { Component } from '@angular/core';
-import { NgForm, NgModel } from "@angular/forms";
-import { LoginModel, UserModel } from "../auth.models";
-import { AuthService } from "../auth.service";
-import { UserService } from "../user.service";
 import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
+import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
+import { LoginModel, UserModel } from '../auth.models';
+import { ComponentValidation } from '../../abstract/component-validation';
 
 @Component({
-    templateUrl: "app/auth/login/login.template.html"
+    templateUrl: 'app/auth/login/login.template.html'
 })
 
-export class LoginComponent {
-    public model: LoginModel;
-
-    public formSubmited: boolean;
-
-    public authenticationErrors: Array<string>
+export class LoginComponent extends ComponentValidation {
+    public model: LoginModel = new LoginModel();
+    public formSubmited: boolean = false;
+    public authenticationErrors: Array<string> = new Array<string>();
 
     constructor(private auth: AuthService, private userService: UserService, private router: Router) {
-        this.model = new LoginModel();
-        this.formSubmited = false;
-        this.authenticationErrors = new Array<string>();
+        super();
     }
 
     public logIn(form: NgForm): void {
@@ -36,27 +33,11 @@ export class LoginComponent {
                     }
                 },
                 err => {
-                    this.authenticationErrors.push("Authentification error occured!");
+                    this.authenticationErrors.push('Authentification error occured!');
                 }
             );
             this.formSubmited = false;
             form.reset();
         }
-    }
-    public validationErrors(state: NgModel): Array<string> {
-        let errors: Array<string> = new Array<string>();
-        let name = state.name;
-        if (state.invalid) {
-            for (var error in state.errors) {
-                switch (error) {
-                    case "minlength":
-                        errors.push(`${name} must be at least ${state.errors[error].requiredLength} characters!`);
-                        break;
-                    case "required":
-                        errors.push(`${name} must be filled in!`);
-                }
-            }
-        }
-        return errors;
     }
 }
