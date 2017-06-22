@@ -17,13 +17,13 @@ gulp.task('clean-app', function (cb) {
 
 gulp.task('copy-lib', ['clean-lib'], function () {
     var libs = [
-        "@angular",
-        "systemjs",
-        "core-js",
-        "zone.js",
-        "rxjs",
-        "jquery",
-        "semantic-ui"
+        '@angular',
+        'systemjs',
+        'core-js',
+        'zone.js',
+        'rxjs',
+        'jquery',
+        'semantic-ui'
     ];
 
     var promises = [];
@@ -74,7 +74,7 @@ if (cfg.appConfig.isDebug === true) {
 
 gulp.task('compile-ts', buildAppDeps, function () {
     var tsProject = ts.createProject('tsconfig.json');
-    var tsResult = gulp.src("app/**/*.ts")
+    var tsResult = gulp.src('app/**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(tsProject());
 
@@ -115,7 +115,7 @@ gulp.task('only-copy-ts', [], function () {
 
 gulp.task('only-compile-ts', ['only-copy-ts'], function () {
     var tsProject = ts.createProject('tsconfig.json');
-    var tsResult = gulp.src("app/**/*.ts")
+    var tsResult = gulp.src('app/**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(tsProject());
 
@@ -132,8 +132,8 @@ gulp.task('only-compile-ts', ['only-copy-ts'], function () {
 });
 
 gulp.task('default', ['copy-lib', 'compile-ts'], function () {
-    gulp.watch("app/**/*.ts", { cwd: './' }, ['only-compile-ts']);
-    gulp.watch("app/**/*.html", { cwd: './' }, ['only-copy-html']);
-    gulp.watch("app/**/*.js", { cwd: './' }, ['only-copy-js']);
-    gulp.watch("app/less/**/*.less", { cwd: './' }, ['only-less']);
+    gulp.watch('app/**/*.ts', { cwd: './' }, ['only-compile-ts']);
+    gulp.watch('app/**/*.html', { cwd: './' }, ['only-copy-html']);
+    gulp.watch('app/**/*.js', { cwd: './' }, ['only-copy-js']);
+    gulp.watch('app/less/**/*.less', { cwd: './' }, ['only-less']);
 });

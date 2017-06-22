@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using WatchWord.DataAccess;
+using WatchWord.Domain.Entity;
 
 namespace WatchWord.DataAccess.Migrations
 {
@@ -398,7 +401,8 @@ namespace WatchWord.DataAccess.Migrations
                 {
                     b.HasOne("WatchWord.Domain.Entity.Material", "Material")
                         .WithMany("Words")
-                        .HasForeignKey("MaterialId");
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

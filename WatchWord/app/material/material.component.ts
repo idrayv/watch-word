@@ -1,49 +1,101 @@
 import { NgForm, NgModel } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from "rxjs/Subject";
+import { ISubscription } from "rxjs/Subscription";
 import { MaterialService } from './material.service';
 import { ComponentValidation } from '../abstract/component-validation';
-import { MaterialType, MaterialModel, ParseResponseModel, Word } from './material.models';
+import { MaterialModel, MaterialMode } from './material.models';
 
 @Component({
     templateUrl: 'app/material/material.template.html'
 })
 
 export class MaterialComponent extends ComponentValidation implements OnInit, OnDestroy {
-    public id: number | string;
-    public material: MaterialModel = new MaterialModel();;
-    public formSubmited = false
-    private routeSubscriber: any;
+    public mode: MaterialMode = null;
+    public serverErrors: Array<string> = new Array<string>();
+    public material: MaterialModel = new MaterialModel();
+    public formSubmited = false;
+    private routeSubscription: ISubscription;
 
-    constructor(private createMaterialService: MaterialService, private route: ActivatedRoute) {
+    constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router) {
         super();
     }
 
     ngOnInit() {
-        this.routeSubscriber = this.route.params.subscribe(params => { this.id = +params['id']; });
+        this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
     }
 
-    ngOnDestroy() {
-        this.routeSubscriber.unsubscribe();
+    private onRouteChanged(param: string): void {
+        this.serverErrors = new Array<string>();
+
+        if (param === 'create') {
+            this.mode = MaterialMode.Add;
+            this.material = new MaterialModel();
+        } else if (+param) {
+            this.initializeMaterial(+param);
+        } else {
+            console.log('404');
+            // TODO: redirect to 404
+        }
     }
 
-    public createMaterial(form: NgForm): void {
+    private initializeMaterial(id: number): void {
+        this.materialService.getMaterial(id).then(
+            response => {
+                if (response.success) {
+                    this.mode = MaterialMode.Read;
+                    this.material = response.material;
+                    this.serverErrors = new Array<string>();
+                } else {
+                    this.mode = null;
+                    this.serverErrors = response.errors;
+                }
+            }
+        );
+    }
+
+    public editMaterial(): void {
+        this.mode = MaterialMode.Edit;
+    }
+
+    public deleteMaterial(): void {
+        this.materialService.deleteMaterial(this.material.id).then(
+            response => {
+                if (response.success) {
+                    this.router.navigateByUrl('materials');
+                } else {
+                    response.errors.forEach(err => console.log(err));
+                    this.serverErrors = response.errors;
+                }
+            }
+        );
+    }
+
+    public saveMaterial(form: NgForm): void {
         this.formSubmited = true;
         if (form.valid) {
-            this.createMaterialService.createMaterial(this.material).subscribe(
+            this.materialService.saveMaterial(this.material).then(
                 response => {
                     if (response.success) {
-                        console.log('Success');
+                        if (this.mode == MaterialMode.Add) {
+                            this.router.navigateByUrl('material/' + response.id);
+                        } else {
+                            this.serverErrors = new Array<string>();
+                            this.mode = MaterialMode.Read;
+                        }
                     } else {
-                        console.log('Error');
+                        response.errors.forEach(err => console.log(err));
+                        this.serverErrors = response.errors;
                     }
-                },
-                err => {
-                    console.log('Connection error');
                 }
             );
             this.formSubmited = false;
-            form.reset();
         }
+    }
+
+    ngOnDestroy() {
+        this.routeSubscription.unsubscribe();
     }
 }

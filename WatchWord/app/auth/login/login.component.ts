@@ -23,7 +23,7 @@ export class LoginComponent extends ComponentValidation {
         this.formSubmited = true;
         if (form.valid) {
             let login = this.model.login;
-            this.auth.authenticate(this.model).subscribe(
+            this.auth.authenticate(this.model).then(
                 response => {
                     if (response.success) {
                         this.userService.setUser(new UserModel(login, true));
@@ -31,9 +31,6 @@ export class LoginComponent extends ComponentValidation {
                     } else {
                         this.authenticationErrors = response.errors;
                     }
-                },
-                err => {
-                    this.authenticationErrors.push('Authentification error occured!');
                 }
             );
             this.formSubmited = false;

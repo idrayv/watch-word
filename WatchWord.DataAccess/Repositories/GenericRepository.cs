@@ -26,29 +26,29 @@ namespace WatchWord.DataAccess.Repositories
 
         #region CREATE
 
-        /// <summary>Inserts or updates entity.</summary>
+        /// <summary>Inserts entity asynchronously.</summary>
         /// <param name="entity">The entity.</param>
-        public virtual void Insert(TEntity entity)
+        public async virtual void Insert(TEntity entity)
         {
-            _dbSet.Add(entity);
+            await _dbSet.AddAsync(entity);
         }
 
-        /// <summary>Inserts entities.</summary>
+        /// <summary>Inserts entities asynchronously.</summary>
         /// <param name="entities">The entities enumerable.</param>
-        public void Insert(IEnumerable<TEntity> entities)
+        public async void Insert(IEnumerable<TEntity> entities)
         {
-            _dbSet.AddRange(entities);
+            await _dbSet.AddRangeAsync(entities);
         }
 
         #endregion
 
         #region READ
 
-        /// <summary>Gets count of entities from database.</summary>
+        /// <summary>Gets count of entities from database asynchronously.</summary>
         /// <param name="whereProperties">Where predicate.</param>
-        public virtual int GetCount(Expression<Func<TEntity, bool>> whereProperties = null)
+        public virtual async Task<int> GetCount(Expression<Func<TEntity, bool>> whereProperties = null)
         {
-            return AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties).Count();
+            return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties).CountAsync();
         }
 
         /// <summary>Gets entities from database asynchronously.</summary>
@@ -59,16 +59,6 @@ namespace WatchWord.DataAccess.Repositories
             params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).ToListAsync();
-        }
-
-        /// <summary>Gets entities from database.</summary>
-        /// <param name="whereProperties">Where predicate.</param>
-        /// <param name="includeProperties">Include properties.</param>
-        /// <returns>The list of entities.</returns>
-        public virtual List<TEntity> GetAll(Expression<Func<TEntity, bool>> whereProperties = null,
-            params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            return AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).ToList();
         }
 
         /// <summary>Skip the given number and returns the specified number of entities from database asynchronously.</summary>
@@ -83,34 +73,22 @@ namespace WatchWord.DataAccess.Repositories
             return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).Skip(skipNumber).Take(amount).ToListAsync();
         }
 
-        /// <summary>Skip the given number and returns the specified number of entities from database.</summary>
-        /// <param name="skipNumber">Number of entities to skip.</param>
-        /// <param name="amount">Number of entities to take.</param>
-        /// <param name="whereProperties">Where predicate.</param>
-        /// <param name="includeProperties">Include properties.</param>
-        /// <returns>The list of entities.</returns>
-        public virtual List<TEntity> SkipAndTake(int skipNumber, int amount, Expression<Func<TEntity, bool>> whereProperties = null,
-            params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            return AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).Skip(skipNumber).Take(amount).ToList();
-        }
-
-        /// <summary>Finds entity by id.</summary>
+        /// <summary>Finds entity by id asynchronously.</summary>
         /// <param name="id">The id.</param>
         /// <returns>The operation <see cref="TEntity"/>.</returns>
-        public virtual TEntity GetById(TIdentity id)
+        public virtual async Task<TEntity> GetById(TIdentity id)
         {
-            return _dbSet.Find(id);
+            return await _dbSet.FindAsync(id);
         }
 
-        /// <summary>Gets the first entity which matchs the condition.</summary>
+        /// <summary>Gets the first entity which matchs the condition asynchronously.</summary>
         /// <param name="whereProperties">Where predicate.</param>
         /// <param name="includeProperties">Include properties.</param>
         /// <returns>The list of entities.</returns>
-        public virtual TEntity GetByСondition(Expression<Func<TEntity, bool>> whereProperties = null,
+        public virtual async Task<TEntity> GetByСondition(Expression<Func<TEntity, bool>> whereProperties = null,
             params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            return AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).FirstOrDefault();
+            return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).FirstOrDefaultAsync();
         }
 
         #endregion
@@ -121,7 +99,7 @@ namespace WatchWord.DataAccess.Repositories
         /// <param name="entityToUpdate">Entity to update.</param>
         public virtual void Update(TEntity entityToUpdate)
         {
-            _context.Entry(entityToUpdate).State = EntityState.Modified;
+            _dbSet.Update(entityToUpdate);
         }
 
         #endregion
@@ -156,13 +134,6 @@ namespace WatchWord.DataAccess.Repositories
         }
 
         #endregion
-
-        /// <summary>Saves all pending changes.</summary>
-        /// <returns>The number of objects in an Added, Modified, or Deleted state.</returns>
-        public virtual int Save()
-        {
-            return _context.SaveChanges();
-        }
 
         /// <summary>Saves all pending changes asynchronously.</summary>
         /// <returns>The number of objects in an Added, Modified, or Deleted state.</returns>

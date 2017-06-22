@@ -12,7 +12,7 @@ namespace WatchWord.Domain.Entity
         public string Translation { get; set; }
 
         /// <summary>Gets or sets the owner of the vocabulary word.</summary>
-        public Account Owner { get; set; }
+        public virtual Account Owner { get; set; }
 
         /// <summary>Gets or sets the type of the vocabulary word. NewWord, LearnWord or KnownWord.</summary>
         public VocabType Type { get; set; }

@@ -22,7 +22,7 @@ export class RegisterComponent {
         this.formSubmitted = true;
         if (form.valid) {
             let login = this.model.login;
-            this.auth.register(this.model).subscribe(
+            this.auth.register(this.model).then(
                 response => {
                     if (response.success) {
                         this.userService.setUser(new UserModel(login, true));
@@ -30,9 +30,6 @@ export class RegisterComponent {
                     } else {
                         this.registrationErrors = response.errors;
                     }
-                },
-                err => {
-                    this.registrationErrors.push('Registration error occured!');
                 }
             );
             form.reset();

@@ -28,9 +28,9 @@ namespace WatchWord.Domain.Entity
         public string Image { get; set; }
 
         /// <summary>Gets or sets the creator of the material.</summary>
-        public Account Owner { get; set; }
+        public virtual Account Owner { get; set; }
 
         /// <summary>Gets or sets the collection of words.</summary>
-        public ICollection<Word> Words { get; set; }
+        public virtual ICollection<Word> Words { get; set; }
     }
 }

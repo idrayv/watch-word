@@ -1,12 +1,10 @@
 ﻿import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Http, Response, Request, XHRBackend, RequestOptions, RequestOptionsArgs, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
 import { LoginModel, RegisterModel } from './auth.models';
 import { BaseResponseModel } from '../abstract/models';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-
 let cfg = require('../config').appConfig;
 
 @Injectable()
@@ -15,19 +13,22 @@ export class AuthService {
 
     constructor(private http: Http) { }
 
-    authenticate(loginModel: LoginModel): Observable<BaseResponseModel> {
-        return this.http.post(this.baseUrl + '/account/login', loginModel)
-            .map((res: Response) => res.json());
+    authenticate(loginModel: LoginModel): Promise<BaseResponseModel> {
+        return this.http.post(this.baseUrl + '/account/login', loginModel).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return { sucess: false, errors: ['Authentification error occured!'] } });
     }
 
-    register(registerModel: RegisterModel): Observable<BaseResponseModel> {
-        return this.http.post(this.baseUrl + '/account/register', registerModel)
-            .map((res: Response) => res.json());
+    register(registerModel: RegisterModel): Promise<BaseResponseModel> {
+        return this.http.post(this.baseUrl + '/account/register', registerModel).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return { sucess: false, errors: ['Registration error occured!'] } });
     }
 
-    logout(): Observable<BaseResponseModel> {
-        return this.http.post(this.baseUrl + '/account/logout', {})
-            .map((res: Response) => res.json());
+    logout(): Promise<BaseResponseModel> {
+        return this.http.post(this.baseUrl + '/account/logout', {}).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return { sucess: false, errors: ['Logout error occured!'] } });
     }
 }
 

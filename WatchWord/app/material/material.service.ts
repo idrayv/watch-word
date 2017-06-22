@@ -1,40 +1,50 @@
 ﻿import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
-import { ParseResponseModel, ImageResponseModel, MaterialModel } from '../material/material.models';
-import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
+import { CreateResponseModel, ParseResponseModel, ImageResponseModel, MaterialModel, MaterialResponseModel } from '../material/material.models';
 let cfg = require('../config').appConfig;
 
 @Injectable()
 export class MaterialService {
     private baseUrl: string = cfg.apiRoute;
+    private connectionErrorModel = { sucess: false, errors: ['Connection error'] };
 
     constructor(private http: Http) { }
 
-    parseSubtitles(subtitlesFile: any): Observable<ParseResponseModel> {
+    parseSubtitles(subtitlesFile: any): Promise<ParseResponseModel> {
         let input = new FormData();
         input.append('file', subtitlesFile);
 
-        return this.http.post(this.baseUrl + '/parse/file', input).map((res: Response) => res.json());;
+        return this.http.post(this.baseUrl + '/parse/file', input).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return this.connectionErrorModel });
     }
 
-    parseImage(imageFile: any): Observable<ImageResponseModel> {
+    parseImage(imageFile: any): Promise<ImageResponseModel> {
         let input = new FormData();
         input.append('file', imageFile);
 
-        return this.http.post(this.baseUrl + '/image/parse', input).map((res: Response) => res.json());;
+        return this.http.post(this.baseUrl + '/image/parse', input).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return this.connectionErrorModel });
     }
 
-    createMaterial(material: MaterialModel): Observable<ParseResponseModel> {
-        let input = new FormData();
-        for (let name in material) {
-            if (material[name] instanceof Array) {
-                input.append(name, JSON.stringify(material[name]));
-                continue;
-            }
-            input.append(name, material[name]);
-        }
+    getMaterial(id: number): Promise<MaterialResponseModel> {
+        return this.http.get(this.baseUrl + '/material/' + id).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return this.connectionErrorModel });
+    }
 
-        return this.http.post(this.baseUrl + '/materials/create', input).map((res: Response) => res.json());;
+    saveMaterial(material: MaterialModel): Promise<CreateResponseModel> {
+        return this.http.post(this.baseUrl + '/material/save', material).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return this.connectionErrorModel });
+    }
+
+    deleteMaterial(id: number): Promise<CreateResponseModel> {
+        return this.http.delete(this.baseUrl + '/material/' + id).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return this.connectionErrorModel });
     }
 }

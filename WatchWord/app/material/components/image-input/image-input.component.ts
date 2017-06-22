@@ -46,7 +46,7 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
 
     callService(file: File): void {
         let base64: string = '';
-        this.materialService.parseImage(file).subscribe(
+        this.materialService.parseImage(file).then(
             response => {
                 if (response.success) {
                     base64 = response.base64;
@@ -55,10 +55,6 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
                 } else {
                     this.addErrorsAndCleanInput(response.errors);
                 }
-                this.onChangeCallback(base64);
-            },
-            err => {
-                this.addErrorsAndCleanInput(['Connection error']);
                 this.onChangeCallback(base64);
             }
         );

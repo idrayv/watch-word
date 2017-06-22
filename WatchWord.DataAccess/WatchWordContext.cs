@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using WatchWord.Domain.Entity;
 using WatchWord.Domain.Identity;
@@ -53,6 +54,17 @@ namespace WatchWord.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_configuration["DatabaseSettings:ConnectionString"]);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Word>(word =>
+            {
+                word.HasOne(w => w.Material).WithMany(m => m.Words).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.ForSqlServerUseIdentityColumns();
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

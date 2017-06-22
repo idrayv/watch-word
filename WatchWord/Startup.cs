@@ -55,9 +55,10 @@ namespace WatchWord
             // Configuration
             services.AddSingleton<IConfiguration>(Configuration);
 
-            services.AddSingleton<IMaterialsService, MaterialsService>();
-            services.AddSingleton<MaterialsRepository, MaterialsRepository>();
-            services.AddSingleton<DbContext, WatchWordContext>();
+            services.AddScoped(typeof(DbContext), typeof(WatchWordContext));
+            services.AddScoped(typeof(MaterialsRepository), typeof(MaterialsRepository));
+            services.AddScoped(typeof(WordsRepository), typeof(WordsRepository));
+            services.AddScoped(typeof(IMaterialsService), typeof(MaterialsService));
 
             // Database context for identity
             services.AddDbContext<WatchWordContext>();
@@ -76,7 +77,6 @@ namespace WatchWord
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
 
-
                 // Lockout settings
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 options.Lockout.MaxFailedAccessAttempts = 10;
@@ -86,7 +86,7 @@ namespace WatchWord
                 options.Cookies.ApplicationCookie.LoginPath = "/identity/login";
                 options.Cookies.ApplicationCookie.LogoutPath = "/identity/logoff";
 
-                // : Only for Dev
+                // CORS: Only for Dev
                 options.Cookies.ApplicationCookie.CookieSecure = CookieSecurePolicy.SameAsRequest;
 
                 // User settings

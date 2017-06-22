@@ -24,17 +24,15 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     public logOut() {
-        this.authService.logout().subscribe(
+        this.authService.logout().then(
             response => {
                 if (response.success) {
                     this.userService.setUser(new UserModel('', false));
                 } else {
                     console.log(response.errors);
                 }
-            },
-            err => {
-                console.log('Logout error occured!');
-            });
+            }
+        );
     }
 
     ngOnDestroy() {

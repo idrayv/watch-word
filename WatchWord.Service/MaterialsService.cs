@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Abstract;
@@ -8,33 +9,52 @@ namespace WatchWord.Service
 {
     public class MaterialsService : IMaterialsService
     {
-        private MaterialsRepository _repository;
+        private MaterialsRepository _materialsRepository;
+        private WordsRepository _wordsRepository;
 
-        public MaterialsService(MaterialsRepository repository)
+        public MaterialsService(MaterialsRepository materialsRepository, WordsRepository wordsRepository)
         {
-            _repository = repository;
+            _wordsRepository = wordsRepository;
+            _materialsRepository = materialsRepository;
         }
 
-        public Material GetMaterial(int id)
+        public async Task<Material> GetMaterial(int id)
         {
-            return _repository.GetById(id);
+            return await _materialsRepository.GetByСondition(m => m.Id == id, m => m.Words);
         }
 
-        public IEnumerable<Material> GetMaterials(int page, int count)
+        public async Task<IEnumerable<Material>> GetMaterials(int page, int count)
         {
             page = page < 1 ? 1 : page;
-            return _repository.SkipAndTake((page - 1) * count, count, null, m => m.Words);
+            return await _materialsRepository.SkipAndTakeAsync((page - 1) * count, count, null, m => m.Words);
         }
 
         public async Task<int> SaveMaterial(Material material)
         {
-            _repository.Insert(material);
-            return await _repository.SaveAsync();
+            if (material.Id == 0)
+            {
+                _materialsRepository.Insert(material);
+            }
+            else
+            {
+                var words = await _wordsRepository.GetAllAsync(word => word.Material.Id == material.Id && !material.Words.Any(w => w.Id == word.Id));
+                _wordsRepository.Delete(words);
+                _materialsRepository.Update(material);
+            }
+
+            await _materialsRepository.SaveAsync();
+            return material.Id;
         }
 
-        public int TotalCount()
+        public async Task<int> DeleteMaterial(int id)
         {
-            return _repository.GetCount();
+            _materialsRepository.Delete(id);
+            return await _materialsRepository.SaveAsync();
+        }
+
+        public async Task<int> TotalCount()
+        {
+            return await _materialsRepository.GetCount();
         }
     }
 }

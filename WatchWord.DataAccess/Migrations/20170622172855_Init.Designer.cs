@@ -3,19 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using WatchWord.DataAccess;
-using WatchWord.Domain.Entity;
 
 namespace WatchWord.DataAccess.Migrations
 {
     [DbContext(typeof(WatchWordContext))]
-    [Migration("20170405220504_init")]
-    partial class init
+    [Migration("20170622172855_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.1")
+                .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<int>", b =>
@@ -176,9 +174,7 @@ namespace WatchWord.DataAccess.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<byte[]>("Image");
-
-                    b.Property<string>("MimeType");
+                    b.Property<string>("Image");
 
                     b.Property<string>("Name");
 
@@ -404,7 +400,8 @@ namespace WatchWord.DataAccess.Migrations
                 {
                     b.HasOne("WatchWord.Domain.Entity.Material", "Material")
                         .WithMany("Words")
-                        .HasForeignKey("MaterialId");
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

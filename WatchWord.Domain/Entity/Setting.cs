@@ -7,7 +7,7 @@ namespace WatchWord.Domain.Entity
     {
         public SettingKey Key { get; set; }
         public SettingType Type { get; set; }
-        public Account Owner { get; set; }
+        public virtual Account Owner { get; set; }
         public int Int { get; set; }
         public string String { get; set; }
         public bool Boolean { get; set; }

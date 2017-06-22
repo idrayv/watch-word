@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using WatchWord.Infrastructure;
+﻿using WatchWord.Infrastructure;
 using WatchWord.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

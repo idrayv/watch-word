@@ -1,3 +1,4 @@
-﻿<div>
-    <input #file type="file" (change)="fileChanged()" />
+﻿<div class="file-input-wrapper">
+    <button class="ui submit button">Upload image file</button>
+    <input #file type="file" name="file" (change)="fileChanged()">
 </div>

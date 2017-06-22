@@ -32,7 +32,7 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
     fileChanged() {
         let file: File = this.fileInput.nativeElement.files[0];
         let words: Array<Word> = [];
-        this.materialService.parseSubtitles(file).subscribe(
+        this.materialService.parseSubtitles(file).then(
             response => {
                 if (response.success) {
                     words = response.words.map((w) => { let word = new Word(); word.theWord = w.theWord; word.count = w.count; return word; });
@@ -41,10 +41,6 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
                 } else {
                     this.serverErrors = response.errors;
                 }
-                this.onChangeCallback(words);
-            },
-            err => {
-                this.serverErrors = new Array<string>('Connection error');
                 this.onChangeCallback(words);
             }
         );
