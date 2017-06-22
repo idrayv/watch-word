@@ -3,7 +3,12 @@ import { Routes, RouterModule } from '@angular/router'
 import { MaterialsComponent } from './materials.component'
 
 const routes: Routes = [
-    { path: '', component: MaterialsComponent }
+    {
+        path: 'page/:id', component: MaterialsComponent
+    },
+    {
+        path: '**', component: MaterialsComponent
+    }
 ]
 
 @NgModule({

@@ -1,1 +1,16 @@
-﻿<div class="test3">Materials Template</div>
+﻿<div class="test3">
+    <div [ngSwitch]="model.hasErrors">
+        <div *ngSwitchCase="true">
+            <div *ngFor="let error of model.serverErrors">
+                {{error}}
+            </div>
+        </div>
+        <div *ngSwitchCase="false">
+            <div *ngFor="let material of model.materials">
+                <img [src]="material.image"/>
+                <span>{{material.name}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<pagination name="currentPage" route="" [ngModel]="model.paginationModel"></pagination>

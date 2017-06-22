@@ -1,0 +1,9 @@
+﻿<div>
+    <div *ngIf="model">
+        <a *ngFor="let page of model.pages" href="#" [class.active]="model.currentPage === page"
+           [routerLink]="[model.route, page]">
+            {{page}}
+        </a>
+        <router-outlet></router-outlet>
+    </div>
+</div>
