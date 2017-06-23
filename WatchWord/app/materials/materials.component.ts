@@ -11,8 +11,8 @@ import { CountResponseModel, MaterialsResponseModel } from './materials.models';
 })
 
 export class MaterialsComponent implements OnInit, OnDestroy {
-    private routeSubscription: ISubscription;
     public model: MaterialsModel = new MaterialsModel();
+    private routeSubscription: ISubscription;
     private itemsPerPage: number = 5;
     private materialsRoute: string = '/materials/page';
 
@@ -29,7 +29,6 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
     private changeModel(page: number) {
         this.materialsService.getCount().then(response => this.fillPaginationModel(response, page));
-
         this.materialsService.getMaterials(page, this.itemsPerPage).then(response => this.fillMaterials(response));
     }
 

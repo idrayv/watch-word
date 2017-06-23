@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { UserService } from './auth/user.service';
 import { AuthService } from './auth/auth.service';
 import { UserModel } from './auth/auth.models';
-import { Subscription } from 'rxjs/Subscription';
+declare var $: any;
 
 @Component({
     selector: 'watch-word',

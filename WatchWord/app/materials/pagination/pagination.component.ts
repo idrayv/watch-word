@@ -28,9 +28,7 @@ export class PaginationComponent implements OnInit, ControlValueAccessor {
     }
 
     registerOnChange(fn: any): void { }
-
     registerOnTouched(fn: any): void { }
-
     setDisabledState(isDisabled: boolean): void { }
 
     ngOnInit(): void {

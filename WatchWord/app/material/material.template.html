@@ -70,8 +70,8 @@
         <div class="content">
             <div id="material-name" class="header">{{material.name}}</div>
             <div id="material-description">{{material.description}}</div>
-            <input *ngIf="mode == 0" class="ui secondary mini button" type="button" value="Edit" (click)="editMaterial()" />
-            <input *ngIf="mode == 0" class="ui secondary mini button" type="button" value="Delete" (click)="deleteMaterial()" />
+            <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="editMaterial()">Edit</button>
+            <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="deleteMaterial()">Delete</button>
         </div>
     </div>
 </div>

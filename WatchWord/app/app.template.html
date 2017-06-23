@@ -1,15 +1,20 @@
 <nav class="ui stackable inverted menu">
     <div class="ui container">
         <a id="logo-menu-item" class="header item" routerLink="" routerLinkActive="active">WatchWord</a>
-        <a class="item" routerLink="dictionaries" routerLinkActive="active">Dictionaries</a>
-        <a class="item" routerLink="materials" routerLinkActive="active">Materials</a>
-        <a class="item" [routerLink]="['/material/create']" routerLinkActive="active">Create material</a>
+        <a class="item" routerLink="dictionaries" routerLinkActive="active"><i class="talk outline icon"></i>Dictionaries</a>
+        <a class="item" routerLink="materials" routerLinkActive="active"><i class="film icon"></i>Materials</a>
+        <a class="item" [routerLink]="['/material/create']" routerLinkActive="active"><i class="write icon"></i>Create material</a>
 
         <div class="right menu">
-            <a *ngIf="userModel.isLoggedIn" class="item" routerLinkActive="active">{{userModel.name}}</a>
-            <a *ngIf="userModel.isLoggedIn" class="item" (click)="logOut()">Sign out</a>
-            <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="login" routerLinkActive="active">Sign in</a>
-            <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="register" routerLinkActive="active">Sign up</a>
+            <div *ngIf="userModel.isLoggedIn" class="ui simple dropdown item">
+                <i class="user icon"></i> Hi {{userModel.name}} <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item"><i class="configure icon"></i>Settings</a>
+                </div>
+            </div>
+            <a *ngIf="userModel.isLoggedIn" class="item" (click)="logOut()"><i class="sign out icon"></i>Sign out</a>
+            <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="login" routerLinkActive="active"><i class="sign in icon"></i>Sign in</a>
+            <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="register" routerLinkActive="active"><i class="add user icon"></i>Sign up</a>
         </div>
     </div>
 </nav>
