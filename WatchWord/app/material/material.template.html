@@ -64,14 +64,16 @@
 
 <div class="ui relaxed divided items">
     <div class="item">
-        <div *ngIf="material.image" class="ui small image">
+        <div *ngIf="material.image" class="ui image">
             <img [src]="material.image" />
         </div>
         <div class="content">
             <div id="material-name" class="header">{{material.name}}</div>
             <div id="material-description">{{material.description}}</div>
-            <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="editMaterial()">Edit</button>
-            <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="deleteMaterial()">Delete</button>
+            <div id="material-edit-buttons">
+                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="editMaterial()">Edit</button>
+                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="deleteMaterial()">Delete</button>
+            </div>
         </div>
     </div>
 </div>

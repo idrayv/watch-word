@@ -3,12 +3,12 @@
         <a id="logo-menu-item" class="header item" routerLink="" routerLinkActive="active">WatchWord</a>
         <a class="item" routerLink="dictionaries" routerLinkActive="active"><i class="talk outline icon"></i>Dictionaries</a>
         <a class="item" routerLink="materials" routerLinkActive="active"><i class="film icon"></i>Materials</a>
-        <a class="item" [routerLink]="['/material/create']" routerLinkActive="active"><i class="write icon"></i>Create material</a>
 
         <div class="right menu">
             <div *ngIf="userModel.isLoggedIn" class="ui simple dropdown item">
                 <i class="user icon"></i> Hi {{userModel.name}} <i class="dropdown icon"></i>
                 <div class="menu">
+                    <a class="item" routerLink="material/create" routerLinkActive="active"><i class="write icon"></i>Create material</a>
                     <a class="item"><i class="configure icon"></i>Settings</a>
                 </div>
             </div>

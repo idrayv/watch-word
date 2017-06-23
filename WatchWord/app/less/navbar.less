@@ -1,17 +1,20 @@
-﻿.ui.menu {
+﻿@import 'variables.less';
+
+.ui.menu {
     border-radius: 0px;
 }
 
 #logo-menu-item {
-    background: #24292d;
+    background: @blackBackgroundColor;
 }
 
 .ui.inverted.menu {
-    background: #24292d;
+    background: @blackBackgroundColor;
 }
 
-.ui.inverted.segment, .ui.primary.inverted.segment {
-    background: #24292d;
+.ui.inverted.segment,
+.ui.primary.inverted.segment {
+    background: @blackBackgroundColor;
 }
 
 // fixed in 2.2.11 semantic ui

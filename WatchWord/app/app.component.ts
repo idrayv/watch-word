@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { UserService } from './auth/user.service';
 import { AuthService } from './auth/auth.service';
 import { UserModel } from './auth/auth.models';
-declare var $: any;
 
 @Component({
     selector: 'watch-word',
