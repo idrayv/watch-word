@@ -58,6 +58,7 @@ namespace WatchWord
             services.AddScoped(typeof(DbContext), typeof(WatchWordContext));
             services.AddScoped(typeof(MaterialsRepository), typeof(MaterialsRepository));
             services.AddScoped(typeof(WordsRepository), typeof(WordsRepository));
+            services.AddScoped(typeof(WatchWordUnitOfWork), typeof(WatchWordUnitOfWork));
             services.AddScoped(typeof(IMaterialsService), typeof(MaterialsService));
 
             // Database context for identity

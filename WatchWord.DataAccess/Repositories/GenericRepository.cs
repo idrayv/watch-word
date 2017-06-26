@@ -135,13 +135,6 @@ namespace WatchWord.DataAccess.Repositories
 
         #endregion
 
-        /// <summary>Saves all pending changes asynchronously.</summary>
-        /// <returns>The number of objects in an Added, Modified, or Deleted state.</returns>
-        public virtual async Task<int> SaveAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
-
         /// <summary>Makes query to table by using "where" predicate and "include(join) properties".</summary>
         /// <typeparam name="TSource">Entity type.</typeparam>
         /// <param name="table">Entity framework table.</param>
@@ -160,23 +153,6 @@ namespace WatchWord.DataAccess.Repositories
             }
 
             return query.OrderBy(e => e.Id);
-        }
-
-        /// <summary>Disposes the current object.</summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>Disposes all external resources.</summary>
-        /// <param name="disposing">The dispose indicator.</param>
-        private void Dispose(bool disposing)
-        {
-            if (!disposing) return;
-            if (_context == null) return;
-            _context.Dispose();
-            _context = null;
         }
     }
 }
