@@ -41,12 +41,16 @@ namespace WatchWord
             services.AddScoped(typeof(DbContext), typeof(WatchWordContext));
 
             // DataAccess
+            services.AddScoped<ISettingsRepository, SettingsRepository>();
+            services.AddScoped<IAccountsRepository, AccountsRepository>();
             services.AddScoped<IWordsRepository, WordsRepository>();
             services.AddScoped<IMaterialsRepository, MaterialsRepository>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
 
             // Services
+            services.AddScoped<ISettingsService, SettingsService>();
+            services.AddScoped<IAccountsService, AccountsService>();
             services.AddScoped<IPictureService, PictureService>();
             services.AddScoped<IScanWordParser, ScanWordParser>();
             services.AddScoped<IMaterialsService, MaterialsService>();

@@ -54,7 +54,7 @@ namespace WatchWord.DataAccess.Repositories
         /// <param name="whereProperties">Where predicate.</param>
         /// <param name="includeProperties">Include properties.</param>
         /// <returns>The list of entities.</returns>
-        Task<TEntity> GetByСondition(Expression<Func<TEntity, bool>> whereProperties = null,
+        Task<TEntity> GetByConditionAsync(Expression<Func<TEntity, bool>> whereProperties = null,
             params Expression<Func<TEntity, object>>[] includeProperties);
 
         #endregion

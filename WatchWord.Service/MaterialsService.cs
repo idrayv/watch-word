@@ -14,16 +14,19 @@ namespace WatchWord.Service
         private IWordsRepository wordsRepository;
         private IWatchWordUnitOfWork unitOfWork;
 
+        /// <summary>Prevents a default instance of the <see cref="MaterialsService"/> class from being created.</summary>
+        private MaterialsService() { }
+
         public MaterialsService(IWatchWordUnitOfWork unitOfWork)
         {
-            this.wordsRepository = unitOfWork.Repository<IWordsRepository>(); ;
-            this.materialsRepository = unitOfWork.Repository<IMaterialsRepository>(); ;
+            this.wordsRepository = unitOfWork.Repository<IWordsRepository>();
+            this.materialsRepository = unitOfWork.Repository<IMaterialsRepository>();
             this.unitOfWork = unitOfWork;
         }
 
         public async Task<Material> GetMaterial(int id)
         {
-            return await materialsRepository.GetByСondition(m => m.Id == id, m => m.Words);
+            return await materialsRepository.GetByConditionAsync(m => m.Id == id, m => m.Words);
         }
 
         public async Task<IEnumerable<Material>> GetMaterials(int page, int count)

@@ -59,7 +59,7 @@ namespace WatchWord.DataAccess.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual async Task<TEntity> GetByСondition(Expression<Func<TEntity, bool>> whereProperties = null,
+        public virtual async Task<TEntity> GetByConditionAsync(Expression<Func<TEntity, bool>> whereProperties = null,
             params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).FirstOrDefaultAsync();
