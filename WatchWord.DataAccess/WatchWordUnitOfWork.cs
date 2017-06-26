@@ -5,24 +5,26 @@ using System.Threading.Tasks;
 
 namespace WatchWord.DataAccess
 {
-    public class WatchWordUnitOfWork
+    /// <summary>Represents unit of work pattern for WatchWord repositories.</summary>
+    public class WatchWordUnitOfWork : IWatchWordUnitOfWork, IDisposable
     {
         private IServiceProvider serviceProvider;
         private DbContext context;
 
+        /// <summary>Initializes a new instance of the <see cref="WatchWordUnitOfWork"/> class.</summary>
+        /// <param name="serviceProvider">IoC provider</param>
+        /// <param name="context">Entity framework context.</param>
         public WatchWordUnitOfWork(IServiceProvider serviceProvider, DbContext context)
         {
             this.serviceProvider = serviceProvider;
             this.context = context;
         }
 
-        public T Repository<T>() where T : class
+        public T Repository<T>()
         {
             return serviceProvider.GetService<T>();
         }
 
-        /// <summary>Saves all pending changes asynchronously.</summary>
-        /// <returns>The number of objects in an Added, Modified, or Deleted state.</returns>
         public virtual async Task<int> SaveAsync()
         {
             return await context.SaveChangesAsync();

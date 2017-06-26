@@ -13,6 +13,10 @@ namespace WatchWord.Controllers
     [Route("api/[controller]")]
     public class ParseController : Controller
     {
+        IScanWordParser parser;
+
+        public ParseController(IScanWordParser parser) => this.parser = parser;
+
         [HttpPost]
         [Authorize]
         [Route("File")]
@@ -31,7 +35,7 @@ namespace WatchWord.Controllers
                 else if (file.Length > 0)
                 {
                     var stream = file.OpenReadStream();
-                    var words = ScanWordParser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
+                    var words = parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
 
                     if (words.Count > 0)
                     {

@@ -13,7 +13,7 @@ export class MaterialsService {
     constructor(private http: Http) { }
 
     public getCount(): Promise<CountResponseModel> {
-        return this.http.get(this.baseUrl + '/materials/getCount').toPromise()
+        return this.http.get(this.baseUrl + '/materials/GetCount').toPromise()
             .then(response => response.json())
             .catch(err => { return { errors: ['Server error'], success: false, count: 0 } });
     }

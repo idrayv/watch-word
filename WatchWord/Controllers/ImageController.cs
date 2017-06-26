@@ -11,6 +11,10 @@ namespace WatchWord.Controllers
     [Route("api/[controller]")]
     public class ImageController : Controller
     {
+        IPictureService pictureService;
+
+        public ImageController(IPictureService pictureService) => this.pictureService = pictureService;
+
         [HttpPost]
         [Authorize]
         [Route("Parse")]
@@ -28,7 +32,7 @@ namespace WatchWord.Controllers
                 }
                 else if (file.Length > 0)
                 {
-                    var base64 = ImageService.ParseImageFile(file);
+                    var base64 = pictureService.ParseImageFile(file);
                     if (base64.Length > 0)
                     {
                         responseModel.Success = true;

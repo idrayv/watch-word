@@ -8,22 +8,14 @@ using WatchWord.Domain.Entity;
 namespace WatchWord.Service
 {
     /// <summary>Represents logic for parsing words in the files or streams.</summary>
-    public static class ScanWordParser
+    public class ScanWordParser : IScanWordParser
     {
-        /// <summary>Scans the unique words in the StreamReader of the file.</summary>
-        /// <param name="material">Material entity.</param>
-        /// <param name="stream">Stream reader for the text file.</param>
-        /// <returns>Unsorted collection of words in file.</returns>
-        public static List<Word> ParseUnigueWordsInFile(Material material, StreamReader stream)
+        public List<Word> ParseUnigueWordsInFile(Material material, StreamReader stream)
         {
             return ParseFile(material, stream, TypeResult.OnlyUniqueWordsInFile).Words;
         }
 
-        /// <summary>Scans all the words and their positions in the StreamReader of the file.</summary>
-        /// <param name="material">Material entity.</param>
-        /// <param name="stream">Stream reader for the text file.</param>
-        /// <returns>Unsorted collection of word compositions in file.</returns>
-        public static List<Composition> ParseAllWordsInFile(Material material, StreamReader stream)
+        public List<Composition> ParseAllWordsInFile(Material material, StreamReader stream)
         {
             return ParseFile(material, stream, TypeResult.CompositionOfWords).Compositions;
         }
@@ -32,7 +24,7 @@ namespace WatchWord.Service
         /// <param name="material">Material entity.</param>
         /// <param name="stream">Stream reader for the text file.</param>
         /// <param name="type">Type of result.</param>
-        private static ScanResult ParseFile(Material material, TextReader stream, TypeResult type)
+        private ScanResult ParseFile(Material material, TextReader stream, TypeResult type)
         {
             var pattern = new Regex(@"[^\W_\d]([^\W_\d]|[-’'](?=[^\W_\d]))*([^\W_\d]|['’])?");
 
@@ -75,7 +67,7 @@ namespace WatchWord.Service
         /// <param name="scanWord">Word entity.</param>
         /// <param name="line">Serial number of the line that contains the word.</param>
         /// <param name="column">Position of the first character in word, from the beginning of the line.</param>
-        private static void AddWordToCompositions(
+        private void AddWordToCompositions(
             object compositionsLocker,
             ICollection<Composition> compositions,
             Word scanWord,
@@ -97,7 +89,7 @@ namespace WatchWord.Service
         /// <param name="material">Material containing this word.</param>
         /// <param name="wordText">The word string.</param>
         /// <returns>The <see cref="Word"/> entity.</returns>
-        private static Word GetOrCreateScanWord(object wordsLocker, ICollection<Word> fileWords, Material material, string wordText)
+        private Word GetOrCreateScanWord(object wordsLocker, ICollection<Word> fileWords, Material material, string wordText)
         {
             Word word;
             lock (wordsLocker)
@@ -115,16 +107,6 @@ namespace WatchWord.Service
             }
 
             return word;
-        }
-
-        /// <summary>Nested type of scan result.</summary>
-        private class ScanResult
-        {
-            /// <summary>Gets or sets unsorted collection of words in the file.</summary>
-            public List<Word> Words { get; set; }
-
-            /// <summary>Gets or sets unsorted collection of word compositions in the file.</summary>
-            public List<Composition> Compositions { get; set; }
         }
     }
 }

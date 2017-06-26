@@ -10,14 +10,14 @@ namespace WatchWord.Service
 {
     public class MaterialsService : IMaterialsService
     {
-        private MaterialsRepository materialsRepository;
-        private WordsRepository wordsRepository;
-        private WatchWordUnitOfWork unitOfWork;
+        private IMaterialsRepository materialsRepository;
+        private IWordsRepository wordsRepository;
+        private IWatchWordUnitOfWork unitOfWork;
 
-        public MaterialsService(WatchWordUnitOfWork unitOfWork)
+        public MaterialsService(IWatchWordUnitOfWork unitOfWork)
         {
-            this.wordsRepository = unitOfWork.Repository<WordsRepository>(); ;
-            this.materialsRepository = unitOfWork.Repository<MaterialsRepository>(); ;
+            this.wordsRepository = unitOfWork.Repository<IWordsRepository>(); ;
+            this.materialsRepository = unitOfWork.Repository<IMaterialsRepository>(); ;
             this.unitOfWork = unitOfWork;
         }
 

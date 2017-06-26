@@ -20,6 +20,8 @@ namespace WatchWord
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -30,7 +32,25 @@ namespace WatchWord
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
+        private void ConfigureDependencyInjection(IServiceCollection services)
+        {
+            // Configuration
+            services.AddSingleton<IConfiguration>(Configuration);
+
+            // EF
+            services.AddScoped(typeof(DbContext), typeof(WatchWordContext));
+
+            // DataAccess
+            services.AddScoped<IWordsRepository, WordsRepository>();
+            services.AddScoped<IMaterialsRepository, MaterialsRepository>();
+            services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
+            services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
+
+            // Services
+            services.AddScoped<IPictureService, PictureService>();
+            services.AddScoped<IScanWordParser, ScanWordParser>();
+            services.AddScoped<IMaterialsService, MaterialsService>();
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -52,14 +72,8 @@ namespace WatchWord
                 });
             }
 
-            // Configuration
-            services.AddSingleton<IConfiguration>(Configuration);
-
-            services.AddScoped(typeof(DbContext), typeof(WatchWordContext));
-            services.AddScoped(typeof(MaterialsRepository), typeof(MaterialsRepository));
-            services.AddScoped(typeof(WordsRepository), typeof(WordsRepository));
-            services.AddScoped(typeof(WatchWordUnitOfWork), typeof(WatchWordUnitOfWork));
-            services.AddScoped(typeof(IMaterialsService), typeof(MaterialsService));
+            // Dependency injection
+            ConfigureDependencyInjection(services);
 
             // Database context for identity
             services.AddDbContext<WatchWordContext>();

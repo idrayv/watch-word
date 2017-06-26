@@ -10,9 +10,10 @@ namespace WatchWord.Controllers
     [Route("api/[controller]")]
     public class MaterialsController : Controller
     {
-        private readonly IMaterialsService _service;
-        public MaterialsController(IMaterialsService service) => _service = service;
+        private readonly IMaterialsService materialsService;
         private static string DbError => "Database query error. Please try later.";
+
+        public MaterialsController(IMaterialsService materialsService) => this.materialsService = materialsService;
 
         [HttpGet]
         [Route("GetMaterials")]
@@ -21,7 +22,7 @@ namespace WatchWord.Controllers
             var response = new MaterialsResponseModel() { Success = true };
             try
             {
-                response.Materials = await _service.GetMaterials(page, count);
+                response.Materials = await materialsService.GetMaterials(page, count);
             }
             catch (Exception ex)
             {
@@ -40,7 +41,7 @@ namespace WatchWord.Controllers
             var response = new MaterialsCountResponseModel() { Success = true };
             try
             {
-                response.Count = await _service.TotalCount();
+                response.Count = await materialsService.TotalCount();
             }
             catch (Exception ex)
             {
