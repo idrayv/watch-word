@@ -37,22 +37,24 @@ namespace WatchWord
             // Configuration
             services.AddSingleton<IConfiguration>(Configuration);
 
-            // EF
+            // Entity Framework
             services.AddScoped(typeof(DbContext), typeof(WatchWordContext));
 
             // DataAccess
+            services.AddScoped<IWordsRepository, WordsRepository>();
             services.AddScoped<ISettingsRepository, SettingsRepository>();
             services.AddScoped<IAccountsRepository, AccountsRepository>();
-            services.AddScoped<IWordsRepository, WordsRepository>();
             services.AddScoped<IMaterialsRepository, MaterialsRepository>();
+            services.AddScoped<ITranslationsRepository, TranslationsRepository>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
 
             // Services
-            services.AddScoped<ISettingsService, SettingsService>();
-            services.AddScoped<IAccountsService, AccountsService>();
             services.AddScoped<IPictureService, PictureService>();
             services.AddScoped<IScanWordParser, ScanWordParser>();
+            services.AddScoped<ISettingsService, SettingsService>();
+            services.AddScoped<IAccountsService, AccountsService>();
+            services.AddScoped<ITranslationService, TranslationService>();
             services.AddScoped<IMaterialsService, MaterialsService>();
         }
 

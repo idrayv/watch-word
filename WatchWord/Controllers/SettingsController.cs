@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WatchWord.Domain.Entity;
 using WatchWord.Models;
 using WatchWord.Service;
@@ -18,6 +19,7 @@ namespace WatchWord.Controllers
         public SettingsController(ISettingsService settingsService) => this.settingsService = settingsService;
 
         [HttpGet]
+        [Authorize]
         [Route("GetUnfilledSiteSettings")]
         public async Task<string> GetUnfilledSiteSettings(int page, int count)
         {
@@ -37,6 +39,7 @@ namespace WatchWord.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("InsertSiteSettings")]
         public async Task<string> InsertSiteSettings([FromBody] List<Setting> settings)
         {
