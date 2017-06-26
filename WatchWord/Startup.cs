@@ -42,9 +42,12 @@ namespace WatchWord
 
             // DataAccess
             services.AddScoped<IWordsRepository, WordsRepository>();
+
             services.AddScoped<ISettingsRepository, SettingsRepository>();
             services.AddScoped<IAccountsRepository, AccountsRepository>();
             services.AddScoped<IMaterialsRepository, MaterialsRepository>();
+            services.AddScoped<IKnownWordsRepository, KnownWordsRepository>();
+            services.AddScoped<ILearnWordsRepository, LearnWordsRepository>();
             services.AddScoped<ITranslationsRepository, TranslationsRepository>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
@@ -54,8 +57,9 @@ namespace WatchWord
             services.AddScoped<IScanWordParser, ScanWordParser>();
             services.AddScoped<ISettingsService, SettingsService>();
             services.AddScoped<IAccountsService, AccountsService>();
-            services.AddScoped<ITranslationService, TranslationService>();
             services.AddScoped<IMaterialsService, MaterialsService>();
+            services.AddScoped<IVocabularyService, VocabularyService>();
+            services.AddScoped<ITranslationService, TranslationService>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

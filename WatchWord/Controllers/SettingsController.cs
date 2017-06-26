@@ -21,7 +21,7 @@ namespace WatchWord.Controllers
         [HttpGet]
         [Authorize]
         [Route("GetUnfilledSiteSettings")]
-        public async Task<string> GetUnfilledSiteSettings(int page, int count)
+        public async Task<string> GetUnfilledSiteSettings()
         {
             var response = new SettingsResponseModel() { Success = true };
             try

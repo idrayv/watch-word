@@ -22,7 +22,7 @@ namespace WatchWord.Service
             accountsRepository = unitOfWork.Repository<IAccountsRepository>(); ;
         }
 
-        public async Task<Account> GetByExternalId(int id)
+        public async Task<Account> GetByExternalIdAsync(int id)
         {
             var account = await accountsRepository.GetByConditionAsync(a => a.ExternalId == id);
             if (account != null) return account;
