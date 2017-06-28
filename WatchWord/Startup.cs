@@ -68,9 +68,9 @@ namespace WatchWord
             // Options
             services.AddOptions();
 
-            // CORS: Only for Dev
-            var isDebug = Configuration.GetValue<bool>("Config:EnableCors");
-            if (isDebug)
+            // Disable CORS: Only for Dev
+            var corsEnabled = Configuration.GetValue<bool>("Config:EnableCors");
+            if (!corsEnabled)
             {
                 services.AddCors(options =>
                 {
@@ -146,9 +146,9 @@ namespace WatchWord
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // CORS: Only for Dev
-            var isDebug = Configuration.GetValue<bool>("Config:EnableCors");
-            if (isDebug)
+            // Disable CORS: Only for Dev
+            var corsEnabled = Configuration.GetValue<bool>("Config:EnableCors");
+            if (!corsEnabled)
             {
                 app.UseCors("CorsPolicy");
             }
