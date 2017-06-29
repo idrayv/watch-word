@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using WatchWord.DataAccess;
 using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
@@ -29,7 +29,7 @@ namespace WatchWord.Service
         {
             this.settingsService = settingsService;
             this.unitOfWork = unitOfWork;
-            this.translationsRepository = unitOfWork.Repository<ITranslationsRepository>();
+            translationsRepository = unitOfWork.Repository<ITranslationsRepository>();
         }
 
         public async Task<List<string>> GetTranslations(string word)

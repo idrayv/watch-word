@@ -1,20 +1,20 @@
 ﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WatchWord.Infrastructure;
-using WatchWord.DataAccess;
-using WatchWord.Domain.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using WatchWord.Service;
 using WatchWord.Service.Abstract;
 using WatchWord.DataAccess.Repositories;
-using Microsoft.EntityFrameworkCore;
+using WatchWord.Infrastructure;
+using WatchWord.DataAccess;
+using WatchWord.Domain.Identity;
 
 namespace WatchWord
 {
@@ -49,7 +49,6 @@ namespace WatchWord
             services.AddScoped<IKnownWordsRepository, KnownWordsRepository>();
             services.AddScoped<ILearnWordsRepository, LearnWordsRepository>();
             services.AddScoped<ITranslationsRepository, TranslationsRepository>();
-            services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
 
             // Services

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, forwardRef } from '@angular/core';
+﻿import { Component, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { PaginationService } from './pagination.service';
 import { MaterialsService } from '../materials.service';
@@ -16,7 +16,7 @@ import { PaginationServiceModel, PaginationModel } from './pagination.models';
     ]
 })
 
-export class PaginationComponent implements OnInit, ControlValueAccessor {
+export class PaginationComponent implements ControlValueAccessor {
     private model: PaginationServiceModel;
 
     constructor(private pagination: PaginationService) { }
@@ -30,7 +30,4 @@ export class PaginationComponent implements OnInit, ControlValueAccessor {
     registerOnChange(fn: any): void { }
     registerOnTouched(fn: any): void { }
     setDisabledState(isDisabled: boolean): void { }
-
-    ngOnInit(): void {
-    }
 }

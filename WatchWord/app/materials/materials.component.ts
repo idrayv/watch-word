@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
 import { MaterialsService } from './materials.service';
 import { PaginationModel } from './pagination/pagination.models';
@@ -13,13 +13,18 @@ import { CountResponseModel, MaterialsResponseModel } from './materials.models';
 export class MaterialsComponent implements OnInit, OnDestroy {
     public model: MaterialsModel = new MaterialsModel();
     private routeSubscription: ISubscription;
-    private itemsPerPage: number = 5;
+    private itemsPerPage: number = 24;
     private materialsRoute: string = '/materials/page';
 
-    constructor(private route: ActivatedRoute, private materialsService: MaterialsService) { }
+    constructor(private router: Router, private route: ActivatedRoute, private materialsService: MaterialsService) { }
 
     ngOnInit(): void {
         this.routeSubscription = this.route.params.subscribe(param => this.onRouteChanged(+param['id']));
+    }
+
+    public onMaterialClick(id: number): void {
+        window.console.log(id);
+        this.router.navigate(['/material', id]);
     }
 
     private onRouteChanged(id: number): void {
@@ -28,6 +33,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     }
 
     private changeModel(page: number) {
+        this.model.materials = [];
         this.materialsService.getCount().then(response => this.fillPaginationModel(response, page));
         this.materialsService.getMaterials(page, this.itemsPerPage).then(response => this.fillMaterials(response));
     }

@@ -32,4 +32,3 @@ namespace WatchWord.Service.Abstract
         Task<IEnumerable<Material>> GetMaterials(int from, int count);
     }
 }
-

@@ -1,9 +1,6 @@
-﻿<div>
-    <div *ngIf="model">
-        <a *ngFor="let page of model.pages" href="#" [class.active]="model.currentPage === page"
-           [routerLink]="[model.route, page]">
-            {{page}}
-        </a>
-        <router-outlet></router-outlet>
-    </div>
+﻿<div *ngIf="model" class="ten ui buttons">
+    <button *ngFor="let page of model.pages" href="#" class="ui mini button" [class.active]="model.currentPage === page"
+            [routerLink]="[model.route, page]">
+        {{page}}
+    </button>
 </div>

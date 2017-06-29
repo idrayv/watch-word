@@ -1,31 +1,53 @@
-﻿@import 'variables.less';
-
-#material-files {
-    width: auto;
+﻿.ms-pagination {
+    padding-bottom: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }
 
-#material-edit-buttons {
-    padding-top: 0.5em;
+.ms {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.ui.secondary.button,
-.ui.secondary.buttons .button {
-    background-color: @blackBackgroundColor;
+.ms-material {
+    cursor: pointer;
+    width: 160px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 1rem;
+    transition: 0.4s ease;
 
     &:hover {
-        background-color: @blackBackgroundHoverColor;
+        -webkit-transform: scale(1.03);
+        -ms-transform: scale(1.03);
+        transform: scale(1.03);
+        transition: 0.4s ease;
     }
 }
 
-@media only screen and (max-width: 767px) {
-    .ui.items:not(.unstackable) > .item > .image {
-        margin-left: initial;
-    }
+.ms-no-br {
+    margin-bottom: 0rem;
+}
 
-    .ui.items:not(.unstackable) > .item > .image,
-    .ui.items:not(.unstackable) > .item > .image > img {
-        max-width: initial !important;
-        width: initial !important;
-        max-height: initial !important;
-    }
+.ms-material-name {
+    max-width: 155px;
+    max-height: 200px;
+    position: absolute;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    color: white;
+    word-wrap: break-word;
+    font-size: 0.9rem;
+    line-height: 1.6rem;
+    overflow: hidden;
+}
+
+.ms-material-image {
+    max-width: 160px;
 }

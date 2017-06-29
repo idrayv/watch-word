@@ -1,17 +1,18 @@
-﻿<div class="test3">
-    <div [ngSwitch]="model.hasErrors">
-        <div *ngSwitchCase="true">
-            <div *ngFor="let error of model.serverErrors">
-                {{error}}
-            </div>
-        </div>
-        <div *ngSwitchCase="false">
-            <div *ngFor="let material of model.materials">
-                <img [src]="material.image" />
-                <span>{{material.name}}</span>
-            </div>
-        </div>
+﻿<div *ngIf="model.hasErrors">
+    <div *ngFor="let error of model.serverErrors">
+        {{error}}
     </div>
 </div>
 
-<pagination name="currentPage" route="" [ngModel]="model.paginationModel"></pagination>
+<div *ngIf="!model.hasErrors" class="ms">
+    <div *ngFor="let material of model.materials" class="ms-material" (click)="onMaterialClick(material.id)">
+        <div class="ms-material-name">{{material.name}}</div>
+        <img [src]="material.image" class="ms-material-image" />
+    </div>
+    <div class="ms-material ms-no-br"></div><div class="ms-material ms-no-br"></div><div class="ms-material ms-no-br"></div>
+    <div class="ms-material ms-no-br"></div><div class="ms-material ms-no-br"></div><div class="ms-material ms-no-br"></div>
+</div>
+
+<div *ngIf="model.materials && model.materials.length" class="ms-pagination">
+    <pagination [ngModel]="model.paginationModel"></pagination>
+</div>

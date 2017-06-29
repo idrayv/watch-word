@@ -7,19 +7,19 @@ export class PaginationService {
         let totalPages = Math.ceil(model.count / model.itemsPerPage);
         let startPage: number, endPage: number;
 
-        if (totalPages < 10) {
+        if (totalPages < 6) {
             startPage = 1;
             endPage = totalPages;
         } else {
-            if (model.currentPage <= 6) {
+            if (model.currentPage <= 4) {
                 startPage = 1;
-                endPage = 10;
-            } else if (model.currentPage + 4 >= totalPages) {
-                startPage = totalPages - 9;
-                endPage = totalPages;       
+                endPage = 6;
+            } else if (model.currentPage + 2 >= totalPages) {
+                startPage = totalPages - 5;
+                endPage = totalPages;
             } else {
-                startPage = model.currentPage - 5;
-                endPage = model.currentPage + 4;
+                startPage = model.currentPage - 2;
+                endPage = model.currentPage + 3;
             }
         }
 
