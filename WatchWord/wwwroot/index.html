@@ -17,10 +17,12 @@
     <script src="lib/semantic-ui/dist/semantic.min.js"></script>
 
     <script>
-      System.import('app').catch(function(err){ console.error(err); });
+        System.import('app').catch(function (err) { console.error(err); });
     </script>
 </head>
 <body>
-    <watch-word>Loading...</watch-word>
+    <watch-word>
+        <div class="loading"></div>
+    </watch-word>
 </body>
 </html>

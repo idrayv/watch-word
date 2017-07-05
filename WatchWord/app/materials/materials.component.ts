@@ -5,6 +5,7 @@ import { MaterialsService } from './materials.service';
 import { PaginationModel } from './pagination/pagination.models';
 import { MaterialsModel } from './materials.models';
 import { CountResponseModel, MaterialsResponseModel } from './materials.models';
+import { SpinnerService } from '../spinner/spinner.service';
 
 @Component({
     templateUrl: 'app/materials/materials.template.html'
@@ -16,14 +17,13 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     private itemsPerPage: number = 24;
     private materialsRoute: string = '/materials/page';
 
-    constructor(private router: Router, private route: ActivatedRoute, private materialsService: MaterialsService) { }
+    constructor(private router: Router, private route: ActivatedRoute, private materialsService: MaterialsService, private spinner: SpinnerService) { }
 
     ngOnInit(): void {
         this.routeSubscription = this.route.params.subscribe(param => this.onRouteChanged(+param['id']));
     }
 
     public onMaterialClick(id: number): void {
-        window.console.log(id);
         this.router.navigate(['/material', id]);
     }
 
@@ -34,8 +34,12 @@ export class MaterialsComponent implements OnInit, OnDestroy {
 
     private changeModel(page: number) {
         this.model.materials = [];
+        this.spinner.displaySpinner(true);
         this.materialsService.getCount().then(response => this.fillPaginationModel(response, page));
-        this.materialsService.getMaterials(page, this.itemsPerPage).then(response => this.fillMaterials(response));
+        this.materialsService.getMaterials(page, this.itemsPerPage).then((response) => { 
+            this.spinner.displaySpinner(false);
+            return this.fillMaterials(response);
+        });
     }
 
     private fillPaginationModel(response: CountResponseModel, page: number): void {
