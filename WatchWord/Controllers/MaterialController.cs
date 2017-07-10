@@ -6,16 +6,23 @@ using WatchWord.Models;
 using WatchWord.Service.Abstract;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
+using WatchWord.Domain.Identity;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
     public class MaterialController : Controller
     {
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IMaterialsService materialService;
-        private static string DbError => "Database query error. Please try later.";
+        private static string dbError = "Database query error. Please try later.";
 
-        public MaterialController(IMaterialsService materialService) => this.materialService = materialService;
+        public MaterialController(IMaterialsService materialService, UserManager<ApplicationUser> userManager)
+        {
+            this.userManager = userManager;
+            this.materialService = materialService;
+        }
 
         [HttpPost]
         [Authorize]
@@ -30,14 +37,14 @@ namespace WatchWord.Controllers
                 if (response.Id <= 0)
                 {
                     response.Success = false;
-                    response.Errors.Add(DbError);
+                    response.Errors.Add(dbError);
                 }
             }
             catch (Exception ex)
             {
                 response.Success = false;
                 Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                response.Errors.Add(dbError);
             }
 
             return response.ToJson();
@@ -54,14 +61,14 @@ namespace WatchWord.Controllers
                 if (await materialService.DeleteMaterial(id) <= 0)
                 {
                     response.Success = false;
-                    response.Errors.Add(DbError);
+                    response.Errors.Add(dbError);
                 }
             }
             catch (Exception ex)
             {
                 response.Success = false;
                 Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                response.Errors.Add(dbError);
             }
 
             return response.ToJson();
@@ -81,12 +88,17 @@ namespace WatchWord.Controllers
                     response.Success = false;
                     response.Errors.Add("Material with key " + id + " does not exist!");
                 }
+                else
+                {
+                    var userId = (await userManager.GetUserAsync(HttpContext.User)).Id;
+                    response.VocabWords = await materialService.GetVocabWordsByMaterial(response.Material, userId);
+                }
             }
             catch (Exception ex)
             {
                 response.Success = false;
                 Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                response.Errors.Add(dbError);
             }
 
             return response.ToJson();

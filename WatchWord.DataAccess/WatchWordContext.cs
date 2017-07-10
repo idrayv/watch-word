@@ -23,11 +23,8 @@ namespace WatchWord.DataAccess
         /// <summary>Gets or sets the materials.</summary>
         public DbSet<Material> Materials { get; set; }
 
-        /// <summary>Gets or sets the vocabulary of known words.</summary>
-        public DbSet<KnownWord> KnownWords { get; set; }
-
-        /// <summary>Gets or sets the vocabulary of learning words.</summary>
-        public DbSet<LearnWord> LearnWords { get; set; }
+        /// <summary>Gets or sets the vocabulary words.</summary>
+        public DbSet<VocabWord> VocabWords { get; set; }
 
         /// <summary>Gets or sets user's or site's settings.</summary>
         public DbSet<Setting> Settings { get; set; }
@@ -87,16 +84,10 @@ namespace WatchWord.DataAccess
                 material.Property(m => m.Description);
             });
 
-            modelBuilder.Entity<KnownWord>(knownWord =>
+            modelBuilder.Entity<VocabWord>(knownWord =>
             {
-                knownWord.ToTable("KnownWords");
-                knownWord.Property(k => k.Id).ValueGeneratedOnAdd();
-            });
-
-            modelBuilder.Entity<LearnWord>(learnWord =>
-            {
-                learnWord.ToTable("LearnWords");
-                learnWord.Property(l => l.Id).ValueGeneratedOnAdd();
+                knownWord.ToTable("VocabWords");
+                knownWord.Property(v => v.Id).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<Setting>(setting =>

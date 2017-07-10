@@ -5,7 +5,6 @@ namespace WatchWord.Models
 {
     public class VocabularyResponseModel : BaseResponseModel
     {
-        public List<KnownWord> KnownWords { get; set; }
-        public List<LearnWord> LearnWords { get; set; }
+        public List<VocabWord> VocabWords { get; set; }
     }
 }

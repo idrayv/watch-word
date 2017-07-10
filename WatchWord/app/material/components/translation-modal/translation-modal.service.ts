@@ -2,7 +2,8 @@
 import { Http, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
-import { TranslationModalModel, TranslationResponseModel, VocabularyResponseModel, VocabularyRequestModel } from './translation-modal.models';
+import { TranslationModalModel, TranslationResponseModel, VocabularyResponseModel } from './translation-modal.models';
+import { VocabWord, VocabType } from '../../material.models';
 import { TranslationService } from './translation.service';
 import { Word } from '../../material.models';
 let cfg = require('../../../config').appConfig;
@@ -21,7 +22,7 @@ export class TranslationModalService {
     public pushToModal(word: Word): void {
         this.translationService.getTransletion(word.theWord).then(response => {
             this.translationModalModel.next(this.getTransletionModel(word, response));
-        }); 
+        });
     }
 
     private getTransletionModel(word: Word, serverResponse: TranslationResponseModel): TranslationModalModel {
@@ -36,8 +37,9 @@ export class TranslationModalService {
     }
 
     public saveToVocabulary(transletionModel: TranslationModalModel): void {
-        let request: VocabularyRequestModel = {
-            isKnown: transletionModel.isKnown,
+        let request: VocabWord = {
+            id: 0,
+            type: transletionModel.isKnown ? VocabType.KnownWord : VocabType.LearnWord,
             translation: transletionModel.translation,
             word: transletionModel.word.theWord
         };

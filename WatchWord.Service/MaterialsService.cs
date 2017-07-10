@@ -10,6 +10,7 @@ namespace WatchWord.Service
 {
     public class MaterialsService : IMaterialsService
     {
+        private IVocabularyService vocabularyService;
         private IMaterialsRepository materialsRepository;
         private IWordsRepository wordsRepository;
         private IWatchWordUnitOfWork unitOfWork;
@@ -17,8 +18,9 @@ namespace WatchWord.Service
         /// <summary>Prevents a default instance of the <see cref="MaterialsService"/> class from being created.</summary>
         private MaterialsService() { }
 
-        public MaterialsService(IWatchWordUnitOfWork unitOfWork)
+        public MaterialsService(IWatchWordUnitOfWork unitOfWork, IVocabularyService vocabularyService)
         {
+            this.vocabularyService = vocabularyService;
             this.wordsRepository = unitOfWork.Repository<IWordsRepository>();
             this.materialsRepository = unitOfWork.Repository<IMaterialsRepository>();
             this.unitOfWork = unitOfWork;
@@ -29,10 +31,19 @@ namespace WatchWord.Service
             return await materialsRepository.GetByConditionAsync(m => m.Id == id, m => m.Words);
         }
 
+        public async Task<List<VocabWord>> GetVocabWordsByMaterial(Material material, int userId)
+        {
+            var arrayOfWords = material.Words == null
+                ? new string[0]
+                : material.Words.Select(n => n.TheWord).ToArray();
+
+            return await vocabularyService.GetVocabByMaterialWordsAsync(arrayOfWords, userId);
+        }
+
         public async Task<IEnumerable<Material>> GetMaterials(int page, int count)
         {
             page = page < 1 ? 1 : page;
-            return await materialsRepository.SkipAndTakeAsync((page - 1) * count, count, null, m => m.Words);
+            return await materialsRepository.SkipAndTakeAsync((page - 1) * count, count);
         }
 
         public async Task<int> SaveMaterial(Material material)

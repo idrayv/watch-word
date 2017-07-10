@@ -1,6 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { TranslationResponseModel, VocabularyRequestModel, VocabularyResponseModel } from './translation-modal.models';
+import { TranslationResponseModel, VocabularyResponseModel } from './translation-modal.models';
+import { VocabWord } from '../../material.models';
 let cfg = require('../../../config').appConfig;
 
 @Injectable()
@@ -15,8 +16,8 @@ export class TranslationService {
             .catch(() => { return { errors: ['Connection error'], success: false, translations: [] } });
     }
 
-    public saveToVocabulary(transletionModel: VocabularyRequestModel): Promise<VocabularyResponseModel> {
-        return this.http.post(this.baseUrl + '/Vocabulary/', transletionModel).toPromise()
+    public saveToVocabulary(vocabWord: VocabWord): Promise<VocabularyResponseModel> {
+        return this.http.post(this.baseUrl + '/Vocabulary/', vocabWord).toPromise()
             .then((res: Response) => res.json())
             .catch(() => { return { errors: ['Connection error'], success: false } });
     }

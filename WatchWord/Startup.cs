@@ -47,8 +47,7 @@ namespace WatchWord
             services.AddScoped<ISettingsRepository, SettingsRepository>();
             services.AddScoped<IAccountsRepository, AccountsRepository>();
             services.AddScoped<IMaterialsRepository, MaterialsRepository>();
-            services.AddScoped<IKnownWordsRepository, KnownWordsRepository>();
-            services.AddScoped<ILearnWordsRepository, LearnWordsRepository>();
+            services.AddScoped<IVocabWordsRepository, VocabWordsRepository>();
             services.AddScoped<ITranslationsRepository, TranslationsRepository>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
 

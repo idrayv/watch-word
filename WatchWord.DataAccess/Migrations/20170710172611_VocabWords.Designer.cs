@@ -3,15 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using WatchWord.DataAccess;
-using WatchWord.Domain.Entity;
 
 namespace WatchWord.DataAccess.Migrations
 {
     [DbContext(typeof(WatchWordContext))]
-    partial class WatchWordContextModelSnapshot : ModelSnapshot
+    [Migration("20170710172611_VocabWords")]
+    partial class VocabWords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")

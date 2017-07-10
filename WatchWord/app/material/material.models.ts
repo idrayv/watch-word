@@ -11,10 +11,22 @@ export enum MaterialType {
     Series
 }
 
+export enum VocabType {
+    LearnWord,
+    KnownWord
+}
+
 export class Word {
     public id: number;
     public theWord: string;
     public count: number;
+}
+
+export class VocabWord {
+    public id: number;
+    public word: string;
+    public translation: string;
+    public type: VocabType;
 }
 
 export class MaterialModel {
@@ -32,6 +44,7 @@ export class MaterialResponseModel extends BaseResponseModel {
 
 export class ParseResponseModel extends BaseResponseModel {
     public words: Array<Word>;
+    public vocabWords: Array<VocabWord>;
 }
 
 export class CreateResponseModel extends BaseResponseModel {

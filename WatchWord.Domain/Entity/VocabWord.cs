@@ -20,7 +20,6 @@ namespace WatchWord.Domain.Entity
 
     public enum VocabType
     {
-        NewWord,
         LearnWord,
         KnownWord
     }

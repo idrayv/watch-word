@@ -7,6 +7,7 @@ using WatchWord.Domain.Identity;
 using WatchWord.Models;
 using WatchWord.Service;
 using System.Diagnostics;
+using WatchWord.Domain.Entity;
 
 namespace WatchWord.Controllers
 {
@@ -25,24 +26,13 @@ namespace WatchWord.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<string> Post([FromBody]VocabularyRequestModel vocabularyRequestModel)
+        public async Task<string> Post([FromBody]VocabWord vocabWord)
         {
             var response = new BaseResponseModel() { Success = true };
             try
             {
-                int result = 0;
                 var userId = (await userManager.GetUserAsync(HttpContext.User)).Id;
-
-                if (vocabularyRequestModel.IsKnown)
-                {
-                    result = await vocabularyService.InsertKnownWord(vocabularyRequestModel.Word,
-                        vocabularyRequestModel.Translation, userId);
-                }
-                else
-                {
-                    result = await vocabularyService.InsertLearnWord(vocabularyRequestModel.Word,
-                        vocabularyRequestModel.Translation, userId);
-                }
+                var result = await vocabularyService.InsertVocabWordAsync(vocabWord, userId);
 
                 if (result <= 0)
                 {
@@ -69,8 +59,7 @@ namespace WatchWord.Controllers
             var response = new VocabularyResponseModel() { Success = true };
             try
             {
-                response.KnownWords = await vocabularyService.GetKnownWords(userId);
-                response.LearnWords = await vocabularyService.GetLearnWords(userId);
+                response.VocabWords = await vocabularyService.GetVocabWordsAsync(userId);
             }
             catch (Exception ex)
             {
