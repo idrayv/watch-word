@@ -2,7 +2,7 @@
 import { Subscription } from 'rxjs/Subscription';
 import { TranslationModalService } from './translation-modal.service';
 import { TranslationModalModel } from './translation-modal.models';
-import { ModalService } from '../modal/modal.service';
+import { ModalService } from '../../../abstract/modal/modal.service';
 
 @Component({
     selector: 'translation-modal',
