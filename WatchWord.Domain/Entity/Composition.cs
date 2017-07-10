@@ -12,6 +12,6 @@ namespace WatchWord.Domain.Entity
         public int Line { get; set; }
 
         /// <summary>Gets or sets the position of the first character in word from the beginning of the line.</summary>
-        public int Сolumn { get; set; }
+        public int Column { get; set; }
     }
 }

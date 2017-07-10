@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 using MySQL.Data.Entity.Extensions;
-using System;
 using WatchWord.Domain.Entity;
 using WatchWord.Domain.Identity;
 
@@ -11,7 +9,7 @@ namespace WatchWord.DataAccess
 {
     public class WatchWordContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
-        private readonly IConfiguration _configuration;
+        private readonly DatabaseSettings dbSettings;
 
         /// <summary>Gets or sets the words.</summary>
         public DbSet<Word> Words { get; set; }
@@ -37,42 +35,28 @@ namespace WatchWord.DataAccess
         /// <summary>Gets or sets translations.</summary>
         public DbSet<Translation> Translations { get; set; }
 
-        protected WatchWordContext()
-        {
-        }
+        protected WatchWordContext() { }
 
-        public WatchWordContext(IConfiguration configuration)
+        public WatchWordContext(DatabaseSettings dbSettings)
         {
-            _configuration = configuration;
-            Init();
-        }
-
-        private void Init()
-        {
+            this.dbSettings = dbSettings;
             Database.Migrate();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var isMySql = _configuration["DatabaseSettings:MySql"] == "True";
-            if (isMySql)
+            if (dbSettings.UseMySQL)
             {
-                optionsBuilder.UseMySQL(_configuration["DatabaseSettings:ConnectionStringMySql"]);
-            }
-            else if (Environment.MachineName == "DESKTOP-Q21PF7P")
-            {
-                optionsBuilder.UseSqlServer(_configuration["DatabaseSettings:ConnectionStringTommyNotebook"]);
+                optionsBuilder.UseMySQL(dbSettings.ConnectionString);
             }
             else
             {
-                optionsBuilder.UseSqlServer(_configuration["DatabaseSettings:ConnectionString"]);
+                optionsBuilder.UseSqlServer(dbSettings.ConnectionString);
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var isMySql = _configuration["DatabaseSettings:MySql"] == "True";
-
             modelBuilder.Entity<Word>(word =>
             {
                 word.Property(w => w.Id).ValueGeneratedOnAdd();
@@ -96,7 +80,7 @@ namespace WatchWord.DataAccess
             {
                 material.ToTable("Materials");
                 material.Property(m => m.Id).ValueGeneratedOnAdd();
-                if (isMySql)
+                if (dbSettings.UseMySQL)
                 {
                     material.Property(m => m.Image).HasColumnType("TEXT").HasMaxLength(20000);
                 }

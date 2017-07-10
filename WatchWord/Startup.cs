@@ -42,8 +42,8 @@ namespace WatchWord
             services.AddScoped(typeof(DbContext), typeof(WatchWordContext));
 
             // DataAccess
+            services.AddSingleton<DatabaseSettings, DatabaseSettings>();
             services.AddScoped<IWordsRepository, WordsRepository>();
-
             services.AddScoped<ISettingsRepository, SettingsRepository>();
             services.AddScoped<IAccountsRepository, AccountsRepository>();
             services.AddScoped<IMaterialsRepository, MaterialsRepository>();

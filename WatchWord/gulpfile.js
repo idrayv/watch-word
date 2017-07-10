@@ -5,6 +5,7 @@
     path = require('path'),
     rimraf = require('rimraf'),
     sourcemaps = require('gulp-sourcemaps'),
+    util = require('gulp-util'),
     cfg = require('./app/config');
 
 gulp.task('clean-lib', function (cb) {
@@ -81,6 +82,7 @@ gulp.task('compile-ts', buildAppDeps, function () {
     var tsResultJs = tsResult.js;
     if (cfg.appConfig.isDebug === true) {
         // Generete map if debug
+        util.log("debug mode: ts maps added");
         tsResultJs = tsResultJs.pipe(sourcemaps.write({
             sourceRoot: function (file) {
                 var sourceFile = path.join(file.cwd, file.sourceMap.file);

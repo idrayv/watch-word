@@ -30,8 +30,7 @@ export class TranslationModalService {
         if (serverResponse.success) {
             modalModel.translations = serverResponse.translations;
         } else {
-            //handle errors here
-            debugger;
+            // TODO: handle errors here
         }
         return modalModel;
     }

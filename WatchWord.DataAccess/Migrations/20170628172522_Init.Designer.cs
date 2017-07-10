@@ -120,7 +120,7 @@ namespace WatchWord.DataAccess.Migrations
 
                     b.Property<int?>("WordId");
 
-                    b.Property<int>("Сolumn");
+                    b.Property<int>("Column");
 
                     b.HasKey("Id");
 
@@ -531,7 +531,7 @@ namespace WatchWord.DataAccess.Migrations
 
                     b.Property<int?>("WordId");
 
-                    b.Property<int>("Сolumn");
+                    b.Property<int>("Column");
 
                     b.HasKey("Id");
 

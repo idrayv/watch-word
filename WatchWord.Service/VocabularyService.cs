@@ -54,7 +54,7 @@ namespace WatchWord.Service
             if (existingLearnWord != null)
             {
                 // Delete translation from learning words vocabulary if exist.
-                learnWordsRepository.Delete(existingLearnWord.Id);
+                learnWordsRepository.Delete(existingLearnWord);
             }
 
             if (existingKnownWord != null)
@@ -86,7 +86,7 @@ namespace WatchWord.Service
             if (existingKnownWord != null)
             {
                 // Delete translation from known words vocabulary if exist.
-                knownWordsRepository.Delete(existingKnownWord.Id);
+                knownWordsRepository.Delete(existingKnownWord);
             }
 
             if (existingLearnWord != null)

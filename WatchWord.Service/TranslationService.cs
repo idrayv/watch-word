@@ -136,7 +136,7 @@ namespace WatchWord.Service
                 text = streamReader.ReadToEnd();
             }
 
-            var yandexTranslateWords = Newtonsoft.Json.JsonConvert.DeserializeObject<YandexTranslateWords>(text);
+            var yandexTranslateWords = JsonConvert.DeserializeObject<YandexTranslateWords>(text);
             foreach (var translation in yandexTranslateWords.text)
             {
                 translations.Add(translation.ToLower());
@@ -188,10 +188,10 @@ namespace WatchWord.Service
         private async Task<string> GetYandexDictionaryApiKey()
         {
             if (!string.IsNullOrEmpty(yandexDictionaryApiKey)) return yandexDictionaryApiKey;
-            var setting = settingsService.GetSiteSetting(SettingKey.YandexDictionaryApiKey);
+            var setting = await settingsService.GetSiteSettingAsync(SettingKey.YandexDictionaryApiKey);
             if (setting != null)
             {
-                yandexDictionaryApiKey = (await settingsService.GetSiteSetting(SettingKey.YandexDictionaryApiKey)).String;
+                yandexDictionaryApiKey = setting.String;
             }
             else
             {
@@ -206,10 +206,10 @@ namespace WatchWord.Service
         private async Task<string> GetYandexTranslateApiKey()
         {
             if (!string.IsNullOrEmpty(yandexTranslateApiKey)) return yandexTranslateApiKey;
-            var setting = settingsService.GetSiteSetting(SettingKey.YandexTranslateApiKey);
+            var setting = await settingsService.GetSiteSettingAsync(SettingKey.YandexTranslateApiKey);
             if (setting != null)
             {
-                yandexTranslateApiKey = (await settingsService.GetSiteSetting(SettingKey.YandexTranslateApiKey)).String;
+                yandexTranslateApiKey = setting.String;
             }
             else
             {

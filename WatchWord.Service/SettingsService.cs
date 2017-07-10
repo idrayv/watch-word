@@ -65,7 +65,7 @@ namespace WatchWord.Service
             return await unitOfWork.SaveAsync();
         }
 
-        public async Task<Setting> GetSiteSetting(SettingKey key)
+        public async Task<Setting> GetSiteSettingAsync(SettingKey key)
         {
             return await settingsRepository.GetByConditionAsync(s => s.Key == key && s.Owner == null);
         }

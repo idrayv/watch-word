@@ -18,6 +18,6 @@ namespace WatchWord.Service
         /// <summary>Gets the site configuration setting by its key.</summary>
         /// <param name="key">Setting key.</param>
         /// <returns>Setting entity.</returns>
-        Task<Setting> GetSiteSetting(SettingKey key);
+        Task<Setting> GetSiteSettingAsync(SettingKey key);
     }
 }

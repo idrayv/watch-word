@@ -301,7 +301,7 @@ namespace WatchWord.DataAccess.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Line = table.Column<int>(nullable: false),
                     WordId = table.Column<int>(nullable: true),
-                    Сolumn = table.Column<int>(nullable: false)
+                    Column = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -734,7 +734,7 @@ namespace WatchWord.DataAccess.Migrations
                         .Annotation("MySQL:AutoIncrement", true),
                     Line = table.Column<int>(nullable: false),
                     WordId = table.Column<int>(nullable: true),
-                    Сolumn = table.Column<int>(nullable: false)
+                    Column = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -62,7 +62,12 @@ namespace WatchWord.DataAccess.Repositories
         public virtual async Task<TEntity> GetByConditionAsync(Expression<Func<TEntity, bool>> whereProperties = null,
             params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).FirstOrDefaultAsync();
+            var entity = await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties, includeProperties).FirstOrDefaultAsync();
+            if (entity != null && _context.Entry(entity).State == EntityState.Detached)
+            {
+                _context.Entry(entity).State = EntityState.Unchanged;
+            }
+            return entity;
         }
 
         #endregion

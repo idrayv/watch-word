@@ -26,7 +26,7 @@ namespace WatchWord.Service
         /// <param name="type">Type of result.</param>
         private ScanResult ParseFile(Material material, TextReader stream, TypeResult type)
         {
-            var pattern = new Regex(@"[^\W_\d]([^\W_\d]|[-’'](?=[^\W_\d]))*([^\W_\d]|['’])?");
+            var pattern = new Regex(@"[^\W_\d]([^\W_\d]|[-’`'](?=[^\W_\d]))*([^\W_\d]|['`’])?");
 
             var wordsLocker = new object();
             var compositionsLocker = new object();
@@ -74,8 +74,7 @@ namespace WatchWord.Service
             int line,
             int column)
         {
-
-            var composition = new Composition { Word = scanWord, Line = line, Сolumn = column };
+            var composition = new Composition { Word = scanWord, Line = line, Column = column };
 
             lock (compositionsLocker)
             {

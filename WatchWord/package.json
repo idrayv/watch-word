@@ -1,9 +1,19 @@
 {
   "name": "watch-word",
   "version": "1.0.0",
+  "description": "Web site for English language learners",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idrayv/WatchWord.git"
+  },
+  "readme": "./README.md",
   "scripts": {},
-  "keywords": [],
+  "keywords": [ "english", "learn", "subtitle" ],
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/idrayv/WatchWord/issues"
+  },
+  "homepage": "http://watchword.azurewebsites.net",
   "dependencies": {
     "@angular/common": "~4.2.4",
     "@angular/compiler": "~4.2.4",
@@ -16,24 +26,26 @@
     "angular-in-memory-web-api": "~0.3.2",
     "systemjs": "~0.20.14",
     "core-js": "~2.4.1",
-    "rxjs": "~5.4.1",
+    "rxjs": "~5.4.2",
     "zone.js": "~0.8.12",
     "semantic-ui": "~2.2.10",
     "jquery": "~3.2.1"
   },
   "devDependencies": {
-    "express": "~4.15.3",
-    "body-parser": "~1.17.2",
-    "@types/core-js": "^0.9.42",
-    "@types/node": "^8.0.4",
-    "gulp": "~3.9.1",
-    "gulp-typescript": "~3.1.7",
-    "gulp-less": "~3.3.2",
-    "gulp-sourcemaps": "~2.6.0",
-    "path": "~0.12.7",
-    "q": "~1.5.0",
-    "rimraf": "~2.6.1",
-    "typescript": "~2.3.4",
-    "escape-string-regexp": "~1.0.5"
+    "express": "latest",
+    "body-parser": "latest",
+    "@types/core-js": "latest",
+    "@types/node": "latest",
+    "gulp": "latest",
+    "gulp-typescript": "latest",
+    "gulp-less": "latest",
+    "gulp-sourcemaps": "latest",
+    "path": "latest",
+    "q": "latest",
+    "rimraf": "latest",
+    "typescript": "latest",
+    "escape-string-regexp": "latest",
+    "useless-module": "latest",
+    "gulp-util": "latest"
   }
 }

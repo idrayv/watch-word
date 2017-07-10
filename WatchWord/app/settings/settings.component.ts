@@ -27,7 +27,7 @@ export class SettingsComponent implements OnInit {
 
     public submitForm(): void {
         this.settingService.insertSettins(this.model.settings).then(response => {
-            debugger;
+            // TODO: Saved message or handle errors
         });
     }
 }

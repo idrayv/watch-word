@@ -19,7 +19,7 @@ namespace WatchWord.Service
         public AccountsService(IWatchWordUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            accountsRepository = unitOfWork.Repository<IAccountsRepository>(); ;
+            accountsRepository = unitOfWork.Repository<IAccountsRepository>();
         }
 
         public async Task<Account> GetByExternalIdAsync(int id)
