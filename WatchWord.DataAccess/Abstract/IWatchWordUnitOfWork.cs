@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace WatchWord.DataAccess
 {
-    public interface IWatchWordUnitOfWork : IDisposable
+    public interface IWatchWordUnitOfWork
     {
         /// <summary>Returns repository by specified type.</summary>
         /// <typeparam name="T">Repository type.</typeparam>

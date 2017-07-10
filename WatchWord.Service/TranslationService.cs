@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using WatchWord.DataAccess;
 using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
+using WatchWord.Service.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
 namespace WatchWord.Service
 {
@@ -18,6 +20,8 @@ namespace WatchWord.Service
         private readonly ISettingsService settingsService;
         private readonly IWatchWordUnitOfWork unitOfWork;
         private readonly ITranslationsRepository translationsRepository;
+        private readonly IConfiguration configuration;
+        private readonly WatchWordProxy proxy;
 
         /// <summary>Prevents a default instance of the <see cref="TranslationService"/> class from being created.</summary>
         private TranslationService() { }
@@ -25,10 +29,15 @@ namespace WatchWord.Service
         /// <summary>Initializes a new instance of the <see cref="TranslationService"/> class.</summary>
         /// <param name="settingsService">Settings service.</param>
         /// <param name="watchWordUnitOfWork">Unit of work over WatchWord repositories.</param>
-        public TranslationService(ISettingsService settingsService, IWatchWordUnitOfWork unitOfWork)
+        public TranslationService(ISettingsService settingsService,
+            IWatchWordUnitOfWork unitOfWork,
+            IConfiguration configuration,
+            WatchWordProxy proxy)
         {
             this.settingsService = settingsService;
             this.unitOfWork = unitOfWork;
+            this.configuration = configuration;
+            this.proxy = proxy;
             translationsRepository = unitOfWork.Repository<ITranslationsRepository>();
         }
 
@@ -53,7 +62,7 @@ namespace WatchWord.Service
                 translations.AddRange(await GetYandexTranslateWord(word));
             }
 
-            SaveTranslationsToCache(word, translations, source);
+            await SaveTranslationsToCache(word, translations, source);
             return translations;
         }
 
@@ -61,15 +70,12 @@ namespace WatchWord.Service
         /// <param name="word">Original word.</param>
         /// <param name="translations">List of translations.</param>
         /// <param name="source">Source of the translation.</param>
-        private void SaveTranslationsToCache(string word, IReadOnlyCollection<string> translations, TranslationSource source)
+        private async Task SaveTranslationsToCache(string word, IReadOnlyCollection<string> translations, TranslationSource source)
         {
-            Task.Run(() =>
-            {
-                SaveTranslationsToCacheAsync(word, translations, source);
-            });
+            await SaveTranslationsToCacheAsync(word, translations, source);
         }
 
-        private async void SaveTranslationsToCacheAsync(string word, IReadOnlyCollection<string> translations, TranslationSource source)
+        private async Task SaveTranslationsToCacheAsync(string word, IReadOnlyCollection<string> translations, TranslationSource source)
         {
             if (translations.Count == 0) return;
 
@@ -116,6 +122,10 @@ namespace WatchWord.Service
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(address);
             httpWebRequest.ContentType = "text/json";
             httpWebRequest.Method = "POST";
+            if (configuration["Proxy:Enabled"] == "True")
+            {
+                httpWebRequest.Proxy = proxy;
+            }
 
             var httpResponse = ((HttpWebResponse)await httpWebRequest.GetResponseAsync()).GetResponseStream();
             if (httpResponse == null) return translations;
@@ -150,12 +160,16 @@ namespace WatchWord.Service
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(address);
             httpWebRequest.ContentType = "text/json";
             httpWebRequest.Method = "POST";
+            if (configuration["Proxy:Enabled"] == "True")
+            {
+                httpWebRequest.Proxy = proxy;
+            }
 
-            var httpResponse = await httpWebRequest.GetRequestStreamAsync();
+            var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
             if (httpResponse == null) return translations;
 
             string text;
-            using (var streamReader = new StreamReader(httpResponse))
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 text = streamReader.ReadToEnd();
             }
@@ -213,7 +227,6 @@ namespace WatchWord.Service
 
         protected class Tr2
         {
-            // ReSharper disable InconsistentNaming
             public string text { get; set; }
         }
 
@@ -255,7 +268,6 @@ namespace WatchWord.Service
             public int code { get; set; }
             public string lang { get; set; }
             public List<string> text { get; set; }
-            // ReSharper restore InconsistentNaming
         }
 
         #endregion

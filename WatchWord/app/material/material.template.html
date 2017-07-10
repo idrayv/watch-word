@@ -80,6 +80,10 @@
 
 <div *ngIf="material.words && material.words.length !== 0">
     <span *ngFor="let word of material.words">
-        {{word.theWord}}
+        <span (click)="getTransletion(word)">{{word.theWord}}</span>
     </span>
 </div>
+
+<modal id="modal">
+    <translation-modal modalId="modal"></translation-modal>
+</modal>

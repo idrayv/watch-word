@@ -1,0 +1,9 @@
+﻿<div>
+    <div>
+        <input type="radio" [(ngModel)]="model.isKnown" name="isKnown" [value]="true">Known<br />
+        <input type="radio" [(ngModel)]="model.isKnown" name="isKnown" [value]="false">Learn
+    </div>
+    <div>
+        <span *ngFor="let translation of model.translations" (click)="selectTranslation(translation)">{{translation}} </span>
+    </div>
+</div>

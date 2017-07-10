@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using MySQL.Data.Entity.Extensions;
+using System;
 using WatchWord.Domain.Entity;
 using WatchWord.Domain.Identity;
 
@@ -57,6 +58,10 @@ namespace WatchWord.DataAccess
             if (isMySql)
             {
                 optionsBuilder.UseMySQL(_configuration["DatabaseSettings:ConnectionStringMySql"]);
+            }
+            else if (Environment.MachineName == "DESKTOP-Q21PF7P")
+            {
+                optionsBuilder.UseSqlServer(_configuration["DatabaseSettings:ConnectionStringTommyNotebook"]);
             }
             else
             {

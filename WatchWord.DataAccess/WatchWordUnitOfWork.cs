@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace WatchWord.DataAccess
 {
     /// <summary>Represents unit of work pattern for WatchWord repositories.</summary>
-    public class WatchWordUnitOfWork : IWatchWordUnitOfWork, IDisposable
+    public class WatchWordUnitOfWork : IWatchWordUnitOfWork
     {
         private IServiceProvider serviceProvider;
         private DbContext context;
@@ -28,23 +28,6 @@ namespace WatchWord.DataAccess
         public virtual async Task<int> SaveAsync()
         {
             return await context.SaveChangesAsync();
-        }
-
-        /// <summary>Disposes the current object.</summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>Disposes all external resources.</summary>
-        /// <param name="disposing">The dispose indicator.</param>
-        private void Dispose(bool disposing)
-        {
-            if (!disposing) return;
-            if (context == null) return;
-            context.Dispose();
-            context = null;
         }
     }
 }

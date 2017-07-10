@@ -6,7 +6,9 @@ import { Subject } from "rxjs/Subject";
 import { ISubscription } from "rxjs/Subscription";
 import { MaterialService } from './material.service';
 import { ComponentValidation } from '../abstract/component-validation';
-import { MaterialModel, MaterialMode } from './material.models';
+import { MaterialModel, MaterialMode, Word } from './material.models';
+import { SpinnerService } from '../spinner/spinner.service';
+import { TranslationModalService } from './components/translation-modal/translation-modal.service';
 
 @Component({
     templateUrl: 'app/material/material.template.html'
@@ -19,7 +21,12 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
     public formSubmited = false;
     private routeSubscription: ISubscription;
 
-    constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router) {
+    constructor(private materialService: MaterialService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private spinner: SpinnerService,
+        private modalService: TranslationModalService
+    ) {
         super();
     }
 
@@ -42,8 +49,10 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
     }
 
     private initializeMaterial(id: number): void {
+        this.spinner.displaySpinner(true);
         this.materialService.getMaterial(id).then(
             response => {
+                this.spinner.displaySpinner(false);
                 if (response.success) {
                     this.mode = MaterialMode.Read;
                     this.material = response.material;
@@ -61,8 +70,10 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
     }
 
     public deleteMaterial(): void {
+        this.spinner.displaySpinner(true);
         this.materialService.deleteMaterial(this.material.id).then(
             response => {
+                this.spinner.displaySpinner(false);
                 if (response.success) {
                     this.router.navigateByUrl('materials');
                 } else {
@@ -76,8 +87,10 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
     public saveMaterial(form: NgForm): void {
         this.formSubmited = true;
         if (form.valid) {
+            this.spinner.displaySpinner(true);
             this.materialService.saveMaterial(this.material).then(
                 response => {
+                    this.spinner.displaySpinner(false);
                     if (response.success) {
                         if (this.mode == MaterialMode.Add) {
                             this.router.navigateByUrl('material/' + response.id);
@@ -93,6 +106,10 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
             );
             this.formSubmited = false;
         }
+    }
+
+    public getTransletion(word: Word): void {
+        this.modalService.pushToModal(word);
     }
 
     ngOnDestroy() {

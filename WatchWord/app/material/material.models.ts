@@ -12,6 +12,7 @@ export enum MaterialType {
 }
 
 export class Word {
+    public id: number;
     public theWord: string;
     public count: number;
 }
@@ -23,7 +24,6 @@ export class MaterialModel {
     public description: string;
     public image: string;
     public words: Array<Word> = new Array<Word>();
-
 }
 
 export class MaterialResponseModel extends BaseResponseModel {

@@ -15,6 +15,7 @@ using WatchWord.DataAccess.Repositories;
 using WatchWord.Infrastructure;
 using WatchWord.DataAccess;
 using WatchWord.Domain.Identity;
+using WatchWord.Service.Infrastructure;
 
 namespace WatchWord
 {
@@ -59,6 +60,9 @@ namespace WatchWord
             services.AddScoped<IMaterialsService, MaterialsService>();
             services.AddScoped<IVocabularyService, VocabularyService>();
             services.AddScoped<ITranslationService, TranslationService>();
+
+            // Development
+            services.AddSingleton<WatchWordProxy, WatchWordProxy>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

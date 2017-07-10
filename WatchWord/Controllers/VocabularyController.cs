@@ -15,7 +15,7 @@ namespace WatchWord.Controllers
     {
         private UserManager<ApplicationUser> userManager;
         private readonly IVocabularyService vocabularyService;
-        private static string DbError => "Database query error. Please try later.";
+        private static string DbError = "Database query error. Please try later.";
 
         public VocabularyController(IVocabularyService vocabularyService, UserManager<ApplicationUser> userManager)
         {
@@ -24,6 +24,7 @@ namespace WatchWord.Controllers
         }
 
         [Authorize]
+        [HttpPost]
         public async Task<string> Post([FromBody]VocabularyRequestModel vocabularyRequestModel)
         {
             var response = new BaseResponseModel() { Success = true };
@@ -60,6 +61,7 @@ namespace WatchWord.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public async Task<string> Get()
         {
             var userId = (await userManager.GetUserAsync(HttpContext.User)).Id;
