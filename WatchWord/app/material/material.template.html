@@ -26,7 +26,7 @@
         <div class="two fields">
             <div id="material-files" class="field">
                 <label>Subtitles:</label>
-                <subtitles-input [(ngModel)]="material.words" name="subtitles" #subtitles="ngModel" required></subtitles-input>
+                <subtitles-input [(ngModel)]="wordCompositions" name="subtitles" #subtitles="ngModel" required></subtitles-input>
 
                 <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
                     <ul *ngFor="let error of validationErrors(subtitles)">
@@ -78,9 +78,9 @@
     </div>
 </div>
 
-<div *ngIf="material.words && material.words.length !== 0">
-    <span *ngFor="let word of material.words">
-        <span (click)="getTransletion(word)">{{word.theWord}}</span>
+<div *ngIf="wordCompositions && wordCompositions.length !== 0">
+    <span *ngFor="let wordComposition of wordCompositions">
+        <span (click)="getTransletion(wordComposition)">{{wordComposition.materialWord.theWord}}</span>
     </span>
 </div>
 

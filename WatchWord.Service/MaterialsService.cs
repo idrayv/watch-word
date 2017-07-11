@@ -37,7 +37,7 @@ namespace WatchWord.Service
                 ? new string[0]
                 : material.Words.Select(n => n.TheWord).ToArray();
 
-            return await vocabularyService.GetVocabByMaterialWordsAsync(arrayOfWords, userId);
+            return await vocabularyService.GetSpecifiedVocabWordsAsync(arrayOfWords, userId);
         }
 
         public async Task<IEnumerable<Material>> GetMaterials(int page, int count)

@@ -4,8 +4,8 @@ import { NgForm, NgModel } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
 import { LoginModel, UserModel } from '../auth.models';
-import { ComponentValidation } from '../../abstract/component-validation';
-import { SpinnerService } from '../../spinner/spinner.service';
+import { SpinnerService } from "../../global/spinner/spinner.service";
+import { ComponentValidation } from "../../global/component-validation";
 
 @Component({
     templateUrl: 'app/auth/login/login.template.html'

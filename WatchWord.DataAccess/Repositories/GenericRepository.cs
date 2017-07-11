@@ -37,6 +37,11 @@ namespace WatchWord.DataAccess.Repositories
 
         #region READ
 
+        public virtual bool Any(Expression<Func<TEntity, bool>> whereProperties = null)
+        {
+            return _dbSet.Any(whereProperties);
+        }
+
         public virtual async Task<int> GetCount(Expression<Func<TEntity, bool>> whereProperties = null)
         {
             return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties).CountAsync();

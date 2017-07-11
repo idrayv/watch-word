@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { UserService } from './auth/user.service';
 import { AuthService } from './auth/auth.service';
 import { UserModel } from './auth/auth.models';
-import { SpinnerService } from './spinner/spinner.service';
+import { SpinnerService } from "./global/spinner/spinner.service";
 
 @Component({
     selector: 'watch-word',

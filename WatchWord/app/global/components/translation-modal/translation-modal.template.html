@@ -1,0 +1,10 @@
+﻿<div>
+    <div>
+        <div>Select translation for: {{model.vocabWord.word}}</div>
+        <input type="radio" [(ngModel)]="model.vocabWord.type" name="isKnown" [value]="0">Learn<br />
+        <input type="radio" [(ngModel)]="model.vocabWord.type" name="isKnown" [value]="1">Known
+    </div>
+    <div>
+        <span *ngFor="let translation of model.translations" (click)="selectTranslation(translation)">{{translation}} </span>
+    </div>
+</div>

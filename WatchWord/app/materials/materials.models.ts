@@ -1,4 +1,4 @@
-﻿import { BaseResponseModel } from '../abstract/models';
+﻿import { BaseResponseModel } from '../global/models';
 import { MaterialModel } from '../material/material.models';
 import { PaginationModel } from './pagination/pagination.models';
 

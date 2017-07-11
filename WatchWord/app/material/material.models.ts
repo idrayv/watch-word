@@ -1,4 +1,4 @@
-﻿import { BaseResponseModel } from '../abstract/models';
+﻿import { BaseResponseModel } from '../global/models';
 
 export enum MaterialMode {
     Read,
@@ -26,7 +26,12 @@ export class VocabWord {
     public id: number;
     public word: string;
     public translation: string;
-    public type: VocabType;
+    public type: VocabType = VocabType.LearnWord;
+}
+
+export class WordComposition {
+    public materialWord: Word = new Word();
+    public vocabWord: VocabWord = new VocabWord();
 }
 
 export class MaterialModel {
@@ -40,14 +45,14 @@ export class MaterialModel {
 
 export class MaterialResponseModel extends BaseResponseModel {
     public material: MaterialModel;
+    public vocabWords: Array<VocabWord>;
 }
 
 export class ParseResponseModel extends BaseResponseModel {
     public words: Array<Word>;
-    public vocabWords: Array<VocabWord>;
 }
 
-export class CreateResponseModel extends BaseResponseModel {
+export class MaterialPostResponseModel extends BaseResponseModel {
     public id: number;
 }
 

@@ -1,7 +1,7 @@
 ﻿import { Component, ElementRef, forwardRef, Output, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
 import { MaterialService } from '../../material.service';
-import { Word } from '../../material.models';
+import { Word, WordComposition } from '../../material.models';
 
 @Component({
     selector: 'subtitles-input',
@@ -31,11 +31,18 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
 
     fileChanged() {
         let file: File = this.fileInput.nativeElement.files[0];
-        let words: Array<Word> = [];
+        let words: Array<WordComposition> = [];
         this.materialService.parseSubtitles(file).then(
             response => {
                 if (response.success) {
-                    words = response.words.map((w) => { let word = new Word(); word.theWord = w.theWord; word.count = w.count; return word; });
+                    words = response.words.map((w) => {
+                        // TODO: fill with vocabulary service
+                        let word = new WordComposition();
+                        word.materialWord = new Word();
+                        word.materialWord.theWord = w.theWord;
+                        word.materialWord.count = w.count;
+                        return word;
+                    });
                     this.serverErrors = [];
 
                 } else {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WatchWord.DataAccess;
@@ -37,9 +38,21 @@ namespace WatchWord.Service
             var owner = await accountsService.GetByExternalIdAsync(userId);
             vocabWord.Owner = owner;
 
-            if (await vocabWordsRepository.GetById(vocabWord.Id) != null)
+            var existingVocabWord = await vocabWordsRepository.GetByConditionAsync(v => v.Word == vocabWord.Word, v => v.Owner);
+
+            if (existingVocabWord != null)
             {
-                vocabWordsRepository.Update(vocabWord);
+                if (existingVocabWord.Owner.Id == owner.Id)
+                {
+                    existingVocabWord.Word = vocabWord.Word;
+                    existingVocabWord.Translation = vocabWord.Translation;
+                    existingVocabWord.Type = vocabWord.Type;
+                    vocabWordsRepository.Update(existingVocabWord);
+                }
+                else
+                {
+                    throw new Exception("Private VocabWord: Access denied.");
+                }
             }
             else
             {
@@ -49,7 +62,7 @@ namespace WatchWord.Service
             return await unitOfWork.SaveAsync();
         }
 
-        public async Task<List<VocabWord>> GetVocabByMaterialWordsAsync(string[] materialWords, int userId)
+        public async Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(string[] materialWords, int userId)
         {
             var owner = await accountsService.GetByExternalIdAsync(userId);
             var vocabWords = await vocabWordsRepository.GetAllAsync(v => v.Owner.Id == owner.Id && materialWords.Contains(v.Word));

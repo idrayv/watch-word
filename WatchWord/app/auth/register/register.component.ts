@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 import { UserService } from '../user.service';
 import { RegisterFormGroup } from './register-form.model';
 import { RegisterModel, UserModel } from '../auth.models';
-import { SpinnerService } from '../../spinner/spinner.service';
+import { SpinnerService } from "../../global/spinner/spinner.service";
 
 @Component({
     templateUrl: 'app/auth/register/register.template.html'

@@ -3,7 +3,7 @@ import { ModalService } from './modal.service';
 
 @Component({
     selector: 'modal',
-    templateUrl: 'app/abstract/modal/modal.template.html',
+    templateUrl: 'app/global/components/modal/modal.template.html',
     styles: [`
         .modal {
           position: fixed;

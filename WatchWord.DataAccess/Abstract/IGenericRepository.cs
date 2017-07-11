@@ -25,6 +25,8 @@ namespace WatchWord.DataAccess.Repositories
 
         #region READ
 
+        bool Any(Expression<Func<TEntity, bool>> whereProperties = null);
+
         /// <summary>Gets count of entities from database asynchronously.</summary>
         /// <param name="whereProperties">Where predicate.</param>
         Task<int> GetCount(Expression<Func<TEntity, bool>> whereProperties = null);

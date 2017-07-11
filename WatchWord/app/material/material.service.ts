@@ -2,7 +2,8 @@
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
-import { CreateResponseModel, ParseResponseModel, ImageResponseModel, MaterialModel, MaterialResponseModel } from '../material/material.models';
+import { MaterialPostResponseModel, ParseResponseModel, ImageResponseModel, MaterialModel, MaterialResponseModel } from '../material/material.models';
+import { BaseResponseModel } from '../global/models';
 let cfg = require('../config').appConfig;
 
 @Injectable()
@@ -36,13 +37,13 @@ export class MaterialService {
             .catch(() => { return this.connectionErrorModel });
     }
 
-    saveMaterial(material: MaterialModel): Promise<CreateResponseModel> {
+    saveMaterial(material: MaterialModel): Promise<MaterialPostResponseModel> {
         return this.http.post(this.baseUrl + '/material/save', material).toPromise()
             .then((res: Response) => res.json())
             .catch(() => { return this.connectionErrorModel });
     }
 
-    deleteMaterial(id: number): Promise<CreateResponseModel> {
+    deleteMaterial(id: number): Promise<BaseResponseModel> {
         return this.http.delete(this.baseUrl + '/material/' + id).toPromise()
             .then((res: Response) => res.json())
             .catch(() => { return this.connectionErrorModel });

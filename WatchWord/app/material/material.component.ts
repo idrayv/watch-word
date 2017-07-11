@@ -5,10 +5,10 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from "rxjs/Subject";
 import { ISubscription } from "rxjs/Subscription";
 import { MaterialService } from './material.service';
-import { ComponentValidation } from '../abstract/component-validation';
-import { MaterialModel, MaterialMode, Word } from './material.models';
-import { SpinnerService } from '../spinner/spinner.service';
-import { TranslationModalService } from './components/translation-modal/translation-modal.service';
+import { MaterialModel, MaterialMode, Word, WordComposition, VocabWord } from './material.models';
+import { ComponentValidation } from "../global/component-validation";
+import { TranslationModalService } from "../global/components/translation-modal/translation-modal.service";
+import { SpinnerService } from "../global/spinner/spinner.service";
 
 @Component({
     templateUrl: 'app/material/material.template.html'
@@ -18,6 +18,7 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
     public mode: MaterialMode = null;
     public serverErrors: Array<string> = new Array<string>();
     public material: MaterialModel = new MaterialModel();
+    public wordCompositions: Array<WordComposition> = new Array<WordComposition>();
     public formSubmited = false;
     private routeSubscription: ISubscription;
 
@@ -40,6 +41,7 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
         if (param === 'create') {
             this.mode = MaterialMode.Add;
             this.material = new MaterialModel();
+            this.wordCompositions = new Array<WordComposition>();
         } else if (+param) {
             this.initializeMaterial(+param);
         } else {
@@ -56,6 +58,16 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
                 if (response.success) {
                     this.mode = MaterialMode.Read;
                     this.material = response.material;
+
+                    // TODO: separated method
+                    this.wordCompositions = new Array<WordComposition>();
+                    response.material.words.forEach(word => {
+                        let wordComposition = new WordComposition();
+                        wordComposition.materialWord = word;
+                        wordComposition.vocabWord = response.vocabWords.find(vw => vw.word == word.theWord);
+                        this.wordCompositions.push(wordComposition);
+                    });
+
                     this.serverErrors = new Array<string>();
                 } else {
                     this.mode = null;
@@ -108,8 +120,13 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
         }
     }
 
-    public getTransletion(word: Word): void {
-        this.modalService.pushToModal(word);
+    public getTransletion(wordComposition: WordComposition): void {
+        if (!wordComposition.vocabWord || !wordComposition.vocabWord.word) {
+            wordComposition.vocabWord = new VocabWord();
+            wordComposition.vocabWord.word = wordComposition.materialWord.theWord;
+        }
+
+        this.modalService.pushToModal(wordComposition.vocabWord);
     }
 
     ngOnDestroy() {

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import { SettingsResponseModel, Setting } from './settings.models';
-import { BaseResponseModel } from '../abstract/models';
+import { BaseResponseModel } from '../global/models';
 let cfg = require('../config').appConfig;
 
 @Injectable()

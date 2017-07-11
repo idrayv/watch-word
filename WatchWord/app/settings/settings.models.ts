@@ -1,4 +1,4 @@
-﻿import { BaseResponseModel } from '../abstract/models';
+﻿import { BaseResponseModel } from '../global/models';
 
 export enum SettingType {
     Int,

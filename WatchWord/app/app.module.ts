@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { UserService } from './auth/user.service';
-import { SpinnerService } from './spinner/spinner.service';
+import { SpinnerService } from "./global/spinner/spinner.service";
 
 @NgModule({
     imports: [
