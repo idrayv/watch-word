@@ -2,7 +2,7 @@
 import { Http, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
-import { TranslatePostResponseModel, VocabularyPostResponseModel, TranslationModalModel, TransletionModalResponseModel } from './translation-modal.models';
+import { TranslatePostResponseModel, VocabularyPostResponseModel, TranslationModalModel, TranslationModalResponseModel } from './translation-modal.models';
 import { TranslationService } from './translation.service';
 import { VocabWord } from '../../../material/material.models';
 let cfg = require('../../../config').appConfig;
@@ -11,11 +11,11 @@ let cfg = require('../../../config').appConfig;
 export class TranslationModalService {
     private baseUrl: string = cfg.apiRoute;
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
-    private responseModel: Subject<TransletionModalResponseModel> = new Subject<TransletionModalResponseModel>();
+    private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
     public constructor(private http: Http, private translationService: TranslationService) { }
 
-    public get transletionModalResponseObserverable(): Observable<TransletionModalResponseModel> {
+    public get transletionModalResponseObserverable(): Observable<TranslationModalResponseModel> {
         return this.responseModel.asObservable();
     }
 
@@ -33,7 +33,7 @@ export class TranslationModalService {
         });
     }
 
-    private getResponseWithErrors(errors: string[]): TransletionModalResponseModel {
+    private getResponseWithErrors(errors: string[]): TranslationModalResponseModel {
         return {
             success: false,
             errors: errors,

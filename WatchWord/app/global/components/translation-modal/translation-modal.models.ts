@@ -10,7 +10,7 @@ export class TranslatePostResponseModel extends BaseResponseModel {
     public translations: string[];
 }
 
-export class TransletionModalResponseModel extends BaseResponseModel {
+export class TranslationModalResponseModel extends BaseResponseModel {
     public vocabWord: VocabWord;
 }
 
