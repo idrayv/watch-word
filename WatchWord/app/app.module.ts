@@ -7,9 +7,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { UserService } from './auth/user.service';
 import { SpinnerService } from './global/spinner/spinner.service';
-import { ModalService } from './global/components/modal/modal.service';
-import { TranslationModalService } from './global/components/translation-modal/translation-modal.service';
-import { TranslationService } from './global/components/translation-modal/translation.service';
 
 @NgModule({
     imports: [
@@ -21,9 +18,6 @@ import { TranslationService } from './global/components/translation-modal/transl
         AppComponent
     ],
     providers: [
-        ModalService,
-        TranslationModalService,
-        TranslationService,
         SpinnerService,
         UserService,
         AuthService,

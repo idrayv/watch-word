@@ -6,21 +6,21 @@ import { FormsModule } from '@angular/forms';
 import { MaterialService } from './material.service';
 import { ImageInputComponent } from './components/image-input/image-input.component';
 import { SubtitlesInputComponent } from './components/subtitles-input/subtitles-input.component';
-import { TranslationModalComponent } from '../global/components/translation-modal/translation-modal.component';
-import { ModalComponent } from '../global/components/modal/modal.component';
+import { TranslationModalModule } from '../global/components/translation-modal/translation-modal.module';
+import { ModalModule } from '../global/components/modal/modal.module';
 
 @NgModule({
     imports: [
         CommonModule,
         MaterialRoutingModule,
-        FormsModule
+        FormsModule,
+        ModalModule,
+        TranslationModalModule
     ],
     declarations: [
         MaterialComponent,
         ImageInputComponent,
-        SubtitlesInputComponent,
-        ModalComponent,
-        TranslationModalComponent
+        SubtitlesInputComponent
     ],
     providers: [
         MaterialService

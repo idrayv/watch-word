@@ -1,1 +1,22 @@
-﻿<div class="test2">Dictionaries Template</div>
+﻿<div *ngIf="serverErrors.length === 0">
+    Learn words:
+    <div>
+        <span *ngFor="let learnWord of learnWords()">
+            <span (click)="getTranslation(learnWord)">{{learnWord.word}} </span>
+        </span>
+    </div>
+    Known words:
+    <div>
+        <span *ngFor="let knownWord of knownWords()">
+            <span (click)="getTranslation(knownWord)">{{knownWord.word}} </span>
+        </span>
+    </div>
+    <modal id="dictionaries-modal">
+        <translation-modal modalId="dictionaries-modal"></translation-modal>
+    </modal>
+</div>
+<div *ngIf="serverErrors.length > 0">
+    <div *ngFor="let error of serverErrors">
+        {{error}}
+    </div>
+</div>
