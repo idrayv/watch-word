@@ -2,13 +2,13 @@ import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Subject } from "rxjs/Subject";
-import { ISubscription } from "rxjs/Subscription";
+import { Subject } from 'rxjs/Subject';
+import { ISubscription } from 'rxjs/Subscription';
 import { MaterialService } from './material.service';
 import { MaterialModel, MaterialMode, Word, WordComposition, VocabWord } from './material.models';
-import { ComponentValidation } from "../global/component-validation";
-import { TranslationModalService } from "../global/components/translation-modal/translation-modal.service";
-import { SpinnerService } from "../global/spinner/spinner.service";
+import { ComponentValidation } from '../global/component-validation';
+import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
+import { SpinnerService } from '../global/spinner/spinner.service';
 
 @Component({
     templateUrl: 'app/material/material.template.html'

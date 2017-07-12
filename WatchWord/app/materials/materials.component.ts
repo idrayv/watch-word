@@ -5,7 +5,7 @@ import { MaterialsService } from './materials.service';
 import { PaginationModel } from './pagination/pagination.models';
 import { MaterialsModel } from './materials.models';
 import { CountResponseModel, MaterialsResponseModel } from './materials.models';
-import { SpinnerService } from "../global/spinner/spinner.service";
+import { SpinnerService } from '../global/spinner/spinner.service';
 
 @Component({
     templateUrl: 'app/materials/materials.template.html'

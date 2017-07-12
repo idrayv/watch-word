@@ -2,17 +2,22 @@
 import { Http, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
-import { TranslatePostResponseModel, VocabularyPostResponseModel, TranslationModalModel } from './translation-modal.models';
+import { TranslatePostResponseModel, VocabularyPostResponseModel, TranslationModalModel, TransletionModalResponseModel } from './translation-modal.models';
 import { TranslationService } from './translation.service';
-import { VocabWord } from "../../../material/material.models";
+import { VocabWord } from '../../../material/material.models';
 let cfg = require('../../../config').appConfig;
 
 @Injectable()
 export class TranslationModalService {
     private baseUrl: string = cfg.apiRoute;
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
+    private responseModel: Subject<TransletionModalResponseModel> = new Subject<TransletionModalResponseModel>();
 
     public constructor(private http: Http, private translationService: TranslationService) { }
+
+    public get transletionModalResponseObserverable(): Observable<TransletionModalResponseModel> {
+        return this.responseModel.asObservable();
+    }
 
     public get translationModalObservable(): Observable<TranslationModalModel> {
         return this.translationModel.asObservable();
@@ -20,24 +25,29 @@ export class TranslationModalService {
 
     public pushToModal(vocabWord: VocabWord): void {
         this.translationService.getTransletion(vocabWord.word).then(response => {
-            this.translationModel.next(this.getTransletionModel(vocabWord, response));
+            if (response.success) {
+                this.translationModel.next({ vocabWord: vocabWord, translations: response.translations });
+            } else {
+                this.responseModel.next(this.getResponseWithErrors(response.errors));
+            }
         });
     }
 
-    private getTransletionModel(vocabWord: VocabWord, serverResponse: TranslatePostResponseModel): TranslationModalModel {
-        let model: TranslationModalModel = new TranslationModalModel();
-        model.vocabWord = vocabWord;
-        if (serverResponse.success) {
-            model.translations = serverResponse.translations;
-        } else {
-            // TODO: handle errors here
-        }
-        return model;
+    private getResponseWithErrors(errors: string[]): TransletionModalResponseModel {
+        return {
+            success: false,
+            errors: errors,
+            vocabWord: null
+        };
     }
 
     public saveToVocabulary(vocabWord: VocabWord): void {
         this.translationService.saveToVocabulary(vocabWord).then(response => {
-            //handle response here
+            if (response.success) {
+                this.responseModel.next({ errors: [], vocabWord: vocabWord, success: true });
+            } else {
+                this.responseModel.next(this.getResponseWithErrors(response.errors));
+            }
         });
     }
 }

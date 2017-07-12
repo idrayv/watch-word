@@ -25,7 +25,6 @@ export class SettingsResponseModel extends BaseResponseModel {
     public settings: Setting[];
 }
 
-
 export class SettingsModel {
 
     private settingNames: { key: SettingKey, value: string }[];
@@ -38,8 +37,8 @@ export class SettingsModel {
 
     constructor() {
         this.settingNames = [
-            { key: SettingKey.yandexTranslateApiKey, value: "Yandex Translate Api Key" },
-            { key: SettingKey.yandexDictionaryApiKey, value: "Yandex Dictionary Api Key" }
+            { key: SettingKey.yandexTranslateApiKey, value: 'Yandex Translate Api Key' },
+            { key: SettingKey.yandexDictionaryApiKey, value: 'Yandex Dictionary Api Key' }
         ];
     }
 

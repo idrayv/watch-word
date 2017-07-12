@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WordComposition } from "../../../material/material.models";
+import { WordComposition } from '../../../material/material.models';
 
 @Component({
     selector: 'word',
