@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { TranslatePostResponseModel, VocabularyPostResponseModel, TranslationModalModel, TranslationModalResponseModel } from './translation-modal.models';
 import { TranslationService } from './translation.service';
 import { VocabWord } from '../../../material/material.models';
+import { SpinnerService } from '../../spinner/spinner.service';
 let cfg = require('../../../config').appConfig;
 
 @Injectable()
@@ -13,7 +14,7 @@ export class TranslationModalService {
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
     private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
-    public constructor(private http: Http, private translationService: TranslationService) { }
+    public constructor(private http: Http, private translationService: TranslationService, private spinner: SpinnerService) { }
 
     public get transletionModalResponseObserverable(): Observable<TranslationModalResponseModel> {
         return this.responseModel.asObservable();
@@ -24,7 +25,9 @@ export class TranslationModalService {
     }
 
     public pushToModal(vocabWord: VocabWord): void {
+        this.spinner.displaySpinner(true);
         this.translationService.getTransletion(vocabWord.word).then(response => {
+            this.spinner.displaySpinner(false);
             if (response.success) {
                 this.translationModel.next({ vocabWord: vocabWord, translations: response.translations });
             } else {
@@ -42,7 +45,9 @@ export class TranslationModalService {
     }
 
     public saveToVocabulary(vocabWord: VocabWord): void {
+        this.spinner.displaySpinner(true);
         this.translationService.saveToVocabulary(vocabWord).then(response => {
+            this.spinner.displaySpinner(false);
             if (response.success) {
                 this.responseModel.next({ errors: [], vocabWord: vocabWord, success: true });
             } else {

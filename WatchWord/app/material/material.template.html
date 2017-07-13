@@ -78,10 +78,8 @@
     </div>
 </div>
 
-<div *ngIf="wordCompositions && wordCompositions.length !== 0">
-    <span *ngFor="let wordComposition of wordCompositions">
-        <span (click)="getTransletion(wordComposition)">{{wordComposition.materialWord.theWord}}</span>
-    </span>
+<div class="words" *ngIf="wordCompositions && wordCompositions.length !== 0">
+    <word [model]="wordComposition" *ngFor="let wordComposition of wordCompositions"></word>
 </div>
 
 <modal id="modal">

@@ -8,6 +8,7 @@ import { ImageInputComponent } from './components/image-input/image-input.compon
 import { SubtitlesInputComponent } from './components/subtitles-input/subtitles-input.component';
 import { TranslationModalModule } from '../global/components/translation-modal/translation-modal.module';
 import { ModalModule } from '../global/components/modal/modal.module';
+import { WordModule } from '../global/components/word/word.module';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { ModalModule } from '../global/components/modal/modal.module';
         MaterialRoutingModule,
         FormsModule,
         ModalModule,
-        TranslationModalModule
+        TranslationModalModule,
+        WordModule
     ],
     declarations: [
         MaterialComponent,

@@ -40,16 +40,17 @@ export class MaterialModel {
     public name: string;
     public description: string;
     public image: string;
-    public words: Array<Word> = new Array<Word>();
+    public words: Word[] = [];
 }
 
 export class MaterialResponseModel extends BaseResponseModel {
     public material: MaterialModel;
-    public vocabWords: Array<VocabWord>;
+    public vocabWords: VocabWord[];
 }
 
 export class ParseResponseModel extends BaseResponseModel {
-    public words: Array<Word>;
+    public words: Word[];
+    public vocabWords: VocabWord[];
 }
 
 export class MaterialPostResponseModel extends BaseResponseModel {

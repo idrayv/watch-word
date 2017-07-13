@@ -14,7 +14,7 @@ import { ComponentValidation } from '../../global/component-validation';
 export class LoginComponent extends ComponentValidation {
     public model: LoginModel = new LoginModel();
     public formSubmited: boolean = false;
-    public authenticationErrors: Array<string> = new Array<string>();
+    public authenticationErrors: string[] = [];
 
     constructor(private auth: AuthService, private userService: UserService, private router: Router, private spinner: SpinnerService) {
         super();

@@ -8,6 +8,6 @@ namespace WatchWord.Service
     {
         Task<List<VocabWord>> GetVocabWordsAsync(int userId);
         Task<int> InsertVocabWordAsync(VocabWord vocabWord, int userId);
-        Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(string[] materialWords, int userId);
+        Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, int userId);
     }
 }

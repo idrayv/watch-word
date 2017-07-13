@@ -1,6 +1,7 @@
 ﻿import { Component, ElementRef, forwardRef, Output, ViewChild, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
 import { MaterialService } from '../../material.service';
+import { SpinnerService } from '../../../global/spinner/spinner.service';
 
 @Component({
     selector: 'image-input[mimeTypes]',
@@ -21,13 +22,13 @@ import { MaterialService } from '../../material.service';
 
 export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
     private onChangeCallback: Function;
-    private errors: Array<string> = [];
-    private types: Array<string> = [];
+    private errors: string[] = [];
+    private types: string[] = [];
 
     @ViewChild('file')
     fileInput: ElementRef;
 
-    constructor(private materialService: MaterialService, private el: ElementRef) { }
+    constructor(private materialService: MaterialService, private el: ElementRef, private spinner: SpinnerService) { }
 
     ngOnInit() {
         let attribute = this.el.nativeElement.attributes.getNamedItem('mimeTypes');
@@ -46,8 +47,10 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
 
     callService(file: File): void {
         let base64: string = '';
+        this.spinner.displaySpinner(true);
         this.materialService.parseImage(file).then(
             response => {
+                this.spinner.displaySpinner(false);
                 if (response.success) {
                     base64 = response.base64;
                     this.errors = [];
@@ -60,7 +63,7 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
         );
     }
 
-    addErrorsAndCleanInput(errors: Array<string>): void {
+    addErrorsAndCleanInput(errors: string[]): void {
         this.errors = errors;
         this.fileInput.nativeElement.value = null;
     }

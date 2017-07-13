@@ -1,4 +1,4 @@
-﻿<div class="word">
-    <div class="word-translation"></div>
-    <div class="word-origin"></div>
+﻿<div (click)="getTransletion()" [ngClass]="classes">
+    <div class="translation">{{model.vocabWord?.translation}}</div>
+    <div class="origin">{{model.materialWord?.theWord}}</div>
 </div>

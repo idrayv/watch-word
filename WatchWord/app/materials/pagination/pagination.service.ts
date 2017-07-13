@@ -38,8 +38,8 @@ export class PaginationService {
         return result;
     }
 
-    private range(start: number, end: number): Array<number> {
-        let result: Array<number> = []
+    private range(start: number, end: number): number[] {
+        let result: number[] = []
         while (end >= start) {
             result.push(start++);
         }

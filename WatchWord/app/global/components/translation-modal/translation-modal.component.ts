@@ -1,8 +1,8 @@
 ﻿import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { TranslationModalService } from './translation-modal.service';
-import { ModalService } from "../modal/modal.service";
-import { TranslationModalModel } from "./translation-modal.models";
+import { ModalService } from '../modal/modal.service';
+import { TranslationModalModel } from './translation-modal.models';
 
 @Component({
     selector: 'translation-modal',

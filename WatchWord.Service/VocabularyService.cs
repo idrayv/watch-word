@@ -62,10 +62,14 @@ namespace WatchWord.Service
             return await unitOfWork.SaveAsync();
         }
 
-        public async Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(string[] materialWords, int userId)
+        public async Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, int userId)
         {
+            var arrayOfWords = materialWords == null
+                ? new string[0]
+                : materialWords.Select(n => n.TheWord).ToArray();
+
             var owner = await accountsService.GetByExternalIdAsync(userId);
-            var vocabWords = await vocabWordsRepository.GetAllAsync(v => v.Owner.Id == owner.Id && materialWords.Contains(v.Word));
+            var vocabWords = await vocabWordsRepository.GetAllAsync(v => v.Owner.Id == owner.Id && arrayOfWords.Contains(v.Word));
 
             return vocabWords;
         }

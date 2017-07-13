@@ -6,11 +6,11 @@ export class ComponentValidation {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
 
-    public validationErrors(state: NgModel): Array<string> {
-        let errors: Array<string> = new Array<string>();
+    public validationErrors(state: NgModel): string[] {
+        let errors: string[] = [];
         let name = this.capitalizeFirstLetter(state.name);
         if (state.invalid) {
-            for (var error in state.errors) {
+            for (let error in state.errors) {
                 switch (error) {
                     case 'minlength':
                         errors.push(`${name} must be at least ${state.errors[error].requiredLength} characters!`);
@@ -19,10 +19,10 @@ export class ComponentValidation {
                         errors.push(`${name} must be filled in!`);
                         break;
                     case 'subtitlesInput':
-                        (<Array<string>>state.errors[error]).forEach((er) => errors.push(er));
+                        (<string[]>state.errors[error]).forEach((er) => errors.push(er));
                         break;
                     case 'imageInput':
-                        (<Array<string>>state.errors[error]).forEach((er) => errors.push(er));
+                        (<string[]>state.errors[error]).forEach((er) => errors.push(er));
                         break;
                 }
             }

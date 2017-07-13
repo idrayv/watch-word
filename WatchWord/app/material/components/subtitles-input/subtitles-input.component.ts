@@ -2,6 +2,7 @@
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
 import { MaterialService } from '../../material.service';
 import { Word, WordComposition } from '../../material.models';
+import { SpinnerService } from '../../../global/spinner/spinner.service';
 
 @Component({
     selector: 'subtitles-input',
@@ -22,29 +23,23 @@ import { Word, WordComposition } from '../../material.models';
 
 export class SubtitlesInputComponent implements ControlValueAccessor, Validator {
     private onChangeCallback: Function;
-    private serverErrors: Array<string> = [];
+    private serverErrors: string[] = [];
 
-    constructor(private materialService: MaterialService) { }
+    constructor(private materialService: MaterialService, private spinner: SpinnerService) { }
 
     @ViewChild('file')
     fileInput: ElementRef;
 
     fileChanged() {
+        this.spinner.displaySpinner(true);
         let file: File = this.fileInput.nativeElement.files[0];
-        let words: Array<WordComposition> = [];
+        let words: WordComposition[];
         this.materialService.parseSubtitles(file).then(
             response => {
+                this.spinner.displaySpinner(false);
                 if (response.success) {
-                    words = response.words.map((w) => {
-                        // TODO: fill with vocabulary service
-                        let word = new WordComposition();
-                        word.materialWord = new Word();
-                        word.materialWord.theWord = w.theWord;
-                        word.materialWord.count = w.count;
-                        return word;
-                    });
+                    words = this.materialService.composeWordWithVocabulary(response.words, response.vocabWords);
                     this.serverErrors = [];
-
                 } else {
                     this.serverErrors = response.errors;
                 }
@@ -64,7 +59,7 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
         return { 'subtitlesInput': this.serverErrors };
     }
 
-    writeValue(subbtitles: Array<Word>): void { }
+    writeValue(subbtitles: Word[]): void { }
     registerOnValidatorChange(fn: () => void): void { }
     registerOnTouched(fn: any): void { }
     setDisabledState(isDisabled: boolean): void { }

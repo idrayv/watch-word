@@ -15,7 +15,7 @@ export class RegisterComponent {
     public model: RegisterModel = new RegisterModel();
     public form: RegisterFormGroup = new RegisterFormGroup();
     public formSubmitted: boolean = false;
-    public registrationErrors: Array<string> = new Array<string>();
+    public registrationErrors: string[] = [];
 
     constructor(private auth: AuthService, private userService: UserService, private router: Router, private spinner: SpinnerService) { }
 

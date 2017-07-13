@@ -2,7 +2,8 @@
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
-import { MaterialPostResponseModel, ParseResponseModel, ImageResponseModel, MaterialModel, MaterialResponseModel } from '../material/material.models';
+import { MaterialPostResponseModel, ParseResponseModel, ImageResponseModel, MaterialModel } from '../material/material.models';
+import { MaterialResponseModel, WordComposition, Word, VocabWord } from '../material/material.models';
 import { BaseResponseModel } from '../global/models';
 let cfg = require('../config').appConfig;
 
@@ -13,7 +14,7 @@ export class MaterialService {
 
     constructor(private http: Http) { }
 
-    parseSubtitles(subtitlesFile: any): Promise<ParseResponseModel> {
+    public parseSubtitles(subtitlesFile: any): Promise<ParseResponseModel> {
         let input = new FormData();
         input.append('file', subtitlesFile);
 
@@ -22,7 +23,7 @@ export class MaterialService {
             .catch(() => { return this.connectionErrorModel });
     }
 
-    parseImage(imageFile: any): Promise<ImageResponseModel> {
+    public parseImage(imageFile: any): Promise<ImageResponseModel> {
         let input = new FormData();
         input.append('file', imageFile);
 
@@ -31,21 +32,28 @@ export class MaterialService {
             .catch(() => { return this.connectionErrorModel });
     }
 
-    getMaterial(id: number): Promise<MaterialResponseModel> {
+    public getMaterial(id: number): Promise<MaterialResponseModel> {
         return this.http.get(this.baseUrl + '/material/' + id).toPromise()
             .then((res: Response) => res.json())
             .catch(() => { return this.connectionErrorModel });
     }
 
-    saveMaterial(material: MaterialModel): Promise<MaterialPostResponseModel> {
+    public saveMaterial(material: MaterialModel, wordCompositions: WordComposition[]): Promise<MaterialPostResponseModel> {
+        material.words = wordCompositions.map(wordComposition => wordComposition.materialWord);
         return this.http.post(this.baseUrl + '/material/save', material).toPromise()
             .then((res: Response) => res.json())
             .catch(() => { return this.connectionErrorModel });
     }
 
-    deleteMaterial(id: number): Promise<BaseResponseModel> {
+    public deleteMaterial(id: number): Promise<BaseResponseModel> {
         return this.http.delete(this.baseUrl + '/material/' + id).toPromise()
             .then((res: Response) => res.json())
             .catch(() => { return this.connectionErrorModel });
+    }
+
+    public composeWordWithVocabulary(words: Word[], vocabWords: VocabWord[]): WordComposition[] {
+        let vocabWordsObject = {};
+        vocabWords.forEach(vocabWord => vocabWordsObject[vocabWord.word] = vocabWord);
+        return words.map((word) => { return { materialWord: word, vocabWord: vocabWordsObject[word.theWord] } });
     }
 }

@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { TranslatePostResponseModel, VocabularyPostResponseModel } from './translation-modal.models';
-import { VocabWord } from "../../../material/material.models";
+import { VocabWord } from '../../../material/material.models';
 let cfg = require('../../../config').appConfig;
 
 @Injectable()

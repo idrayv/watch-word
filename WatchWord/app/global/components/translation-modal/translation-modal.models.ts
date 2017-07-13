@@ -3,7 +3,7 @@ import { VocabWord } from '../../../material/material.models';
 
 export class TranslationModalModel {
     public vocabWord: VocabWord = new VocabWord();
-    public translations: Array<string> = new Array<string>();
+    public translations: string[] = [];
 }
 
 export class TranslatePostResponseModel extends BaseResponseModel {
