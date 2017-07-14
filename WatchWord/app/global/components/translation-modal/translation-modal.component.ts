@@ -19,8 +19,8 @@ export class TranslationModalComponent implements OnInit, OnDestroy {
     constructor(private transletionModalService: TranslationModalService, private modalService: ModalService) { }
 
     public selectTranslation(translation: string): void {
-        this.model.vocabWord.translation = translation;
-        this.transletionModalService.saveToVocabulary(this.model.vocabWord);
+        this.model.wordComposition.vocabWord.translation = translation;
+        this.transletionModalService.saveToVocabulary(this.model.wordComposition);
         this.modalService.hideModal(this.modalId);
     }
 

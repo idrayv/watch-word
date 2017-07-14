@@ -1,8 +1,8 @@
 ﻿import { BaseResponseModel } from '../global/models';
-import { VocabWord } from '../material/material.models';
+import { VocabWord, WordComposition } from '../material/material.models';
 
 export class DictionariesModel {
-    public vocabWords: VocabWord[] = [];
+    public wordCompositions: WordComposition[] = [];
     public serverErrors: string[] = [];
 }
 

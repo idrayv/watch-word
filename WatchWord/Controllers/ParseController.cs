@@ -35,7 +35,6 @@ namespace WatchWord.Controllers
         public async Task<string> FileAsync(IFormFile file)
         {
             var response = new ParseResponseModel { Success = false };
-            response.Errors.Add("Empty subtitles file!");
 
             if (file != null)
             {
@@ -66,6 +65,10 @@ namespace WatchWord.Controllers
                         response.Errors.Add("Database query error. Please try later.");
                     }
                 }
+            }
+            else
+            {
+                response.Errors.Add("Empty subtitles file!");
             }
 
             return ApiJsonSerializer.Serialize(response);

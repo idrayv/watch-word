@@ -38,21 +38,14 @@ namespace WatchWord.Service
             var owner = await accountsService.GetByExternalIdAsync(userId);
             vocabWord.Owner = owner;
 
-            var existingVocabWord = await vocabWordsRepository.GetByConditionAsync(v => v.Word == vocabWord.Word, v => v.Owner);
+            var existingVocabWord = await vocabWordsRepository.GetByConditionAsync(v => v.Word == vocabWord.Word && v.Owner.Id == vocabWord.Owner.Id, v => v.Owner);
 
             if (existingVocabWord != null)
             {
-                if (existingVocabWord.Owner.Id == owner.Id)
-                {
-                    existingVocabWord.Word = vocabWord.Word;
-                    existingVocabWord.Translation = vocabWord.Translation;
-                    existingVocabWord.Type = vocabWord.Type;
-                    vocabWordsRepository.Update(existingVocabWord);
-                }
-                else
-                {
-                    throw new Exception("Private VocabWord: Access denied.");
-                }
+                existingVocabWord.Word = vocabWord.Word;
+                existingVocabWord.Translation = vocabWord.Translation;
+                existingVocabWord.Type = vocabWord.Type;
+                vocabWordsRepository.Update(existingVocabWord);
             }
             else
             {

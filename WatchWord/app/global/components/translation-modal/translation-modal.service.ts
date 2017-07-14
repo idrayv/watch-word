@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 import { TranslatePostResponseModel, VocabularyPostResponseModel, TranslationModalModel, TranslationModalResponseModel } from './translation-modal.models';
 import { TranslationService } from './translation.service';
-import { VocabWord } from '../../../material/material.models';
+import { VocabWord, WordComposition } from '../../../material/material.models';
 import { SpinnerService } from '../../spinner/spinner.service';
 let cfg = require('../../../config').appConfig;
 
@@ -24,12 +24,17 @@ export class TranslationModalService {
         return this.translationModel.asObservable();
     }
 
-    public pushToModal(vocabWord: VocabWord): void {
+    public pushToModal(wordComposition: WordComposition): void {
         this.spinner.displaySpinner(true);
-        this.translationService.getTransletion(vocabWord.word).then(response => {
+
+        if (!wordComposition.vocabWord || !wordComposition.vocabWord.word) {
+            wordComposition.vocabWord = { word: wordComposition.materialWord.theWord, id: 0, type: 0, translation: '' };
+        }
+
+        this.translationService.getTransletion(wordComposition.materialWord.theWord).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
-                this.translationModel.next({ vocabWord: vocabWord, translations: response.translations });
+                this.translationModel.next({ wordComposition: wordComposition, translations: response.translations });
             } else {
                 this.responseModel.next(this.getResponseWithErrors(response.errors));
             }
@@ -37,19 +42,15 @@ export class TranslationModalService {
     }
 
     private getResponseWithErrors(errors: string[]): TranslationModalResponseModel {
-        return {
-            success: false,
-            errors: errors,
-            vocabWord: null
-        };
+        return { success: false, errors: errors, wordComposition: null };
     }
 
-    public saveToVocabulary(vocabWord: VocabWord): void {
+    public saveToVocabulary(wordComposition: WordComposition): void {
         this.spinner.displaySpinner(true);
-        this.translationService.saveToVocabulary(vocabWord).then(response => {
+        this.translationService.saveToVocabulary(wordComposition.vocabWord).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
-                this.responseModel.next({ errors: [], vocabWord: vocabWord, success: true });
+                this.responseModel.next({ errors: [], wordComposition: wordComposition, success: true });
             } else {
                 this.responseModel.next(this.getResponseWithErrors(response.errors));
             }

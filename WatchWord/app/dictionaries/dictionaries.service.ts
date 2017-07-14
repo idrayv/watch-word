@@ -13,7 +13,7 @@ export class DictionariesService {
     constructor(private http: Http) { }
 
     public getDictionaries(): Promise<DictionariesResponseModel> {
-        return this.http.get(this.baseUrl + '/vocabulary').toPromise()
+        return this.http.get(this.baseUrl + '/Vocabulary').toPromise()
             .then(response => response.json())
             .catch(err => { return { errors: ['Server error'], success: false } });
     }

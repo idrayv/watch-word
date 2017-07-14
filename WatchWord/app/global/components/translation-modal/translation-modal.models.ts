@@ -1,8 +1,8 @@
 ﻿import { BaseResponseModel } from '../../../global/models';
-import { VocabWord } from '../../../material/material.models';
+import { WordComposition } from '../../../material/material.models';
 
 export class TranslationModalModel {
-    public vocabWord: VocabWord = new VocabWord();
+    public wordComposition: WordComposition = new WordComposition();
     public translations: string[] = [];
 }
 
@@ -11,7 +11,7 @@ export class TranslatePostResponseModel extends BaseResponseModel {
 }
 
 export class TranslationModalResponseModel extends BaseResponseModel {
-    public vocabWord: VocabWord;
+    public wordComposition: WordComposition;
 }
 
 export class VocabularyPostResponseModel extends BaseResponseModel { }

@@ -20,8 +20,8 @@ export class DictionariesComponent implements OnInit, OnDestroy {
         // TODO: mix with the same method in material component
         this.modalResponse = this.transletionModalService.transletionModalResponseObserverable.subscribe(response => {
             if (response.success) {
-                let index = this.model.vocabWords.findIndex(n => n.word === response.vocabWord.word);
-                this.model.vocabWords[index] = response.vocabWord;
+                let index = this.model.wordCompositions.findIndex(c => c.materialWord.theWord === response.wordComposition.materialWord.theWord);
+                this.model.wordCompositions[index] = response.wordComposition;
             } else {
                 this.model.serverErrors = response.errors;
             }
@@ -30,22 +30,20 @@ export class DictionariesComponent implements OnInit, OnDestroy {
 
     private fillModelFromResponse(response: DictionariesResponseModel): void {
         if (response.success) {
-            this.model.vocabWords = response.vocabWords;
+            this.model.wordCompositions = response.vocabWords.map(v => {
+                return { vocabWord: v, materialWord: { theWord: v.word, count: 0, id: 0 } };
+            });
         } else {
             this.model.serverErrors = response.errors;
         }
     }
 
     public learnWords(): WordComposition[] {
-        return this.model.vocabWords.filter(word => word.type === VocabType.LearnWord).map((vocab) => {
-            return { vocabWord: vocab, materialWord: { theWord: vocab.word, count: 0, id: 0 } };
-        });
+        return this.model.wordCompositions.filter(word => word.vocabWord.type === VocabType.LearnWord);
     }
 
     public knownWords(): WordComposition[] {
-        return this.model.vocabWords.filter(word => word.type === VocabType.KnownWord).map((vocab) => {
-            return { vocabWord: vocab, materialWord: { theWord: vocab.word, count: 0, id: 0 } };
-        });
+        return this.model.wordCompositions.filter(word => word.vocabWord.type === VocabType.KnownWord);
     }
 
     ngOnDestroy(): void {

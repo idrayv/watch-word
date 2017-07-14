@@ -37,8 +37,8 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
         // TODO: mix with the same method in dictionaries component
         this.modalResponse = this.transletionModalService.transletionModalResponseObserverable.subscribe(response => {
             if (response.success) {
-                let index = this.wordCompositions.findIndex(c => c.materialWord.theWord === response.vocabWord.word);
-                this.wordCompositions[index].vocabWord = response.vocabWord;
+                let index = this.wordCompositions.findIndex(c => c.materialWord.theWord === response.wordComposition.materialWord.theWord);
+                this.wordCompositions[index] = response.wordComposition;
             } else {
                 this.serverErrors = response.errors;
             }

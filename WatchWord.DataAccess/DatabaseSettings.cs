@@ -21,6 +21,10 @@ namespace WatchWord.DataAccess
             {
                 ConnectionString = configuration["DatabaseSettings:ConnectionStringTommyNotebook"];
             }
+            else if (Environment.MachineName == "M-SHCHYHOL")
+            {
+                ConnectionString = configuration["DatabaseSettings:ConnectionStringIdrayv"];
+            }
             else
             {
                 ConnectionString = configuration["DatabaseSettings:ConnectionString"];
