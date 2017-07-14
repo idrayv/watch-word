@@ -3,12 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslationModalComponent } from './translation-modal.component';
 import { TranslationModalService } from './translation-modal.service';
-import { TranslationService } from './translation.service';
+import { DictionariesService } from '../../../dictionaries/dictionaries.service';
 
 @NgModule({
     imports: [FormsModule, CommonModule],
     declarations: [TranslationModalComponent],
-    providers: [TranslationModalService, TranslationService],
+    providers: [TranslationModalService, DictionariesService],
     exports: [TranslationModalComponent]
 })
 

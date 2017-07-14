@@ -16,16 +16,16 @@ export class TranslationModalComponent implements OnInit, OnDestroy {
     private model: TranslationModalModel = new TranslationModalModel();
     private modelSubscription: Subscription;
 
-    constructor(private transletionModalService: TranslationModalService, private modalService: ModalService) { }
+    constructor(private translationModalService: TranslationModalService, private modalService: ModalService) { }
 
     public selectTranslation(translation: string): void {
         this.model.wordComposition.vocabWord.translation = translation;
-        this.transletionModalService.saveToVocabulary(this.model.wordComposition);
+        this.translationModalService.saveToVocabulary(this.model.wordComposition);
         this.modalService.hideModal(this.modalId);
     }
 
     ngOnInit(): void {
-        this.modelSubscription = this.transletionModalService.translationModalObservable.subscribe(model => {
+        this.modelSubscription = this.translationModalService.translationModalObservable.subscribe(model => {
             this.model = model;
             this.modalService.showModal(this.modalId);
         });

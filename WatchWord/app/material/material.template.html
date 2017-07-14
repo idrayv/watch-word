@@ -26,7 +26,7 @@
         <div class="two fields">
             <div id="material-files" class="field">
                 <label>Subtitles:</label>
-                <subtitles-input [(ngModel)]="wordCompositions" name="subtitles" #subtitles="ngModel" required></subtitles-input>
+                <subtitles-input [(ngModel)]="model.wordCompositions" name="subtitles" #subtitles="ngModel" required></subtitles-input>
 
                 <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
                     <ul *ngFor="let error of validationErrors(subtitles)">
@@ -56,8 +56,8 @@
     </form>
 </div>
 
-<div *ngIf="serverErrors.length > 0">
-    <div *ngFor="let error of serverErrors">
+<div *ngIf="model.serverErrors.length > 0">
+    <div *ngFor="let error of model.serverErrors">
         {{error}}
     </div>
 </div>
@@ -78,8 +78,8 @@
     </div>
 </div>
 
-<div class="words" *ngIf="wordCompositions && wordCompositions.length !== 0">
-    <word [model]="wordComposition" *ngFor="let wordComposition of wordCompositions"></word>
+<div class="words" *ngIf="model.wordCompositions && model.wordCompositions.length !== 0">
+    <word [model]="wordComposition" *ngFor="let wordComposition of model.wordCompositions"></word>
 </div>
 
 <modal id="modal">

@@ -14,7 +14,7 @@ export class WordComponent {
 
     constructor(private translationModalService: TranslationModalService) { }
 
-    public getTransletion(): void {
+    public getTranslation(): void {
         this.translationModalService.pushToModal({ vocabWord: { ...this.model.vocabWord }, materialWord: { ...this.model.materialWord } });
     }
 }

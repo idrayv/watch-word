@@ -60,3 +60,12 @@ export class MaterialPostResponseModel extends BaseResponseModel {
 export class ImageResponseModel extends BaseResponseModel {
     public base64: string;
 }
+
+export class WordCompositionsModel {
+    public wordCompositions: WordComposition[] = [];
+    public serverErrors: string[] = [];
+}
+
+export class VocabWordsModel extends BaseResponseModel {
+    public vocabWords: VocabWord[];
+}

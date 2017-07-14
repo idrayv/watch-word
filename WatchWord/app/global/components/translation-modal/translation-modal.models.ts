@@ -13,5 +13,3 @@ export class TranslatePostResponseModel extends BaseResponseModel {
 export class TranslationModalResponseModel extends BaseResponseModel {
     public wordComposition: WordComposition;
 }
-
-export class VocabularyPostResponseModel extends BaseResponseModel { }

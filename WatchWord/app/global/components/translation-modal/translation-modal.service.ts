@@ -2,10 +2,10 @@
 import { Http, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
-import { TranslatePostResponseModel, VocabularyPostResponseModel, TranslationModalModel, TranslationModalResponseModel } from './translation-modal.models';
-import { TranslationService } from './translation.service';
-import { VocabWord, WordComposition } from '../../../material/material.models';
+import { TranslatePostResponseModel, TranslationModalModel, TranslationModalResponseModel } from './translation-modal.models';
+import { VocabWord, WordComposition, WordCompositionsModel } from '../../../material/material.models';
 import { SpinnerService } from '../../spinner/spinner.service';
+import { DictionariesService } from '../../../dictionaries/dictionaries.service';
 let cfg = require('../../../config').appConfig;
 
 @Injectable()
@@ -14,14 +14,20 @@ export class TranslationModalService {
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
     private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
-    public constructor(private http: Http, private translationService: TranslationService, private spinner: SpinnerService) { }
+    public constructor(private http: Http, private dictionariesService: DictionariesService, private spinner: SpinnerService) { }
 
-    public get transletionModalResponseObserverable(): Observable<TranslationModalResponseModel> {
+    public get translationModalResponseObserverable(): Observable<TranslationModalResponseModel> {
         return this.responseModel.asObservable();
     }
 
     public get translationModalObservable(): Observable<TranslationModalModel> {
         return this.translationModel.asObservable();
+    }
+
+    public getTranslation(word: string): Promise<TranslatePostResponseModel> {
+        return this.http.get(this.baseUrl + '/Translate/' + word).toPromise()
+            .then((res: Response) => res.json())
+            .catch(() => { return { errors: ['Connection error'], success: false, translations: [] } });
     }
 
     public pushToModal(wordComposition: WordComposition): void {
@@ -31,7 +37,7 @@ export class TranslationModalService {
             wordComposition.vocabWord = { word: wordComposition.materialWord.theWord, id: 0, type: 0, translation: '' };
         }
 
-        this.translationService.getTransletion(wordComposition.materialWord.theWord).then(response => {
+        this.getTranslation(wordComposition.materialWord.theWord).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
                 this.translationModel.next({ wordComposition: wordComposition, translations: response.translations });
@@ -41,13 +47,9 @@ export class TranslationModalService {
         });
     }
 
-    private getResponseWithErrors(errors: string[]): TranslationModalResponseModel {
-        return { success: false, errors: errors, wordComposition: null };
-    }
-
     public saveToVocabulary(wordComposition: WordComposition): void {
         this.spinner.displaySpinner(true);
-        this.translationService.saveToVocabulary(wordComposition.vocabWord).then(response => {
+        this.dictionariesService.saveToVocabulary(wordComposition.vocabWord).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
                 this.responseModel.next({ errors: [], wordComposition: wordComposition, success: true });
@@ -55,5 +57,18 @@ export class TranslationModalService {
                 this.responseModel.next(this.getResponseWithErrors(response.errors));
             }
         });
+    }
+
+    public fillWordCompositionsModel(response: TranslationModalResponseModel, model: WordCompositionsModel): void {
+        if (response.success) {
+            let index = model.wordCompositions.findIndex(c => c.materialWord.theWord === response.wordComposition.materialWord.theWord);
+            model.wordCompositions[index] = response.wordComposition;
+        } else {
+            model.serverErrors = response.errors;
+        }
+    }
+
+    private getResponseWithErrors(errors: string[]): TranslationModalResponseModel {
+        return { success: false, errors: errors, wordComposition: null };
     }
 }

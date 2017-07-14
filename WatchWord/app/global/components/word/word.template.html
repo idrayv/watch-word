@@ -1,4 +1,4 @@
-﻿<div (click)="getTransletion()"
+﻿<div (click)="getTranslation()"
      [ngClass]="{ 'word': true, 'known-word': model.vocabWord && model.vocabWord.type, 'learn-word': model.vocabWord && !model.vocabWord.type }">
     <div class="translation">{{model.vocabWord?.translation}}</div>
     <div class="origin">{{model.materialWord?.theWord}}</div>

@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
-import { DictionariesModel, DictionariesResponseModel } from './dictionaris.models';
 import { DictionariesService } from './dictionaries.service';
-import { VocabWord, VocabType, WordComposition } from '../material/material.models';
+import { VocabWord, VocabType, WordComposition, VocabWordsModel, WordCompositionsModel } from '../material/material.models';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
 
 @Component({
@@ -10,25 +9,19 @@ import { TranslationModalService } from '../global/components/translation-modal/
 })
 
 export class DictionariesComponent implements OnInit, OnDestroy {
-    private model: DictionariesModel = new DictionariesModel();
+    private model: WordCompositionsModel = new WordCompositionsModel();
     private modalResponse: ISubscription;
 
-    constructor(private dictionariesService: DictionariesService, private transletionModalService: TranslationModalService) { }
+    constructor(private dictionariesService: DictionariesService, private translationModalService: TranslationModalService) { }
 
     ngOnInit(): void {
         this.dictionariesService.getDictionaries().then(response => this.fillModelFromResponse(response));
-        // TODO: mix with the same method in material component
-        this.modalResponse = this.transletionModalService.transletionModalResponseObserverable.subscribe(response => {
-            if (response.success) {
-                let index = this.model.wordCompositions.findIndex(c => c.materialWord.theWord === response.wordComposition.materialWord.theWord);
-                this.model.wordCompositions[index] = response.wordComposition;
-            } else {
-                this.model.serverErrors = response.errors;
-            }
+        this.modalResponse = this.translationModalService.translationModalResponseObserverable.subscribe(response => {
+            this.translationModalService.fillWordCompositionsModel(response, this.model);
         });
     }
 
-    private fillModelFromResponse(response: DictionariesResponseModel): void {
+    private fillModelFromResponse(response: VocabWordsModel): void {
         if (response.success) {
             this.model.wordCompositions = response.vocabWords.map(v => {
                 return { vocabWord: v, materialWord: { theWord: v.word, count: 0, id: 0 } };
