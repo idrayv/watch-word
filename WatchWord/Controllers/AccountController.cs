@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WatchWord.Domain.Identity;
 using WatchWord.Infrastructure;
 using WatchWord.Models;
+using System.Linq;
 
 namespace WatchWord.Controllers
 {
@@ -28,11 +29,21 @@ namespace WatchWord.Controllers
         public async Task<string> Register([FromBody] AuthRequestModel authModel)
         {
             var user = new ApplicationUser { UserName = authModel.Login, Email = authModel.Email };
+            var isFirstUser = _userManager.Users.FirstOrDefault() == null;
             var result = await _userManager.CreateAsync(user, authModel.Password);
             var registerModel = new BaseResponseModel();
 
             if (result.Succeeded)
             {
+                if (isFirstUser)
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "Member");
+                }
+
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 registerModel.Success = true;
             }
