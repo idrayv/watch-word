@@ -13,7 +13,7 @@
         <div>
             <label>
                 Password:
-                <input type="text" required minlength="4" [(ngModel)]="model.password" name="password" #password="ngModel"/>
+                <input type="password" required minlength="4" [(ngModel)]="model.password" name="password" #password="ngModel"/>
             </label>
             <div *ngIf="(formSubmited || password.dirty) && password.invalid">
                 <ul *ngFor="let error of validationErrors(password)">

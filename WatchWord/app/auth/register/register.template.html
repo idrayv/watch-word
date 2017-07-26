@@ -14,7 +14,7 @@
     <div>
         <label>
             Password:
-            <input name="password" formControlName="password" [(ngModel)]="model.password" />
+            <input name="password" formControlName="password" [(ngModel)]="model.password" type="password" />
         </label>
         <ul class="text-danger list-unstyled"
             *ngIf="(formSubmitted || form.controls['password'].dirty) && form.controls['password'].invalid">
