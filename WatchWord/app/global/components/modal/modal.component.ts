@@ -4,20 +4,6 @@ import { ModalService } from './modal.service';
 @Component({
     selector: 'modal',
     templateUrl: 'app/global/components/modal/modal.template.html',
-    styles: [`
-        .modal {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 600px;
-          max-width: 100%;
-          background-color: yellow;
-        }
-        .modalHide {
-            display: none;
-        }
-    `]
 })
 
 export class ModalComponent implements OnInit, OnDestroy {
@@ -30,11 +16,11 @@ export class ModalComponent implements OnInit, OnDestroy {
     constructor(private service: ModalService) { }
 
     public show(): void {
-        this.modalBody.nativeElement.classList.remove('modalHide');
+        this.modalBody.nativeElement.classList.add('active');
     }
 
     public hide(): void {
-        this.modalBody.nativeElement.classList.add('modalHide');
+        this.modalBody.nativeElement.classList.remove('active');
     }
 
     ngOnInit(): void {

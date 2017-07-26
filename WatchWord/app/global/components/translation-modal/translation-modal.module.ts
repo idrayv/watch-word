@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { TranslationModalComponent } from './translation-modal.component';
 import { TranslationModalService } from './translation-modal.service';
 import { DictionariesService } from '../../../dictionaries/dictionaries.service';
+import { GlobalPipes } from '../../../global/pipes/global-pipes.module';
 
 @NgModule({
-    imports: [FormsModule, CommonModule],
+    imports: [FormsModule, CommonModule, GlobalPipes],
     declarations: [TranslationModalComponent],
     providers: [TranslationModalService, DictionariesService],
     exports: [TranslationModalComponent]
