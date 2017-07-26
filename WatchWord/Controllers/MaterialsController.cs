@@ -4,6 +4,8 @@ using WatchWord.Models;
 using WatchWord.Service.Abstract;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using WatchWord.Domain.Entity;
+using System.Linq;
 
 namespace WatchWord.Controllers
 {
@@ -11,24 +13,22 @@ namespace WatchWord.Controllers
     public class MaterialsController : Controller
     {
         private readonly IMaterialsService materialsService;
-        private static string DbError => "Database query error. Please try later.";
+        private const string dbError = "Database query error. Please try later.";
 
         public MaterialsController(IMaterialsService materialsService) => this.materialsService = materialsService;
 
         [HttpGet]
-        [Route("GetMaterials")]
-        public async Task<string> GetMaterials(int page, int count)
+        public async Task<string> Get(int page, int count)
         {
-            var response = new MaterialsResponseModel() { Success = true };
+            var response = new EntitiesResponseModel<Material>() { Success = true };
             try
             {
-                response.Materials = await materialsService.GetMaterials(page, count);
+                var materials = (await materialsService.GetMaterials(page, count)).ToList();
+                response.Entities = materials;
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                AddErrors(response, ex);
             }
 
             return response.ToJson();
@@ -45,12 +45,17 @@ namespace WatchWord.Controllers
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                AddErrors(response, ex);
             }
 
             return response.ToJson();
+        }
+
+        private void AddErrors(BaseResponseModel model, Exception ex)
+        {
+            model.Success = false;
+            Debug.Write(ex.ToString());
+            model.Errors.Add(dbError);
         }
     }
 }

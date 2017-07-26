@@ -1,5 +1,4 @@
-﻿import { Injectable } from '@angular/core';
-import { NgModel } from '@angular/forms';
+﻿import { NgModel } from '@angular/forms';
 
 export class ComponentValidation {
     private capitalizeFirstLetter(word: string): string {

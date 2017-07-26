@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { ISubscription } from 'rxjs/Subscription';
-import { MaterialsService } from './materials.service';
-import { PaginationModel } from './pagination/pagination.models';
 import { MaterialsModel } from './materials.models';
-import { CountResponseModel, MaterialsResponseModel } from './materials.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
+import { CountResponseModel, PaginationResponseModel } from '../global/components/pagination/pagination.models';
+import { MaterialsPaginationService } from "./materials-pagination.service";
+import { MaterialModel } from "../material/material.models";
 
 @Component({
     templateUrl: 'app/materials/materials.template.html'
@@ -18,7 +18,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     private materialsRoute: string = '/materials/page';
 
     constructor(private router: Router, private route: ActivatedRoute,
-        private materialsService: MaterialsService,
+        private materialsService: MaterialsPaginationService,
         private spinner: SpinnerService) { }
 
     ngOnInit(): void {
@@ -38,7 +38,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
         this.model.materials = [];
         this.spinner.displaySpinner(true);
         this.materialsService.getCount().then(response => this.fillPaginationModel(response, page));
-        this.materialsService.getMaterials(page, this.itemsPerPage).then((response) => {
+        this.materialsService.getEntities(page, this.itemsPerPage).then((response) => {
             this.spinner.displaySpinner(false);
             return this.fillMaterials(response);
         });
@@ -57,9 +57,9 @@ export class MaterialsComponent implements OnInit, OnDestroy {
         }
     }
 
-    private fillMaterials(response: MaterialsResponseModel): void {
+    private fillMaterials(response: PaginationResponseModel<MaterialModel>): void {
         if (response.success) {
-            this.model.materials = response.materials;
+            this.model.materials = response.entities;
         } else {
             this.model.serverErrors = response.errors;
         }
