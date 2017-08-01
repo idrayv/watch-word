@@ -90,8 +90,8 @@ namespace WatchWord.Controllers
                 }
                 else
                 {
-                    var userId = (await userManager.GetUserAsync(HttpContext.User)).Id;
-                    response.VocabWords = await materialService.GetVocabWordsByMaterial(response.Material, userId);
+                    var user = (await userManager.GetUserAsync(HttpContext.User));
+                    response.VocabWords = await materialService.GetVocabWordsByMaterial(response.Material, user == null ? 0 : user.Id);
                 }
             }
             catch (Exception ex)
