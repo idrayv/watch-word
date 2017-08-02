@@ -51,6 +51,23 @@ namespace WatchWord.Controllers
             return response.ToJson();
         }
 
+        [HttpGet]
+        [Route("Search/{text?}")]
+        public async Task<string> Search(string text)
+        {
+            var response = new EntitiesResponseModel<Material>() { Success = true };
+            try
+            {
+                response.Entities = await materialsService.GetMaterialsByPartialNameAsync(text);
+            }
+            catch (Exception ex)
+            {
+                AddErrors(response, ex);
+            }
+
+            return response.ToJson();
+        }
+
         private void AddErrors(BaseResponseModel model, Exception ex)
         {
             model.Success = false;

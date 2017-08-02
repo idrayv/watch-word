@@ -36,5 +36,7 @@ namespace WatchWord.Service.Abstract
         /// <param name="count">Count</param>
         /// <returns>Collection of material</returns>
         Task<IEnumerable<Material>> GetMaterials(int from, int count);
+
+        Task<List<Material>> GetMaterialsByPartialNameAsync(string partialName);
     }
 }

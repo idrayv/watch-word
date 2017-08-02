@@ -7,21 +7,27 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { UserService } from './auth/user.service';
 import { SpinnerService } from './global/spinner/spinner.service';
+import { MaterialsSearchComponent } from './materials-search/materials-search.component';
+import { FormsModule } from '@angular/forms/';
+import { MaterialsSearchService } from './materials-search/materials-search.service';
 
 @NgModule({
     imports: [
         BrowserModule,
         HttpModule,
-        AppRoutingModule
+        AppRoutingModule,
+        FormsModule
     ],
     declarations: [
-        AppComponent
+        AppComponent,
+        MaterialsSearchComponent
     ],
     providers: [
         SpinnerService,
         UserService,
         AuthService,
-        { provide: Http, useClass: AuthHttpService }
+        { provide: Http, useClass: AuthHttpService },
+        MaterialsSearchService
     ],
     bootstrap: [AppComponent]
 })

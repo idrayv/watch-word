@@ -70,5 +70,10 @@ namespace WatchWord.Service
         {
             return await materialsRepository.GetCount();
         }
+
+        public async Task<List<Material>> GetMaterialsByPartialNameAsync(string partialName)
+        {
+            return await materialsRepository.SkipAndTakeAsync(0, 8, m => m.Name.Contains(partialName));
+        }
     }
 }
