@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { BaseResponseModel } from '../global/models';
-import { SearchModel } from './materials-search.models';
+import { SearchResultModel } from './materials-search.models';
 let cfg = require('../config').appConfig;
 
 @Injectable()
@@ -13,7 +13,7 @@ export class MaterialsSearchService {
 
     constructor(private http: Http) { }
 
-    public search(text: string): Promise<SearchModel> {
+    public search(text: string): Promise<SearchResultModel> {
         return this.http.get(`${this.baseUrl}/materials/search/${text}`).toPromise()
             .then((res: Response) => res.json())
             .catch(() => { return this.connectionErrorModel });

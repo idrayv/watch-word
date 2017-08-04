@@ -6,6 +6,6 @@ export class MaterialsSearchModel {
     public entities: MaterialModel[] = [];
 }
 
-export class SearchModel extends BaseResponseModel {
+export class SearchResultModel extends BaseResponseModel {
     entities: MaterialModel[];
 }

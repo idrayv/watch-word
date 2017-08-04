@@ -20,7 +20,7 @@ export class MaterialsSearchComponent {
         });
     }
 
-    cleanInput(): void {
+    clearInput(): void {
         this.model.input = "";
         this.model.entities = [];
     }
