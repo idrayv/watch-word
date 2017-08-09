@@ -2,10 +2,16 @@
 import { BaseResponseModel } from '../global/models';
 
 export class MaterialsSearchModel {
-    public input: string = "";
+    public input: string = '';
     public entities: MaterialModel[] = [];
 }
 
-export class SearchResultModel extends BaseResponseModel {
+export class SearchResponseModel extends BaseResponseModel {
     entities: MaterialModel[];
+}
+
+export enum RequestStatus {
+    NotStarted,
+    InProgress,
+    CompletedWithError
 }
