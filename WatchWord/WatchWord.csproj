@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MYSQL|AnyCPU'" />
-
   <ItemGroup>
     <Content Include="wwwroot\index.html" />
     <Content Include="wwwroot\systemjs.config.js" />
@@ -29,5 +26,31 @@
     <ProjectReference Include="..\WatchWord.DataAccess\WatchWord.DataAccess.csproj" />
     <ProjectReference Include="..\WatchWord.Service\WatchWord.Service.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Remove="wwwroot\lib\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="wwwroot\lib\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="wwwroot\lib\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="wwwroot\css\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="wwwroot\css\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="wwwroot\css\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="wwwroot\app\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="wwwroot\app\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="wwwroot\app\**" />
+  </ItemGroup>
 </Project>

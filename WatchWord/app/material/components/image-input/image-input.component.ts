@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, forwardRef, Output, ViewChild, OnInit } from '@angular/core';
+﻿import { Component, ElementRef, forwardRef, ViewChild, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
 import { MaterialService } from '../../material.service';
 import { SpinnerService } from '../../../global/spinner/spinner.service';
@@ -6,18 +6,15 @@ import { SpinnerService } from '../../../global/spinner/spinner.service';
 @Component({
     selector: 'image-input[mimeTypes]',
     templateUrl: 'app/material/components/image-input/image-input.template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => ImageInputComponent),
-            multi: true
-        },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => ImageInputComponent),
-            multi: true
-        }
-    ]
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => ImageInputComponent),
+        multi: true
+    }, {
+        provide: NG_VALIDATORS,
+        useExisting: forwardRef(() => ImageInputComponent),
+        multi: true
+    }]
 })
 
 export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
@@ -25,10 +22,10 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
     private errors: string[] = [];
     private types: string[] = [];
 
-    @ViewChild('file')
-    fileInput: ElementRef;
+    @ViewChild('file') fileInput: ElementRef;
 
-    constructor(private materialService: MaterialService, private el: ElementRef, private spinner: SpinnerService) { }
+    constructor(private materialService: MaterialService, private el: ElementRef, private spinner: SpinnerService) {
+    }
 
     ngOnInit() {
         let attribute = this.el.nativeElement.attributes.getNamedItem('mimeTypes');
@@ -40,7 +37,8 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
         if (file && this.types.some(t => t === file.type)) {
             this.callService(file);
         } else {
-            this.addErrorsAndCleanInput([`Content type of this attachment is not allowed. Supported types: ${this.types.join(', ')}`]);
+            this.addErrorsAndCleanInput(
+                [`Content type of this attachment is not allowed. Supported types: ${this.types.join(', ')}`]);
             this.onChangeCallback('');
         }
     }
@@ -48,19 +46,17 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
     callService(file: File): void {
         let base64: string = '';
         this.spinner.displaySpinner(true);
-        this.materialService.parseImage(file).then(
-            response => {
-                this.spinner.displaySpinner(false);
-                if (response.success) {
-                    base64 = response.base64;
-                    this.errors = [];
+        this.materialService.parseImage(file).then(response => {
+            this.spinner.displaySpinner(false);
+            if (response.success) {
+                base64 = response.base64;
+                this.errors = [];
 
-                } else {
-                    this.addErrorsAndCleanInput(response.errors);
-                }
-                this.onChangeCallback(base64);
+            } else {
+                this.addErrorsAndCleanInput(response.errors);
             }
-        );
+            this.onChangeCallback(base64);
+        });
     }
 
     addErrorsAndCleanInput(errors: string[]): void {
@@ -79,8 +75,15 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
         return { 'imageInput': this.errors };
     }
 
-    writeValue(image: string): void { }
-    registerOnTouched(fn: any): void { }
-    registerOnValidatorChange(fn: () => void): void { }
-    setDisabledState(isDisabled: boolean): void { }
+    writeValue(image: string): void {
+    }
+
+    registerOnTouched(fn: any): void {
+    }
+
+    registerOnValidatorChange(fn: () => void): void {
+    }
+
+    setDisabledState(isDisabled: boolean): void {
+    }
 }

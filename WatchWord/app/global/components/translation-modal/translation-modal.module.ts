@@ -13,4 +13,5 @@ import { GlobalPipes } from '../../../global/pipes/global-pipes.module';
     exports: [TranslationModalComponent]
 })
 
-export class TranslationModalModule { }
+export class TranslationModalModule {
+}

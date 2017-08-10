@@ -1,19 +1,15 @@
 ﻿import { BaseResponseModel } from '../global/models';
 
 export enum MaterialMode {
-    Read,
-    Edit,
-    Add
+    Read, Edit, Add
 }
 
 export enum MaterialType {
-    Film,
-    Series
+    Film, Series
 }
 
 export enum VocabType {
-    LearnWord,
-    KnownWord
+    LearnWord, KnownWord, UnsignedWord, IgnoredWord
 }
 
 export class Word {

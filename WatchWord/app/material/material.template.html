@@ -3,7 +3,7 @@
 
         <div>
             <label>Name:</label>
-            <input placeholder="Name" type="text" required [(ngModel)]="material.name" name="name" #name="ngModel" />
+            <input placeholder="Name" type="text" required [(ngModel)]="material.name" name="name" #name="ngModel"/>
 
             <div *ngIf="(formSubmited || name.dirty) && name.invalid">
                 <ul *ngFor="let error of validationErrors(name)">
@@ -14,7 +14,8 @@
 
         <div>
             <label>Description:</label>
-            <input placeholder="Description" type="text" required [(ngModel)]="material.description" name="description" #description="ngModel" />
+            <input placeholder="Description" type="text" required [(ngModel)]="material.description" name="description"
+                   #description="ngModel"/>
 
             <div *ngIf="(formSubmited || description.dirty) && description.invalid">
                 <ul *ngFor="let error of validationErrors(description)">
@@ -26,7 +27,8 @@
         <div class="two fields">
             <div id="material-files" class="field">
                 <label>Subtitles:</label>
-                <subtitles-input [(ngModel)]="model.wordCompositions" name="subtitles" #subtitles="ngModel" required></subtitles-input>
+                <subtitles-input [(ngModel)]="model.wordCompositions" name="subtitles" #subtitles="ngModel"
+                                 required></subtitles-input>
 
                 <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
                     <ul *ngFor="let error of validationErrors(subtitles)">
@@ -37,7 +39,8 @@
 
             <div class="field">
                 <label>Image:</label>
-                <image-input name="image" mimeTypes="image/jpeg;image/png" [(ngModel)]="material.image" #image="ngModel" required></image-input>
+                <image-input name="image" mimeTypes="image/jpeg;image/png" [(ngModel)]="material.image" #image="ngModel"
+                             required></image-input>
 
                 <div *ngIf="(formSubmited || image.dirty) && image.invalid">
                     <ul *ngFor="let error of validationErrors(image)">
@@ -49,8 +52,9 @@
 
         <div class="two fields">
             <div class="field">
-                <input class="ui inverted basic button" type="button" value="Save" (click)="saveMaterial(form)" />
-                <input *ngIf="mode == 1" class="ui inverted red basic button" type="button" value="Cancel" (click)="onRouteChanged(material.id)" />
+                <input class="ui inverted basic button" type="button" value="Save" (click)="saveMaterial(form)"/>
+                <input *ngIf="mode == 1" class="ui inverted red basic button" type="button" value="Cancel"
+                       (click)="onRouteChanged(material.id)"/>
             </div>
         </div>
     </form>
@@ -65,14 +69,18 @@
 <div class="ui relaxed divided items">
     <div class="item">
         <div *ngIf="material.image" class="ui image">
-            <img [src]="material.image" />
+            <img [src]="material.image"/>
         </div>
         <div class="content">
             <div id="material-name" class="header">{{material.name}}</div>
             <div id="material-description">{{material.description}}</div>
             <div id="material-edit-buttons">
-                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="editMaterial()">Edit</button>
-                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="deleteMaterial()">Delete</button>
+                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="editMaterial()">
+                    Edit
+                </button>
+                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="deleteMaterial()">
+                    Delete
+                </button>
             </div>
         </div>
     </div>

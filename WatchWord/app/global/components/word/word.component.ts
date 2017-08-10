@@ -1,5 +1,5 @@
-﻿import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
-import { WordComposition, VocabWord, VocabType } from '../../../material/material.models';
+﻿import { Component, Input } from '@angular/core';
+import { WordComposition } from '../../../material/material.models';
 import { TranslationModalService } from '../translation-modal/translation-modal.service';
 
 @Component({
@@ -9,12 +9,14 @@ import { TranslationModalService } from '../translation-modal/translation-modal.
 
 export class WordComponent {
 
-    @Input()
-    public model: WordComposition;
+    @Input() public model: WordComposition;
 
     constructor(private translationModalService: TranslationModalService) { }
 
     public getTranslation(): void {
-        this.translationModalService.pushToModal({ vocabWord: { ...this.model.vocabWord }, materialWord: { ...this.model.materialWord } });
+        this.translationModalService.pushToModal({
+            vocabWord: { ...this.model.vocabWord },
+            materialWord: { ...this.model.materialWord }
+        });
     }
 }

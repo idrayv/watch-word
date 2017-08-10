@@ -10,4 +10,5 @@ import { TranslationModalModule } from '../translation-modal/translation-modal.m
     exports: [WordComponent]
 })
 
-export class WordModule { }
+export class WordModule {
+}
