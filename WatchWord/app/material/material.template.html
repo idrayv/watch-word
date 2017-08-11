@@ -1,9 +1,9 @@
-﻿<div class="ui inverted segment" *ngIf="mode == 1 || mode == 2">
-    <form novalidate #form="ngForm" class="ui inverted form">
+﻿<div *ngIf="mode == 1 || mode == 2" class="ui inverted segment">
+    <form class="ui inverted form" novalidate #form="ngForm">
 
         <div>
             <label>Name:</label>
-            <input placeholder="Name" type="text" required [(ngModel)]="material.name" name="name" #name="ngModel"/>
+            <input name="name" type="text" placeholder="Name" required [(ngModel)]="material.name" #name="ngModel">
 
             <div *ngIf="(formSubmited || name.dirty) && name.invalid">
                 <ul *ngFor="let error of validationErrors(name)">
@@ -14,8 +14,8 @@
 
         <div>
             <label>Description:</label>
-            <input placeholder="Description" type="text" required [(ngModel)]="material.description" name="description"
-                   #description="ngModel"/>
+            <input name="description" type="text" placeholder="Description" required
+                   [(ngModel)]="material.description" #description="ngModel" />
 
             <div *ngIf="(formSubmited || description.dirty) && description.invalid">
                 <ul *ngFor="let error of validationErrors(description)">
@@ -27,8 +27,8 @@
         <div class="two fields">
             <div id="material-files" class="field">
                 <label>Subtitles:</label>
-                <subtitles-input [(ngModel)]="model.wordCompositions" name="subtitles" #subtitles="ngModel"
-                                 required></subtitles-input>
+                <subtitles-input name="subtitles" required
+                                 [(ngModel)]="model.wordCompositions" #subtitles="ngModel"></subtitles-input>
 
                 <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
                     <ul *ngFor="let error of validationErrors(subtitles)">
@@ -39,8 +39,8 @@
 
             <div class="field">
                 <label>Image:</label>
-                <image-input name="image" mimeTypes="image/jpeg;image/png" [(ngModel)]="material.image" #image="ngModel"
-                             required></image-input>
+                <image-input name="image" mimeTypes="image/jpeg;image/png" required
+                             [(ngModel)]="material.image" #image="ngModel"></image-input>
 
                 <div *ngIf="(formSubmited || image.dirty) && image.invalid">
                     <ul *ngFor="let error of validationErrors(image)">
@@ -52,9 +52,9 @@
 
         <div class="two fields">
             <div class="field">
-                <input class="ui inverted basic button" type="button" value="Save" (click)="saveMaterial(form)"/>
+                <input class="ui inverted basic button" type="button" value="Save" (click)="saveMaterial(form)" />
                 <input *ngIf="mode == 1" class="ui inverted red basic button" type="button" value="Cancel"
-                       (click)="onRouteChanged(material.id)"/>
+                       (click)="onRouteChanged(material.id)" />
             </div>
         </div>
     </form>
@@ -69,7 +69,7 @@
 <div class="ui relaxed divided items">
     <div class="item">
         <div *ngIf="material.image" class="ui image">
-            <img [src]="material.image"/>
+            <img [src]="material.image" />
         </div>
         <div class="content">
             <div id="material-name" class="header">{{material.name}}</div>
@@ -86,11 +86,11 @@
     </div>
 </div>
 
-<div class="words" *ngIf="model.wordCompositions && model.wordCompositions.length !== 0">
-    <word [model]="wordComposition" *ngFor="let wordComposition of model.wordCompositions"></word>
+<div *ngIf="model.wordCompositions && model.wordCompositions.length !== 0" class="words">
+    <word *ngFor="let wordComposition of model.wordCompositions" [model]="wordComposition"></word>
 </div>
 
-<br/>
+<br />
 
 <modal id="modal">
     <translation-modal modalId="modal"></translation-modal>

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WatchWord.Domain.Entity.Common;
 
-namespace WatchWord.DataAccess.Repositories
+namespace WatchWord.DataAccess.Abstract
 {
     /// <summary>Represent entity framework generic repository pattern.</summary>
     /// <typeparam name="TEntity">Type of entity.</typeparam>
@@ -44,7 +44,8 @@ namespace WatchWord.DataAccess.Repositories
         /// <param name="whereProperties">Where predicate.</param>
         /// <param name="includeProperties">Include properties.</param>
         /// <returns>The list of entities.</returns>
-        Task<List<TEntity>> SkipAndTakeAsync(int skipNumber, int amount, Expression<Func<TEntity, bool>> whereProperties = null,
+        Task<List<TEntity>> SkipAndTakeAsync(int skipNumber, int amount,
+            Expression<Func<TEntity, bool>> whereProperties = null,
             params Expression<Func<TEntity, object>>[] includeProperties);
 
         /// <summary>Finds entity by id asynchronously.</summary>

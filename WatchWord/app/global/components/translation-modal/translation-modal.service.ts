@@ -16,7 +16,8 @@ export class TranslationModalService {
     private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
     public constructor(private http: Http, private dictionariesService: DictionariesService,
-                       private spinner: SpinnerService) { }
+        private spinner: SpinnerService) {
+    }
 
     public get translationModalResponseObserverable(): Observable<TranslationModalResponseModel> {
         return this.responseModel.asObservable();

@@ -6,29 +6,32 @@ namespace WatchWord.DataAccess
     public class DatabaseSettings
     {
         public readonly string ConnectionString;
-        public readonly bool UseMySQL;
+        public readonly bool UseMySql;
 
-        protected DatabaseSettings() { }
+        protected DatabaseSettings()
+        {
+        }
 
         public DatabaseSettings(IConfiguration configuration)
         {
-            UseMySQL = configuration["DatabaseSettings:MySql"] == "True";
-            if (UseMySQL)
+            UseMySql = configuration["DatabaseSettings:MySql"] == "True";
+            if (UseMySql)
             {
                 ConnectionString = configuration["DatabaseSettings:ConnectionStringMySql"];
             }
-            else if (Environment.MachineName == "DESKTOP-Q21PF7P")
-            {
-                ConnectionString = configuration["DatabaseSettings:ConnectionStringTommyNotebook"];
-            }
-            else if (Environment.MachineName == "M-SHCHYHOL")
-            {
-                ConnectionString = configuration["DatabaseSettings:ConnectionStringIdrayv"];
-            }
             else
-            {
-                ConnectionString = configuration["DatabaseSettings:ConnectionString"];
-            }
+                switch (Environment.MachineName)
+                {
+                    case "DESKTOP-Q21PF7P":
+                        ConnectionString = configuration["DatabaseSettings:ConnectionStringTommyNotebook"];
+                        break;
+                    case "M-SHCHYHOL":
+                        ConnectionString = configuration["DatabaseSettings:ConnectionStringIdrayv"];
+                        break;
+                    default:
+                        ConnectionString = configuration["DatabaseSettings:ConnectionString"];
+                        break;
+                }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace WatchWord.Service.Abstract
 
         /// <summary>Gets list of words with translations.</summary>
         /// <param name="material">Material.</param>
-        /// /// <param name="material">User identity.</param>
+        /// <param name="userId">User identity.</param>
         /// <returns>List of vocabulary words.</returns>
         Task<List<VocabWord>> GetVocabWordsByMaterial(Material material, int userId);
 

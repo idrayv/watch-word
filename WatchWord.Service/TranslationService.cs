@@ -10,35 +10,42 @@ using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Infrastructure;
 using Microsoft.Extensions.Configuration;
+using WatchWord.DataAccess.Abstract;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Service
 {
     public class TranslationService : ITranslationService
     {
-        private static string yandexTranslateApiKey;
-        private static string yandexDictionaryApiKey;
-        private readonly ISettingsService settingsService;
-        private readonly IWatchWordUnitOfWork unitOfWork;
-        private readonly ITranslationsRepository translationsRepository;
-        private readonly IConfiguration configuration;
-        private readonly WatchWordProxy proxy;
+        private static string _yandexTranslateApiKey;
+        private static string _yandexDictionaryApiKey;
+        private readonly ISettingsService _settingsService;
+        private readonly IWatchWordUnitOfWork _unitOfWork;
+        private readonly ITranslationsRepository _translationsRepository;
+        private readonly IConfiguration _configuration;
+        private readonly WatchWordProxy _proxy;
 
+        // ReSharper disable once UnusedMember.Local
         /// <summary>Prevents a default instance of the <see cref="TranslationService"/> class from being created.</summary>
-        private TranslationService() { }
+        private TranslationService()
+        {
+        }
 
         /// <summary>Initializes a new instance of the <see cref="TranslationService"/> class.</summary>
         /// <param name="settingsService">Settings service.</param>
-        /// <param name="watchWordUnitOfWork">Unit of work over WatchWord repositories.</param>
+        /// <param name="unitOfWork">Unit of work over WatchWord repositories.</param>
+        /// <param name="configuration">Settings configuration.</param>
+        /// <param name="proxy">Web proxy.</param>
         public TranslationService(ISettingsService settingsService,
             IWatchWordUnitOfWork unitOfWork,
             IConfiguration configuration,
             WatchWordProxy proxy)
         {
-            this.settingsService = settingsService;
-            this.unitOfWork = unitOfWork;
-            this.configuration = configuration;
-            this.proxy = proxy;
-            translationsRepository = unitOfWork.Repository<ITranslationsRepository>();
+            _settingsService = settingsService;
+            _unitOfWork = unitOfWork;
+            _configuration = configuration;
+            _proxy = proxy;
+            _translationsRepository = unitOfWork.Repository<ITranslationsRepository>();
         }
 
         public async Task<List<string>> GetTranslations(string word)
@@ -70,20 +77,22 @@ namespace WatchWord.Service
         /// <param name="word">Original word.</param>
         /// <param name="translations">List of translations.</param>
         /// <param name="source">Source of the translation.</param>
-        private async Task SaveTranslationsToCache(string word, IReadOnlyCollection<string> translations, TranslationSource source)
+        private async Task SaveTranslationsToCache(string word, IReadOnlyCollection<string> translations,
+            TranslationSource source)
         {
             await SaveTranslationsToCacheAsync(word, translations, source);
         }
 
-        private async Task SaveTranslationsToCacheAsync(string word, IReadOnlyCollection<string> translations, TranslationSource source)
+        private async Task SaveTranslationsToCacheAsync(string word, IReadOnlyCollection<string> translations,
+            TranslationSource source)
         {
             if (translations.Count == 0) return;
 
             // delete if exist
-            var existing = await translationsRepository.GetAllAsync(t => t.Word == word);
+            var existing = await _translationsRepository.GetAllAsync(t => t.Word == word);
             foreach (var translation in existing)
             {
-                translationsRepository.Delete(translation);
+                _translationsRepository.Delete(translation);
             }
 
             // save translations
@@ -95,8 +104,8 @@ namespace WatchWord.Service
                 Source = source
             }).ToList();
 
-            translationsRepository.Insert(translationsCache);
-            await unitOfWork.SaveAsync();
+            _translationsRepository.Insert(translationsCache);
+            await _unitOfWork.SaveAsync();
         }
 
         /// <summary>Gets translations list from the cache for specified word.</summary>
@@ -104,7 +113,7 @@ namespace WatchWord.Service
         /// <returns>List of the translations.</returns>
         private async Task<IEnumerable<string>> GetTranslateFromCache(string word)
         {
-            return (await translationsRepository.GetAllAsync(t => t.Word == word)).Select(s => s.Translate);
+            return (await _translationsRepository.GetAllAsync(t => t.Word == word)).Select(s => s.Translate);
         }
 
         /// <summary>Gets translations list using yandex translate api for specified word.</summary>
@@ -114,20 +123,21 @@ namespace WatchWord.Service
         {
             var translations = new HashSet<string>();
 
-            var address = string.Format("https://translate.yandex.net/api/v1.5/tr.json/translate?key={0}&lang={1}&text={2}",
-            Uri.EscapeDataString(await GetYandexTranslateApiKey()),
-            Uri.EscapeDataString("en-ru"),
-            Uri.EscapeDataString(word));
+            var address = string.Format(
+                "https://translate.yandex.net/api/v1.5/tr.json/translate?key={0}&lang={1}&text={2}",
+                Uri.EscapeDataString(await GetYandexTranslateApiKey()),
+                Uri.EscapeDataString("en-ru"),
+                Uri.EscapeDataString(word));
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(address);
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create(address);
             httpWebRequest.ContentType = "text/json";
             httpWebRequest.Method = "POST";
-            if (configuration["Proxy:Enabled"] == "True")
+            if (_configuration["Proxy:Enabled"] == "True")
             {
-                httpWebRequest.Proxy = proxy;
+                httpWebRequest.Proxy = _proxy;
             }
 
-            var httpResponse = ((HttpWebResponse)await httpWebRequest.GetResponseAsync()).GetResponseStream();
+            var httpResponse = ((HttpWebResponse) await httpWebRequest.GetResponseAsync()).GetResponseStream();
             if (httpResponse == null) return translations;
 
             string text;
@@ -152,20 +162,21 @@ namespace WatchWord.Service
         {
             var translations = new HashSet<string>();
 
-            var address = string.Format("https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key={0}&lang={1}&text={2}",
-            Uri.EscapeDataString(await GetYandexDictionaryApiKey()),
-            Uri.EscapeDataString("en-ru"),
-            Uri.EscapeDataString(word));
+            var address = string.Format(
+                "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key={0}&lang={1}&text={2}",
+                Uri.EscapeDataString(await GetYandexDictionaryApiKey()),
+                Uri.EscapeDataString("en-ru"),
+                Uri.EscapeDataString(word));
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(address);
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create(address);
             httpWebRequest.ContentType = "text/json";
             httpWebRequest.Method = "POST";
-            if (configuration["Proxy:Enabled"] == "True")
+            if (_configuration["Proxy:Enabled"] == "True")
             {
-                httpWebRequest.Proxy = proxy;
+                httpWebRequest.Proxy = _proxy;
             }
 
-            var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+            var httpResponse = (HttpWebResponse) await httpWebRequest.GetResponseAsync();
             if (httpResponse == null) return translations;
 
             string text;
@@ -187,40 +198,40 @@ namespace WatchWord.Service
         /// <returns>Yandex dictionary api key.</returns>
         private async Task<string> GetYandexDictionaryApiKey()
         {
-            if (!string.IsNullOrEmpty(yandexDictionaryApiKey)) return yandexDictionaryApiKey;
-            var setting = await settingsService.GetSiteSettingAsync(SettingKey.YandexDictionaryApiKey);
+            if (!string.IsNullOrEmpty(_yandexDictionaryApiKey)) return _yandexDictionaryApiKey;
+            var setting = await _settingsService.GetSiteSettingAsync(SettingKey.YandexDictionaryApiKey);
             if (setting != null)
             {
-                yandexDictionaryApiKey = setting.String;
+                _yandexDictionaryApiKey = setting.String;
             }
             else
             {
                 throw new Exception("Yandex dictionary api key not found.");
             }
 
-            return yandexDictionaryApiKey;
+            return _yandexDictionaryApiKey;
         }
 
         /// <summary>Gets yandex translate api key from data storage.</summary>
         /// <returns>Yandex translate api key.</returns>
         private async Task<string> GetYandexTranslateApiKey()
         {
-            if (!string.IsNullOrEmpty(yandexTranslateApiKey)) return yandexTranslateApiKey;
-            var setting = await settingsService.GetSiteSettingAsync(SettingKey.YandexTranslateApiKey);
+            if (!string.IsNullOrEmpty(_yandexTranslateApiKey)) return _yandexTranslateApiKey;
+            var setting = await _settingsService.GetSiteSettingAsync(SettingKey.YandexTranslateApiKey);
             if (setting != null)
             {
-                yandexTranslateApiKey = setting.String;
+                _yandexTranslateApiKey = setting.String;
             }
             else
             {
                 throw new Exception("Yandex translate api key not found.");
             }
 
-            return yandexTranslateApiKey;
+            return _yandexTranslateApiKey;
         }
 
         #region Yandex Classes
-
+        // ReSharper disable InconsistentNaming
         protected class Head
         {
         }

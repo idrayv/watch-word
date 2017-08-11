@@ -5,14 +5,14 @@
             <div class="ui slider checkbox">
                 <input type="checkbox" [checked]="model.wordComposition.vocabWord.type == 0"
                        (change)="(model.wordComposition.vocabWord.type === 0) ?
-                        model.wordComposition.vocabWord.type = 1 : 
+                        model.wordComposition.vocabWord.type = 1 :
                         model.wordComposition.vocabWord.type = 0">
                 <label>Learn</label>
             </div>
             <div class="ui slider checkbox">
                 <input type="checkbox" [checked]="model.wordComposition.vocabWord.type == 1"
                        (change)="(model.wordComposition.vocabWord.type === 1) ?
-                        model.wordComposition.vocabWord.type = 0 : 
+                        model.wordComposition.vocabWord.type = 0 :
                         model.wordComposition.vocabWord.type = 1">
                 <label>Know</label>
             </div>

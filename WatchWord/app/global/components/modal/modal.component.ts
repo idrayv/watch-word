@@ -3,15 +3,13 @@ import { ModalService } from './modal.service';
 
 @Component({
     selector: 'modal',
-    templateUrl: 'app/global/components/modal/modal.template.html',
+    templateUrl: 'app/global/components/modal/modal.template.html'
 })
 
 export class ModalComponent implements OnInit, OnDestroy {
     private element: any;
-    @Input('id')
-    id: string;
-    @ViewChild('modalBody')
-    modalBody: ElementRef;
+    @Input('id') id: string;
+    @ViewChild('modalBody') modalBody: ElementRef;
 
     constructor(private service: ModalService) { }
 

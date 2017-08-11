@@ -1,38 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WatchWord.Domain.Entity;
 using WatchWord.Models;
 using WatchWord.Service;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
-    public class SettingsController : Controller
+    public class SettingsController : MainController
     {
-        private readonly ISettingsService settingsService;
-        private static string DbError => "Database query error. Please try later.";
+        private readonly ISettingsService _settingsService;
 
-        public SettingsController(ISettingsService settingsService) => this.settingsService = settingsService;
+        public SettingsController(ISettingsService settingsService) => _settingsService = settingsService;
 
         [HttpGet]
         [Authorize]
         [Route("GetUnfilledSiteSettings")]
         public async Task<string> GetUnfilledSiteSettings()
         {
-            var response = new SettingsResponseModel() { Success = true };
+            var response = new SettingsResponseModel { Success = true };
             try
             {
-                response.Settings = await settingsService.GetUnfilledSiteSettings();
+                response.Settings = await _settingsService.GetUnfilledSiteSettings();
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();
@@ -43,16 +40,14 @@ namespace WatchWord.Controllers
         [Route("InsertSiteSettings")]
         public async Task<string> InsertSiteSettings([FromBody] List<Setting> settings)
         {
-            var response = new BaseResponseModel() { Success = true };
+            var response = new BaseResponseModel { Success = true };
             try
             {
-                await settingsService.InsertSiteSettings(settings);
+                await _settingsService.InsertSiteSettings(settings);
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();

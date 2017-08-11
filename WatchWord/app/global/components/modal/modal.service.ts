@@ -11,8 +11,9 @@ export class ModalService {
 
     public remove(id: string): void {
         let index = this.modals.findIndex(elem => elem.id === id);
-        if (index !== -1)
+        if (index !== -1) {
             this.modals.splice(index, 1);
+        }
     }
 
     public showModal(id: string): void {

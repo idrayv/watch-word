@@ -1,34 +1,39 @@
 ﻿using System.Threading.Tasks;
 using WatchWord.DataAccess;
+using WatchWord.DataAccess.Abstract;
 using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Service
 {
     /// <summary>Represents a layer for work with user's accounts.</summary>
     public class AccountsService : IAccountsService
     {
-        private readonly IWatchWordUnitOfWork unitOfWork;
-        private IAccountsRepository accountsRepository;
+        private readonly IWatchWordUnitOfWork _unitOfWork;
+        private readonly IAccountsRepository _accountsRepository;
 
+        // ReSharper disable once UnusedMember.Local
         /// <summary>Prevents a default instance of the <see cref="AccountsService"/> class from being created.</summary>
-        private AccountsService() { }
+        private AccountsService()
+        {
+        }
 
         /// <summary>Initializes a new instance of the <see cref="VocabularyService"/> class.</summary>
-        /// <param name="watchWordUnitOfWork">Unit of work over WatchWord repositories.</param>
+        /// <param name="unitOfWork">Unit of work over WatchWord repositories.</param>
         public AccountsService(IWatchWordUnitOfWork unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
-            accountsRepository = unitOfWork.Repository<IAccountsRepository>();
+            _unitOfWork = unitOfWork;
+            _accountsRepository = unitOfWork.Repository<IAccountsRepository>();
         }
 
         public async Task<Account> GetByExternalIdAsync(int id)
         {
-            var account = await accountsRepository.GetByConditionAsync(a => a.ExternalId == id);
+            var account = await _accountsRepository.GetByConditionAsync(a => a.ExternalId == id);
             if (account != null) return account;
             var newAccount = new Account { ExternalId = id };
-            accountsRepository.Insert(newAccount);
-            await unitOfWork.SaveAsync();
+            _accountsRepository.Insert(newAccount);
+            await _unitOfWork.SaveAsync();
             return newAccount;
         }
     }

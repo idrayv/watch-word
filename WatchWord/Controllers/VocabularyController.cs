@@ -6,45 +6,41 @@ using Microsoft.AspNetCore.Mvc;
 using WatchWord.Domain.Identity;
 using WatchWord.Models;
 using WatchWord.Service;
-using System.Diagnostics;
 using WatchWord.Domain.Entity;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
-    public class VocabularyController : Controller
+    public class VocabularyController : MainController
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly IVocabularyService vocabularyService;
-        private const string DbError = "Database query error. Please try later.";
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IVocabularyService _vocabularyService;
 
         public VocabularyController(IVocabularyService vocabularyService, UserManager<ApplicationUser> userManager)
         {
-            this.vocabularyService = vocabularyService;
-            this.userManager = userManager;
+            _vocabularyService = vocabularyService;
+            _userManager = userManager;
         }
 
         [Authorize]
         [HttpPost]
         public async Task<string> Post([FromBody] VocabWord vocabWord)
         {
-            var response = new BaseResponseModel {Success = true};
+            var response = new BaseResponseModel { Success = true };
             try
             {
-                var userId = (await userManager.GetUserAsync(HttpContext.User)).Id;
-                var result = await vocabularyService.InsertVocabWordAsync(vocabWord, userId);
+                var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+                var result = await _vocabularyService.InsertVocabWordAsync(vocabWord, userId);
 
                 if (result <= 0)
                 {
-                    response.Success = false;
-                    response.Errors.Add("Word was not inserted into vocabulary.");
+                    AddCustomError(response, "Word wasn't inserted into vocabulary!");
                 }
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();
@@ -54,18 +50,16 @@ namespace WatchWord.Controllers
         [HttpGet]
         public async Task<string> Get()
         {
-            var userId = (await userManager.GetUserAsync(HttpContext.User)).Id;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
 
-            var response = new VocabularyResponseModel {Success = true};
+            var response = new VocabularyResponseModel { Success = true };
             try
             {
-                response.VocabWords = await vocabularyService.GetVocabWordsAsync(userId);
+                response.VocabWords = await _vocabularyService.GetVocabWordsAsync(user?.Id ?? 0);
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();

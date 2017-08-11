@@ -1,7 +1,6 @@
-﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using ImageProcessorCore;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Service
 {
@@ -9,15 +8,14 @@ namespace WatchWord.Service
     {
         public string ParseImageFile(IFormFile file)
         {
-            String base64;
+            string base64;
             using (var stream = file.OpenReadStream())
             {
-                MemoryStream ms = new MemoryStream();
-                Image image = new Image(stream);
-                base64 = image.Resize(new ResizeOptions()
+                var image = new Image(stream);
+                base64 = image.Resize(new ResizeOptions
                 {
                     Mode = ResizeMode.Crop,
-                    Size = new Size() { Width = 184, Height = 270 }
+                    Size = new Size { Width = 184, Height = 270 }
                 }).ToString();
             }
 

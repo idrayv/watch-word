@@ -16,8 +16,7 @@ export class MaterialService {
         errors: ['Connection error']
     };
 
-    constructor(private http: Http) {
-    }
+    constructor(private http: Http) { }
 
     public parseSubtitles(subtitlesFile: any): Promise<ParseResponseModel> {
         let input = new FormData();
@@ -50,7 +49,8 @@ export class MaterialService {
     }
 
     public saveMaterial(material: MaterialModel,
-                        wordCompositions: WordComposition[]): Promise<MaterialPostResponseModel> {
+        wordCompositions: WordComposition[]): Promise<MaterialPostResponseModel> {
+
         material.words = wordCompositions.map(wordComposition => wordComposition.materialWord);
         return this.http.post(this.baseUrl + '/material/save', material).toPromise()
             .then((res: Response) => res.json())

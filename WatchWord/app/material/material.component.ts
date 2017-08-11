@@ -21,7 +21,7 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
     private modalResponse: ISubscription;
 
     constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router,
-                private spinner: SpinnerService, private translationModalService: TranslationModalService) {
+        private spinner: SpinnerService, private translationModalService: TranslationModalService) {
         super();
     }
 

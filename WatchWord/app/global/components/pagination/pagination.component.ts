@@ -6,13 +6,11 @@ import { PaginationHelperService } from './pagination-helper.service';
 @Component({
     selector: 'pagination',
     templateUrl: 'app/global/components/pagination/pagination.template.html',
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => PaginationComponent),
-            multi: true
-        }
-    ]
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => PaginationComponent),
+        multi: true
+    }]
 })
 
 export class PaginationComponent implements ControlValueAccessor {
@@ -27,6 +25,8 @@ export class PaginationComponent implements ControlValueAccessor {
     }
 
     registerOnChange(fn: any): void { }
+
     registerOnTouched(fn: any): void { }
+
     setDisabledState(isDisabled: boolean): void { }
 }

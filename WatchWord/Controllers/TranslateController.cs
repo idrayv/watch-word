@@ -1,36 +1,33 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using WatchWord.Models;
 using WatchWord.Service;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
-    public class TranslateController : Controller
+    public class TranslateController : MainController
     {
-        ITranslationService translationService;
-        private static string DbError => "Database query error. Please try later.";
+        private readonly ITranslationService _translationService;
 
-        public TranslateController(ITranslationService translationService) => this.translationService = translationService;
+        public TranslateController(ITranslationService translationService) => _translationService = translationService;
 
         [HttpGet]
         [Authorize]
         [Route("{word}")]
         public async Task<string> Translate(string word)
         {
-            var response = new TranslationResponseModel() { Success = true };
+            var response = new TranslationResponseModel { Success = true };
             try
             {
-                response.Translations = await translationService.GetTranslations(word);
+                response.Translations = await _translationService.GetTranslations(word);
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(DbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();

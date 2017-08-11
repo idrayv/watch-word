@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using WatchWord.Domain.Identity;
 using WatchWord.Infrastructure;
 using WatchWord.Models;
-using System.Linq;
 
 namespace WatchWord.Controllers
 {
@@ -16,8 +16,8 @@ namespace WatchWord.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AccountController(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,7 +28,7 @@ namespace WatchWord.Controllers
         [Route("Register")]
         public async Task<string> Register([FromBody] AuthRequestModel authModel)
         {
-            var user = new ApplicationUser { UserName = authModel.Login, Email = authModel.Email };
+            var user = new ApplicationUser {UserName = authModel.Login, Email = authModel.Email};
             var isFirstUser = _userManager.Users.FirstOrDefault() == null;
             var result = await _userManager.CreateAsync(user, authModel.Password);
             var registerModel = new BaseResponseModel();
@@ -44,7 +44,7 @@ namespace WatchWord.Controllers
                     await _userManager.AddToRoleAsync(user, "Member");
                 }
 
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                await _signInManager.SignInAsync(user, false);
                 registerModel.Success = true;
             }
             else
@@ -64,7 +64,7 @@ namespace WatchWord.Controllers
         [Route("Login")]
         public async Task<string> Login([FromBody] AuthRequestModel authModel)
         {
-            var result = await _signInManager.PasswordSignInAsync(authModel.Login, authModel.Password, true, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(authModel.Login, authModel.Password, true, false);
 
             var loginModel = new BaseResponseModel();
             if (result.Succeeded)

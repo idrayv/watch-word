@@ -1,26 +1,24 @@
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WatchWord.Models;
 using WatchWord.Service.Abstract;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using WatchWord.Domain.Entity;
-using System.Linq;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
-    public class MaterialsController : Controller
+    public class MaterialsController : MainController
     {
         private readonly IMaterialsService materialsService;
-        private const string dbError = "Database query error. Please try later.";
 
         public MaterialsController(IMaterialsService materialsService) => this.materialsService = materialsService;
 
         [HttpGet]
         public async Task<string> Get(int page, int count)
         {
-            var response = new EntitiesResponseModel<Material>() { Success = true };
+            var response = new EntitiesResponseModel<Material> { Success = true };
             try
             {
                 var materials = (await materialsService.GetMaterials(page, count)).ToList();
@@ -28,7 +26,7 @@ namespace WatchWord.Controllers
             }
             catch (Exception ex)
             {
-                AddErrors(response, ex);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();
@@ -38,14 +36,14 @@ namespace WatchWord.Controllers
         [Route("GetCount")]
         public async Task<string> GetCount()
         {
-            var response = new MaterialsCountResponseModel() { Success = true };
+            var response = new MaterialsCountResponseModel { Success = true };
             try
             {
                 response.Count = await materialsService.TotalCount();
             }
             catch (Exception ex)
             {
-                AddErrors(response, ex);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();
@@ -55,24 +53,17 @@ namespace WatchWord.Controllers
         [Route("Search/{text?}")]
         public async Task<string> Search(string text)
         {
-            var response = new EntitiesResponseModel<Material>() { Success = true };
+            var response = new EntitiesResponseModel<Material> { Success = true };
             try
             {
                 response.Entities = await materialsService.GetMaterialsByPartialNameAsync(text);
             }
             catch (Exception ex)
             {
-                AddErrors(response, ex);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();
-        }
-
-        private void AddErrors(BaseResponseModel model, Exception ex)
-        {
-            model.Success = false;
-            Debug.Write(ex.ToString());
-            model.Errors.Add(dbError);
         }
     }
 }

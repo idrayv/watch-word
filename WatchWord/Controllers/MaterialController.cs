@@ -1,27 +1,25 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WatchWord.Domain.Entity;
 using WatchWord.Models;
 using WatchWord.Service.Abstract;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Identity;
 using WatchWord.Domain.Identity;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
-    public class MaterialController : Controller
+    public class MaterialController : MainController
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly IMaterialsService materialService;
-        private static string dbError = "Database query error. Please try later.";
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMaterialsService _materialService;
 
         public MaterialController(IMaterialsService materialService, UserManager<ApplicationUser> userManager)
         {
-            this.userManager = userManager;
-            this.materialService = materialService;
+            _userManager = userManager;
+            _materialService = materialService;
         }
 
         [HttpPost]
@@ -32,19 +30,16 @@ namespace WatchWord.Controllers
             var response = new SaveMaterialResponseModel { Success = true };
             try
             {
-                response.Id = await materialService.SaveMaterial(material);
+                response.Id = await _materialService.SaveMaterial(material);
 
                 if (response.Id <= 0)
                 {
-                    response.Success = false;
-                    response.Errors.Add(dbError);
+                    AddCustomError(response, "Material wasn't saved to the database!");
                 }
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(dbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();
@@ -58,17 +53,14 @@ namespace WatchWord.Controllers
             var response = new BaseResponseModel { Success = true };
             try
             {
-                if (await materialService.DeleteMaterial(id) <= 0)
+                if (await _materialService.DeleteMaterial(id) <= 0)
                 {
-                    response.Success = false;
-                    response.Errors.Add(dbError);
+                    AddCustomError(response, "Material wasn't deleted from database!");
                 }
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(dbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();
@@ -78,10 +70,10 @@ namespace WatchWord.Controllers
         [Route("{id}")]
         public async Task<string> GetMaterial(int id)
         {
-            var response = new MaterialResponseModel() { Success = true };
+            var response = new MaterialResponseModel { Success = true };
             try
             {
-                response.Material = await materialService.GetMaterial(id);
+                response.Material = await _materialService.GetMaterial(id);
 
                 if (response.Material == null)
                 {
@@ -90,15 +82,14 @@ namespace WatchWord.Controllers
                 }
                 else
                 {
-                    var user = (await userManager.GetUserAsync(HttpContext.User));
-                    response.VocabWords = await materialService.GetVocabWordsByMaterial(response.Material, user == null ? 0 : user.Id);
+                    var user = await _userManager.GetUserAsync(HttpContext.User);
+                    response.VocabWords =
+                        await _materialService.GetVocabWordsByMaterial(response.Material, user?.Id ?? 0);
                 }
             }
             catch (Exception ex)
             {
-                response.Success = false;
-                Debug.Write(ex.ToString());
-                response.Errors.Add(dbError);
+                AddServerError(response, ex);
             }
 
             return response.ToJson();

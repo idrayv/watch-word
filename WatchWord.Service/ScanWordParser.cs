@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WatchWord.Domain.Entity;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Service
 {
@@ -53,7 +54,8 @@ namespace WatchWord.Service
                         var scanWord = GetOrCreateScanWord(wordsLocker, fileWords, material, words[i].Value);
                         if (type == TypeResult.CompositionOfWords)
                         {
-                            AddWordToCompositions(compositionsLocker, compositions, scanWord, line.Key, words[i].Index + 1);
+                            AddWordToCompositions(compositionsLocker, compositions, scanWord, line.Key,
+                                words[i].Index + 1);
                         }
                     }
                 });
@@ -88,7 +90,8 @@ namespace WatchWord.Service
         /// <param name="material">Material containing this word.</param>
         /// <param name="wordText">The word string.</param>
         /// <returns>The <see cref="Word"/> entity.</returns>
-        private Word GetOrCreateScanWord(object wordsLocker, ICollection<Word> fileWords, Material material, string wordText)
+        private Word GetOrCreateScanWord(object wordsLocker, ICollection<Word> fileWords, Material material,
+            string wordText)
         {
             Word word;
             lock (wordsLocker)

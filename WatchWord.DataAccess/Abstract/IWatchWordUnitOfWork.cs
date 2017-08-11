@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace WatchWord.DataAccess
+namespace WatchWord.DataAccess.Abstract
 {
     public interface IWatchWordUnitOfWork
     {

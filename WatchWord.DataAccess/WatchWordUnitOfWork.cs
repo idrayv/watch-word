@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using WatchWord.DataAccess.Abstract;
 
 namespace WatchWord.DataAccess
 {

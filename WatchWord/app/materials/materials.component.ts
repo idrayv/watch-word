@@ -4,8 +4,8 @@ import { ISubscription } from 'rxjs/Subscription';
 import { MaterialsModel } from './materials.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { CountResponseModel, PaginationResponseModel } from '../global/components/pagination/pagination.models';
-import { MaterialsPaginationService } from "./materials-pagination.service";
-import { MaterialModel } from "../material/material.models";
+import { MaterialsPaginationService } from './materials-pagination.service';
+import { MaterialModel } from '../material/material.models';
 
 @Component({
     templateUrl: 'app/materials/materials.template.html'
@@ -18,8 +18,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
     private materialsRoute: string = '/materials/page';
 
     constructor(private router: Router, private route: ActivatedRoute,
-        private materialsService: MaterialsPaginationService,
-        private spinner: SpinnerService) { }
+        private materialsService: MaterialsPaginationService, private spinner: SpinnerService) { }
 
     ngOnInit(): void {
         this.routeSubscription = this.route.params.subscribe(param => this.onRouteChanged(+param['id']));

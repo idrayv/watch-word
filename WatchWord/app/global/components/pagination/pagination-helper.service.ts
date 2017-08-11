@@ -1,5 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { PaginationServiceModel, PaginationModel } from './pagination.models'
+import { PaginationServiceModel, PaginationModel } from './pagination.models';
 
 @Injectable()
 export class PaginationHelperService {
@@ -25,21 +25,20 @@ export class PaginationHelperService {
 
         let pages: number[] = this.range(startPage, endPage);
 
-        let result: PaginationServiceModel =
-            {
-                currentPage: model.currentPage,
-                totalPages: totalPages,
-                startPage: startPage,
-                endPage: endPage,
-                pages: pages,
-                route: model.route
-            };
+        let result: PaginationServiceModel = {
+            currentPage: model.currentPage,
+            totalPages: totalPages,
+            startPage: startPage,
+            endPage: endPage,
+            pages: pages,
+            route: model.route
+        };
 
         return result;
     }
 
     private range(start: number, end: number): number[] {
-        let result: number[] = []
+        let result: number[] = [];
         while (end >= start) {
             result.push(start++);
         }

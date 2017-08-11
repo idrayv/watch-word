@@ -1,10 +1,11 @@
-﻿import { Http, RequestOptions, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+﻿import { Injectable } from '@angular/core';
+import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import { PaginationResponseModel, CountResponseModel } from './pagination.models';
 let cfg = require('../../../config.js').appConfig;
 
+@Injectable()
 export abstract class PaginationService<TEntity> {
     private url: string;
 
@@ -15,7 +16,13 @@ export abstract class PaginationService<TEntity> {
     public getCount(): Promise<CountResponseModel> {
         return this.http.get(this.url + '/GetCount').toPromise()
             .then(response => response.json())
-            .catch(err => { return { errors: ['Server error'], success: false, count: 0 } });
+            .catch(() => {
+                return {
+                    errors: ['Server error'],
+                    success: false,
+                    count: 0
+                };
+            });
     }
 
     public getEntities(page: number, count: number): Promise<PaginationResponseModel<TEntity>> {
@@ -24,10 +31,16 @@ export abstract class PaginationService<TEntity> {
 
         params.set('page', page.toString());
         params.set('count', count.toString());
-        requestOptions.search = params;
+        requestOptions.params = params;
 
         return this.http.get(this.url, requestOptions).toPromise()
             .then(response => response.json())
-            .catch(() => { return { errors: ['Server error'], success: false, materials: [] } });
+            .catch(() => {
+                return {
+                    errors: ['Server error'],
+                    success: false,
+                    materials: []
+                };
+            });
     }
 }

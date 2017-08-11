@@ -13,4 +13,5 @@ import { MaterialsPaginationService } from './materials-pagination.service';
     providers: [PaginationHelperService, MaterialsPaginationService]
 })
 
-export class MaterialsModule { }
+export class MaterialsModule {
+}

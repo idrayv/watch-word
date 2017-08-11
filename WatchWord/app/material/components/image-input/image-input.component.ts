@@ -24,8 +24,7 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
 
     @ViewChild('file') fileInput: ElementRef;
 
-    constructor(private materialService: MaterialService, private el: ElementRef, private spinner: SpinnerService) {
-    }
+    constructor(private materialService: MaterialService, private el: ElementRef, private spinner: SpinnerService) { }
 
     ngOnInit() {
         let attribute = this.el.nativeElement.attributes.getNamedItem('mimeTypes');
@@ -75,15 +74,11 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
         return { 'imageInput': this.errors };
     }
 
-    writeValue(image: string): void {
-    }
+    writeValue(image: string): void { }
 
-    registerOnTouched(fn: any): void {
-    }
+    registerOnTouched(fn: any): void { }
 
-    registerOnValidatorChange(fn: () => void): void {
-    }
+    registerOnValidatorChange(fn: () => void): void { }
 
-    setDisabledState(isDisabled: boolean): void {
-    }
+    setDisabledState(isDisabled: boolean): void { }
 }

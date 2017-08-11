@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Diagnostics;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -12,17 +10,19 @@ using WatchWord.Infrastructure;
 using WatchWord.Domain.Identity;
 using WatchWord.Service;
 using WatchWord.Domain.Entity;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
-    public class ParseController : Controller
+    public class ParseController : MainController
     {
-        private IScanWordParser parser;
-        private IVocabularyService vocabularyService;
-        private UserManager<ApplicationUser> userManager;
+        private readonly IScanWordParser parser;
+        private readonly IVocabularyService vocabularyService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ParseController(IScanWordParser parser, IVocabularyService vocabularyService, UserManager<ApplicationUser> userManager)
+        public ParseController(IScanWordParser parser, IVocabularyService vocabularyService,
+            UserManager<ApplicationUser> userManager)
         {
             this.parser = parser;
             this.userManager = userManager;
@@ -40,8 +40,7 @@ namespace WatchWord.Controllers
             {
                 if (file.Length > 35000000)
                 {
-                    response.Success = false;
-                    response.Errors = new List<string> { "Subtitles file too big!" };
+                    AddCustomError(response, "Subtitles file too big!");
                 }
                 else if (file.Length > 0)
                 {
@@ -61,14 +60,13 @@ namespace WatchWord.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Debug.Write(ex.ToString());
-                        response.Errors.Add("Database query error. Please try later.");
+                        AddServerError(response, ex);
                     }
                 }
             }
             else
             {
-                response.Errors.Add("Empty subtitles file!");
+                AddCustomError(response, "Empty subtitles file!");
             }
 
             return ApiJsonSerializer.Serialize(response);

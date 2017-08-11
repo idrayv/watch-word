@@ -5,75 +5,79 @@ using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Abstract;
 using WatchWord.DataAccess;
+using WatchWord.DataAccess.Abstract;
 
 namespace WatchWord.Service
 {
     public class MaterialsService : IMaterialsService
     {
-        private IVocabularyService vocabularyService;
-        private IMaterialsRepository materialsRepository;
-        private IWordsRepository wordsRepository;
-        private IWatchWordUnitOfWork unitOfWork;
+        private readonly IVocabularyService _vocabularyService;
+        private readonly IMaterialsRepository _materialsRepository;
+        private readonly IWordsRepository _wordsRepository;
+        private readonly IWatchWordUnitOfWork _unitOfWork;
 
+        // ReSharper disable once UnusedMember.Local
         /// <summary>Prevents a default instance of the <see cref="MaterialsService"/> class from being created.</summary>
-        private MaterialsService() { }
+        private MaterialsService()
+        {
+        }
 
         public MaterialsService(IWatchWordUnitOfWork unitOfWork, IVocabularyService vocabularyService)
         {
-            this.vocabularyService = vocabularyService;
-            this.wordsRepository = unitOfWork.Repository<IWordsRepository>();
-            this.materialsRepository = unitOfWork.Repository<IMaterialsRepository>();
-            this.unitOfWork = unitOfWork;
+            _vocabularyService = vocabularyService;
+            _wordsRepository = unitOfWork.Repository<IWordsRepository>();
+            _materialsRepository = unitOfWork.Repository<IMaterialsRepository>();
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Material> GetMaterial(int id)
         {
-            return await materialsRepository.GetByConditionAsync(m => m.Id == id, m => m.Words);
+            return await _materialsRepository.GetByConditionAsync(m => m.Id == id, m => m.Words);
         }
 
         public async Task<List<VocabWord>> GetVocabWordsByMaterial(Material material, int userId)
         {
-            return await vocabularyService.GetSpecifiedVocabWordsAsync(material.Words, userId);
+            return await _vocabularyService.GetSpecifiedVocabWordsAsync(material.Words, userId);
         }
 
         public async Task<IEnumerable<Material>> GetMaterials(int page, int count)
         {
             page = page < 1 ? 1 : page;
-            return await materialsRepository.SkipAndTakeAsync((page - 1) * count, count);
+            return await _materialsRepository.SkipAndTakeAsync((page - 1) * count, count);
         }
 
         public async Task<int> SaveMaterial(Material material)
         {
             if (material.Id == 0)
             {
-                materialsRepository.Insert(material);
+                _materialsRepository.Insert(material);
             }
             else
             {
-                var words = await wordsRepository.GetAllAsync(word =>
-                    word.Material.Id == material.Id && !material.Words.Any(w => w.Id == word.Id));
-                wordsRepository.Delete(words);
-                materialsRepository.Update(material);
+                var words = await _wordsRepository.GetAllAsync(word =>
+                    word.Material.Id == material.Id && material.Words.All(w => w.Id != word.Id));
+                _wordsRepository.Delete(words);
+                _materialsRepository.Update(material);
             }
 
-            await unitOfWork.SaveAsync();
+            await _unitOfWork.SaveAsync();
             return material.Id;
         }
 
         public async Task<int> DeleteMaterial(int id)
         {
-            materialsRepository.Delete(id);
-            return await unitOfWork.SaveAsync();
+            _materialsRepository.Delete(id);
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<int> TotalCount()
         {
-            return await materialsRepository.GetCount();
+            return await _materialsRepository.GetCount();
         }
 
         public async Task<List<Material>> GetMaterialsByPartialNameAsync(string partialName)
         {
-            return await materialsRepository.SkipAndTakeAsync(0, 8, m => m.Name.Contains(partialName));
+            return await _materialsRepository.SkipAndTakeAsync(0, 8, m => m.Name.Contains(partialName));
         }
     }
 }

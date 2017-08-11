@@ -7,9 +7,9 @@ using WatchWord.Domain.Identity;
 
 namespace WatchWord.DataAccess
 {
-    public class WatchWordContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public sealed class WatchWordContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
-        private readonly DatabaseSettings dbSettings;
+        private readonly DatabaseSettings _dbSettings;
 
         /// <summary>Gets or sets the words.</summary>
         public DbSet<Word> Words { get; set; }
@@ -32,23 +32,24 @@ namespace WatchWord.DataAccess
         /// <summary>Gets or sets translations.</summary>
         public DbSet<Translation> Translations { get; set; }
 
-        protected WatchWordContext() { }
+        // ReSharper disable once UnusedMember.Local
+        private WatchWordContext() { }
 
         public WatchWordContext(DatabaseSettings dbSettings)
         {
-            this.dbSettings = dbSettings;
+            _dbSettings = dbSettings;
             Database.Migrate();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (dbSettings.UseMySQL)
+            if (_dbSettings.UseMySql)
             {
-                optionsBuilder.UseMySQL(dbSettings.ConnectionString);
+                optionsBuilder.UseMySQL(_dbSettings.ConnectionString);
             }
             else
             {
-                optionsBuilder.UseSqlServer(dbSettings.ConnectionString);
+                optionsBuilder.UseSqlServer(_dbSettings.ConnectionString);
             }
         }
 
@@ -77,7 +78,7 @@ namespace WatchWord.DataAccess
             {
                 material.ToTable("Materials");
                 material.Property(m => m.Id).ValueGeneratedOnAdd();
-                if (dbSettings.UseMySQL)
+                if (_dbSettings.UseMySql)
                 {
                     material.Property(m => m.Image).HasColumnType("TEXT").HasMaxLength(20000);
                 }

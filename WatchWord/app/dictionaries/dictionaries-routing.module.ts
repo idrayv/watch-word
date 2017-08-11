@@ -2,9 +2,10 @@
 import { Routes, RouterModule } from '@angular/router';
 import { DictionariesComponent } from './dictionaries.component';
 
-const routes: Routes = [
-    { path: '', component: DictionariesComponent }
-]
+const routes: Routes = [{
+    path: '',
+    component: DictionariesComponent
+}];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],
@@ -12,4 +13,5 @@ const routes: Routes = [
     providers: []
 })
 
-export class DictionariesRoutingModule { }
+export class DictionariesRoutingModule {
+}

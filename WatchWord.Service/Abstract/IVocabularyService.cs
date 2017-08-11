@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using WatchWord.Domain.Entity;
 
-namespace WatchWord.Service
+namespace WatchWord.Service.Abstract
 {
     public interface IVocabularyService
     {

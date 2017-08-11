@@ -22,8 +22,7 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
     private onChangeCallback: Function;
     private serverErrors: string[] = [];
 
-    constructor(private materialService: MaterialService, private spinner: SpinnerService) {
-    }
+    constructor(private materialService: MaterialService, private spinner: SpinnerService) { }
 
     @ViewChild('file') fileInput: ElementRef;
 
@@ -54,15 +53,11 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
         return { 'subtitlesInput': this.serverErrors };
     }
 
-    writeValue(subbtitles: Word[]): void {
-    }
+    writeValue(subbtitles: Word[]): void {}
 
-    registerOnValidatorChange(fn: () => void): void {
-    }
+    registerOnValidatorChange(fn: () => void): void {}
 
-    registerOnTouched(fn: any): void {
-    }
+    registerOnTouched(fn: any): void {}
 
-    setDisabledState(isDisabled: boolean): void {
-    }
+    setDisabledState(isDisabled: boolean): void {}
 }

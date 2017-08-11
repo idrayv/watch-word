@@ -1,25 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
 using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
 using WatchWord.DataAccess;
+using WatchWord.DataAccess.Abstract;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Service
 {
     /// <summary>Represents a layer for work with settings.</summary>
     public class SettingsService : ISettingsService
     {
-        private readonly IWatchWordUnitOfWork unitOfWork;
-        private readonly ISettingsRepository settingsRepository;
-        private readonly IAccountsService accountsService;
+        private readonly IWatchWordUnitOfWork _unitOfWork;
+        private readonly ISettingsRepository _settingsRepository;
 
         /// <summary>These keys contain the specified data types.</summary>
-        private static readonly Dictionary<SettingKey, SettingType> SettingKeyToTypeMapping = new Dictionary<SettingKey, SettingType>
-        {
-            { SettingKey.YandexDictionaryApiKey, SettingType.String },
-            { SettingKey.YandexTranslateApiKey, SettingType.String }
-        };
+        private static readonly Dictionary<SettingKey, SettingType> SettingKeyToTypeMapping =
+            new Dictionary<SettingKey, SettingType>
+            {
+                { SettingKey.YandexDictionaryApiKey, SettingType.String },
+                { SettingKey.YandexTranslateApiKey, SettingType.String }
+            };
 
         /// <summary>These keys are responsible for the configuration of the site.</summary>
         private static readonly List<SettingKey> SiteSettingsKeys = new List<SettingKey>
@@ -30,23 +32,24 @@ namespace WatchWord.Service
 
         /// <summary>Prevents a default instance of the <see cref="SettingsService"/> class from being created.</summary>
         // ReSharper disable once UnusedMember.Local
-        private SettingsService() { }
+        private SettingsService()
+        {
+        }
 
         /// <summary>Initializes a new instance of the <see cref="SettingsService"/> class.</summary>
-        /// <param name="watchWordUnitOfWork">Unit of work over WatchWord repositories.</param>
-        public SettingsService(IWatchWordUnitOfWork unitOfWork, IAccountsService accountsService)
+        /// <param name="unitOfWork">Unit of work over WatchWord repositories.</param>
+        public SettingsService(IWatchWordUnitOfWork unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
-            settingsRepository = unitOfWork.Repository<ISettingsRepository>();
-            this.accountsService = accountsService;
+            _unitOfWork = unitOfWork;
+            _settingsRepository = unitOfWork.Repository<ISettingsRepository>();
         }
 
         public async Task<List<Setting>> GetUnfilledSiteSettings()
         {
-            var filledAdminSettings = await settingsRepository.GetAllAsync(s => SiteSettingsKeys.Contains(s.Key));
+            var filledAdminSettings = await _settingsRepository.GetAllAsync(s => SiteSettingsKeys.Contains(s.Key));
             var unfilledAdminSettings = (from settingKey in SiteSettingsKeys
-                                         where filledAdminSettings.All(s => s.Key != settingKey)
-                                         select CreateNewEmptySettingByKey(settingKey)).ToList();
+                where filledAdminSettings.All(s => s.Key != settingKey)
+                select CreateNewEmptySettingByKey(settingKey)).ToList();
 
             return unfilledAdminSettings;
         }
@@ -58,16 +61,16 @@ namespace WatchWord.Service
             {
                 if (setting.Type == SettingType.String && !string.IsNullOrEmpty(setting.String))
                 {
-                    settingsRepository.Insert(setting);
+                    _settingsRepository.Insert(setting);
                 }
             }
 
-            return await unitOfWork.SaveAsync();
+            return await _unitOfWork.SaveAsync();
         }
 
         public async Task<Setting> GetSiteSettingAsync(SettingKey key)
         {
-            return await settingsRepository.GetByConditionAsync(s => s.Key == key && s.Owner == null);
+            return await _settingsRepository.GetByConditionAsync(s => s.Key == key && s.Owner == null);
         }
 
         /// <summary>Creates new empty setting with the specified key.</summary>

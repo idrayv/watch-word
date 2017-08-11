@@ -9,4 +9,5 @@ import { ModalComponent } from './modal.component';
     exports: [ModalComponent]
 })
 
-export class ModalModule { }
+export class ModalModule {
+}
