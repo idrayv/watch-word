@@ -229,6 +229,7 @@ namespace WatchWord.Service
         }
 
         #region Yandex Classes
+
         // ReSharper disable InconsistentNaming
         protected class Head
         {

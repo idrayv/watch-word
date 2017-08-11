@@ -4,6 +4,7 @@ import { DictionariesService } from './dictionaries.service';
 import { VocabType, WordComposition } from '../material/material.models';
 import { VocabWordsModel, WordCompositionsModel } from '../material/material.models';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
+import { SpinnerService } from '../global/spinner/spinner.service';
 
 @Component({
     templateUrl: 'app/dictionaries/dictionaries.template.html'
@@ -13,11 +14,17 @@ export class DictionariesComponent implements OnInit, OnDestroy {
     private model: WordCompositionsModel = new WordCompositionsModel();
     private modalResponse: ISubscription;
 
-    constructor(private dictionariesService: DictionariesService,
+    constructor(private dictionariesService: DictionariesService, private spinner: SpinnerService,
         private translationModalService: TranslationModalService) { }
 
     ngOnInit(): void {
-        this.dictionariesService.getDictionaries().then(response => this.fillModelFromResponse(response));
+        
+        this.spinner.displaySpinner(true);
+        this.dictionariesService.getDictionaries().then((response) => {
+            this.fillModelFromResponse(response);
+            this.spinner.displaySpinner(false);
+        });
+        
         this.modalResponse = this.translationModalService.translationModalResponseObserverable.subscribe(response => {
             this.translationModalService.fillWordCompositionsModel(response, this.model);
         });
