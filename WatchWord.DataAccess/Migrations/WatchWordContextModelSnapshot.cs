@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using WatchWord.DataAccess;
-using WatchWord.Domain.Entity;
 
 namespace WatchWord.DataAccess.Migrations
 {

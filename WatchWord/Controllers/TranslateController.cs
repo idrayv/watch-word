@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using WatchWord.Models;
-using WatchWord.Service;
 using WatchWord.Service.Abstract;
 
 namespace WatchWord.Controllers

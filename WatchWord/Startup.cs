@@ -17,7 +17,6 @@ using WatchWord.DataAccess;
 using WatchWord.Domain.Identity;
 using WatchWord.Service.Infrastructure;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using WatchWord.DataAccess.Abstract;
 
 namespace WatchWord

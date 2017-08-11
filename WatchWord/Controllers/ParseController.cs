@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using WatchWord.Models;
 using WatchWord.Infrastructure;
 using WatchWord.Domain.Identity;
-using WatchWord.Service;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Abstract;
 

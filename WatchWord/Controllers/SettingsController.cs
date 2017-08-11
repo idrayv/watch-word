@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WatchWord.Domain.Entity;
 using WatchWord.Models;
-using WatchWord.Service;
 using WatchWord.Service.Abstract;
 
 namespace WatchWord.Controllers

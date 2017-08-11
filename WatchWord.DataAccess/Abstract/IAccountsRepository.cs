@@ -1,5 +1,4 @@
-﻿using WatchWord.DataAccess.Repositories;
-using WatchWord.Domain.Entity;
+﻿using WatchWord.Domain.Entity;
 
 namespace WatchWord.DataAccess.Abstract
 {

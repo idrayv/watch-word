@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WatchWord.Service;
 using WatchWord.Infrastructure;
 using WatchWord.Models;
 using WatchWord.Service.Abstract;

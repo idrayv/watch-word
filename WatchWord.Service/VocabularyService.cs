@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WatchWord.DataAccess;
 using WatchWord.DataAccess.Abstract;
-using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Abstract;
 

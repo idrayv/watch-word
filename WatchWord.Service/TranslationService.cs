@@ -5,8 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using WatchWord.DataAccess;
-using WatchWord.DataAccess.Repositories;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Infrastructure;
 using Microsoft.Extensions.Configuration;
