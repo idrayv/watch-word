@@ -24,7 +24,8 @@ gulp.task('copy-lib', ['clean-lib'], function () {
         'zone.js',
         'rxjs',
         'jquery',
-        'semantic-ui'
+        'semantic-ui',
+        'ng2-toastr'
     ];
 
     var promises = [];

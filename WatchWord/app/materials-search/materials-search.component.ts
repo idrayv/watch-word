@@ -1,7 +1,10 @@
-﻿import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+﻿import { Component, ElementRef, OnDestroy, OnInit, ViewContainerRef, ApplicationRef } from '@angular/core';
 import { MaterialsSearchModel, RequestStatus } from './materials-search.models';
 import { MaterialsSearchService } from './materials-search.service';
 import { Subscription } from 'rxjs/Subscription';
+import { ServiceLocator } from "../global/service-locator";
+import { ToastService } from "../global/toast/toast.service";
+import { BaseComponent } from "../global/base.component";
 
 @Component({
     selector: 'materials-search',
@@ -11,20 +14,26 @@ import { Subscription } from 'rxjs/Subscription';
     }
 })
 
-export class MaterialsSearchComponent implements OnDestroy, OnInit {
+export class MaterialsSearchComponent extends BaseComponent implements OnDestroy, OnInit {
     model: MaterialsSearchModel = new MaterialsSearchModel();
     searchSubscription: Subscription = new Subscription();
     isFocused: boolean = false;
     status: RequestStatus = RequestStatus.NotStarted;
     timer: any;
 
+    constructor(private searchSevice: MaterialsSearchService, private componentElement: ElementRef) {
+        super();
+    }
+
     get isLoadingVisible(): boolean {
         return this.status === RequestStatus.InProgress;
     }
 
-    constructor(private searchSevice: MaterialsSearchService, private componentElement: ElementRef) { }
-
     inputChanged(): void {
+        if (!this.isFocused) {
+            this.isFocused = true;
+        }
+
         this.searchSubscription.unsubscribe();
         this.status = RequestStatus.InProgress;
         clearTimeout(this.timer);
@@ -43,7 +52,7 @@ export class MaterialsSearchComponent implements OnDestroy, OnInit {
                     }
                 },
                 err => {
-                    this.processErrors(['Connection error occured.'])
+                    this.displayConnectionError();
                 }
             );
         }, 300);
@@ -51,7 +60,10 @@ export class MaterialsSearchComponent implements OnDestroy, OnInit {
 
     processErrors(errors: string[]) {
         this.status = RequestStatus.CompletedWithError;
-        errors.forEach(err => console.log(err))
+
+        errors.forEach((err) => {
+            this.displayError(err);
+        })
     }
 
     clearInput(): void {
