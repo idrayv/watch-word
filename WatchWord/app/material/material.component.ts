@@ -1,21 +1,23 @@
-import { NgForm } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { MaterialService } from './material.service';
-import { MaterialModel, MaterialMode, WordCompositionsModel } from './material.models';
-import { ComponentValidation } from '../global/component-validation';
+import { MaterialModel, MaterialMode, WordCompositionsModel, MaterialStats } from './material.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
+import { BaseComponent } from '../global/base-component';
+import { ComponentValidation } from '../global/component-validation';
 
 @Component({
     templateUrl: 'app/material/material.template.html'
 })
 
-export class MaterialComponent extends ComponentValidation implements OnInit, OnDestroy {
+export class MaterialComponent extends BaseComponent implements OnInit, OnDestroy {
     public mode: MaterialMode = null;
     public model: WordCompositionsModel = new WordCompositionsModel();
     public material: MaterialModel = new MaterialModel();
+    public materialStats: MaterialStats[];
     public formSubmited = false;
     private routeSubscription: ISubscription;
     private modalResponse: ISubscription;
@@ -39,6 +41,7 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
             this.mode = MaterialMode.Add;
             this.material = new MaterialModel();
             this.model.wordCompositions = [];
+            this.materialStats = [];
         } else if (+param) {
             this.initializeMaterial(+param);
         } else {
@@ -49,6 +52,7 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
 
     private initializeMaterial(id: number): void {
         this.spinner.displaySpinner(true);
+        
         this.materialService.getMaterial(id).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
@@ -101,6 +105,10 @@ export class MaterialComponent extends ComponentValidation implements OnInit, On
             });
             this.formSubmited = false;
         }
+    }
+
+    public validationErrors(state: NgModel): string[] {
+        return ComponentValidation.validationErrors(state);
     }
 
     ngOnDestroy() {

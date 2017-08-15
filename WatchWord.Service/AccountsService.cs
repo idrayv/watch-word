@@ -11,12 +11,6 @@ namespace WatchWord.Service
         private readonly IWatchWordUnitOfWork _unitOfWork;
         private readonly IAccountsRepository _accountsRepository;
 
-        // ReSharper disable once UnusedMember.Local
-        /// <summary>Prevents a default instance of the <see cref="AccountsService"/> class from being created.</summary>
-        private AccountsService()
-        {
-        }
-
         /// <summary>Initializes a new instance of the <see cref="VocabularyService"/> class.</summary>
         /// <param name="unitOfWork">Unit of work over WatchWord repositories.</param>
         public AccountsService(IWatchWordUnitOfWork unitOfWork)

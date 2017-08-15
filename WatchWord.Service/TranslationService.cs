@@ -23,12 +23,6 @@ namespace WatchWord.Service
         private readonly IConfiguration _configuration;
         private readonly WatchWordProxy _proxy;
 
-        // ReSharper disable once UnusedMember.Local
-        /// <summary>Prevents a default instance of the <see cref="TranslationService"/> class from being created.</summary>
-        private TranslationService()
-        {
-        }
-
         /// <summary>Initializes a new instance of the <see cref="TranslationService"/> class.</summary>
         /// <param name="settingsService">Settings service.</param>
         /// <param name="unitOfWork">Unit of work over WatchWord repositories.</param>

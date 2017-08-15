@@ -82,6 +82,12 @@
                     Delete
                 </button>
             </div>
+            <div class="material-stats">
+                <div *ngFor="let stat of materialStats">
+                    <div class="inline">{{stat.name}}:</div>
+                    <div class="inline">{{stat.value}}</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

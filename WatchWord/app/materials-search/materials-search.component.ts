@@ -4,7 +4,7 @@ import { MaterialsSearchService } from './materials-search.service';
 import { Subscription } from 'rxjs/Subscription';
 import { ServiceLocator } from "../global/service-locator";
 import { ToastService } from "../global/toast/toast.service";
-import { BaseComponent } from "../global/base.component";
+import { BaseComponent } from "../global/base-component";
 
 @Component({
     selector: 'materials-search',

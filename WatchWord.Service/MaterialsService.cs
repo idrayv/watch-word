@@ -14,12 +14,6 @@ namespace WatchWord.Service
         private readonly IWordsRepository _wordsRepository;
         private readonly IWatchWordUnitOfWork _unitOfWork;
 
-        // ReSharper disable once UnusedMember.Local
-        /// <summary>Prevents a default instance of the <see cref="MaterialsService"/> class from being created.</summary>
-        private MaterialsService()
-        {
-        }
-
         public MaterialsService(IWatchWordUnitOfWork unitOfWork, IVocabularyService vocabularyService)
         {
             _vocabularyService = vocabularyService;
@@ -33,9 +27,9 @@ namespace WatchWord.Service
             return await _materialsRepository.GetByConditionAsync(m => m.Id == id, m => m.Words);
         }
 
-        public async Task<List<VocabWord>> GetVocabWordsByMaterial(Material material, int userId)
+        public async Task<List<Material>> GetMaterialsByPartialNameAsync(string partialName)
         {
-            return await _vocabularyService.GetSpecifiedVocabWordsAsync(material.Words, userId);
+            return await _materialsRepository.SkipAndTakeAsync(0, 8, m => m.Name.Contains(partialName));
         }
 
         public async Task<IEnumerable<Material>> GetMaterials(int page, int count)
@@ -71,11 +65,6 @@ namespace WatchWord.Service
         public async Task<int> TotalCount()
         {
             return await _materialsRepository.GetCount();
-        }
-
-        public async Task<List<Material>> GetMaterialsByPartialNameAsync(string partialName)
-        {
-            return await _materialsRepository.SkipAndTakeAsync(0, 8, m => m.Name.Contains(partialName));
         }
     }
 }

@@ -13,12 +13,6 @@ namespace WatchWord.Service
         private readonly IAccountsService _accountsService;
         private readonly IVocabWordsRepository _vocabWordsRepository;
 
-        // ReSharper disable once UnusedMember.Local
-        /// <summary>Prevents a default instance of the <see cref="VocabularyService"/> class from being created.</summary>
-        private VocabularyService()
-        {
-        }
-
         /// <summary>Initializes a new instance of the <see cref="VocabularyService"/> class.</summary>
         /// <param name="unitOfWork">Unit of work over WatchWord repositories.</param>
         /// <param name="accountsService">Accounts service.</param>
@@ -32,7 +26,7 @@ namespace WatchWord.Service
         public async Task<List<VocabWord>> GetVocabWordsAsync(int userId)
         {
             var account = await _accountsService.GetByExternalIdAsync(userId);
-            return await _vocabWordsRepository.GetAllAsync(l => l.Owner.Id == account.Id);
+            return await _vocabWordsRepository.GetAllAsync(v => v.Owner.Id == account.Id);
         }
 
         public async Task<int> InsertVocabWordAsync(VocabWord vocabWord, int userId)
@@ -59,6 +53,7 @@ namespace WatchWord.Service
             return await _unitOfWork.SaveAsync();
         }
 
+        // TODO: return "unsigned words" instead of merge in js
         public async Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, int userId)
         {
             var arrayOfWords = materialWords == null

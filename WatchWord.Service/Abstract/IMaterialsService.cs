@@ -21,12 +21,6 @@ namespace WatchWord.Service.Abstract
         /// <returns>Material entity.</returns>
         Task<Material> GetMaterial(int id);
 
-        /// <summary>Gets list of words with translations.</summary>
-        /// <param name="material">Material.</param>
-        /// <param name="userId">User identity.</param>
-        /// <returns>List of vocabulary words.</returns>
-        Task<List<VocabWord>> GetVocabWordsByMaterial(Material material, int userId);
-
         /// <summary>Gets total count of the materials.</summary>
         /// <returns>Total count of the materials.</returns>
         Task<int> TotalCount();

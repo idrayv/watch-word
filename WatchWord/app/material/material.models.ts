@@ -39,6 +39,11 @@ export class MaterialModel {
     public words: Word[] = [];
 }
 
+export class MaterialStats {
+    public name: string;
+    public value: string;
+}
+
 export class MaterialResponseModel extends BaseResponseModel {
     public material: MaterialModel;
     public vocabWords: VocabWord[];

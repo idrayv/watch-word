@@ -14,12 +14,15 @@ namespace WatchWord.Controllers
     public class MaterialController : MainController
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IMaterialsService _materialService;
+        private readonly IMaterialsService _materialsService;
+        private readonly IVocabularyService _vocabularyService;
 
-        public MaterialController(IMaterialsService materialService, UserManager<ApplicationUser> userManager)
+        public MaterialController(IMaterialsService materialService, IVocabularyService vocabularyService,
+            UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _materialService = materialService;
+            _materialsService = materialService;
+            _vocabularyService = vocabularyService;
         }
 
         [HttpPost]
@@ -30,7 +33,7 @@ namespace WatchWord.Controllers
             var response = new SaveMaterialResponseModel { Success = true };
             try
             {
-                response.Id = await _materialService.SaveMaterial(material);
+                response.Id = await _materialsService.SaveMaterial(material);
 
                 if (response.Id <= 0)
                 {
@@ -53,7 +56,7 @@ namespace WatchWord.Controllers
             var response = new BaseResponseModel { Success = true };
             try
             {
-                if (await _materialService.DeleteMaterial(id) <= 0)
+                if (await _materialsService.DeleteMaterial(id) <= 0)
                 {
                     AddCustomError(response, "Material wasn't deleted from database!");
                 }
@@ -73,7 +76,7 @@ namespace WatchWord.Controllers
             var response = new MaterialResponseModel { Success = true };
             try
             {
-                response.Material = await _materialService.GetMaterial(id);
+                response.Material = await _materialsService.GetMaterial(id);
 
                 if (response.Material == null)
                 {
@@ -84,7 +87,7 @@ namespace WatchWord.Controllers
                 {
                     var user = await _userManager.GetUserAsync(HttpContext.User);
                     response.VocabWords =
-                        await _materialService.GetVocabWordsByMaterial(response.Material, user?.Id ?? 0);
+                        await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, user?.Id ?? 0);
                 }
             }
             catch (Exception ex)
