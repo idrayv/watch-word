@@ -6,17 +6,18 @@ import { UserService } from '../user.service';
 import { LoginModel, UserModel } from '../auth.models';
 import { SpinnerService } from '../../global/spinner/spinner.service';
 import { ComponentValidation } from '../../global/component-validation';
+import { BaseComponent } from '../../global/base-component';
 
 @Component({
     templateUrl: 'app/auth/login/login.template.html'
 })
 
-export class LoginComponent extends ComponentValidation {
+export class LoginComponent extends BaseComponent {
     public model: LoginModel = new LoginModel();
     public formSubmited: boolean = false;
-    public authenticationErrors: string[] = [];
 
-    constructor(private auth: AuthService, private userService: UserService, private router: Router, private spinner: SpinnerService) {
+    constructor(private auth: AuthService, private userService: UserService, private router: Router,
+        private spinner: SpinnerService) {
         super();
     }
 
@@ -25,19 +26,21 @@ export class LoginComponent extends ComponentValidation {
         if (form.valid) {
             let login = this.model.login;
             this.spinner.displaySpinner(true);
-            this.auth.authenticate(this.model).then(
-                response => {
-                    this.spinner.displaySpinner(false);
-                    if (response.success) {
-                        this.userService.setUser(new UserModel(login, true));
-                        this.router.navigate(['home']);
-                    } else {
-                        this.authenticationErrors = response.errors;
-                    }
+            this.auth.authenticate(this.model).then(response => {
+                this.spinner.displaySpinner(false);
+                if (response.success) {
+                    this.userService.setUser(new UserModel(login, true));
+                    this.router.navigate(['home']);
+                } else {
+                    response.errors.forEach((err) => this.displayError(err, 'LogIn error'));
                 }
-            );
+            });
             this.formSubmited = false;
             form.reset();
         }
+    }
+
+    public validationErrors(state: NgModel): string[] {
+        return ComponentValidation.validationErrors(state);
     }
 }

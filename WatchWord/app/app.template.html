@@ -6,16 +6,16 @@
         <materials-search class="item"></materials-search>
 
         <div class="right menu">
-            <div *ngIf="userModel.isLoggedIn" class="ui simple dropdown item">
-                <i class="user icon"></i> Hi {{userModel.name}} <i class="dropdown icon"></i>
+            <div *ngIf="userModel?.isLoggedIn" class="ui simple dropdown item">
+                <i class="user icon"></i> Hi {{userModel?.name}} <i class="dropdown icon"></i>
                 <div class="menu">
                     <a class="item" routerLink="material/create" routerLinkActive="active"><i class="write icon"></i>Create material</a>
                     <a class="item" routerLink="settings" routerLinkActive="active"><i class="configure icon"></i>Settings</a>
                 </div>
             </div>
-            <a *ngIf="userModel.isLoggedIn" id="sign-out" class="item" (click)="logOut()"><i class="sign out icon"></i>Sign out</a>
-            <a *ngIf="!userModel.isLoggedIn" class="item" routerLink="login" routerLinkActive="active"><i class="sign in icon"></i>Sign in</a>
-            <a *ngIf="!userModel.isLoggedIn" id="sign-up" class="item" routerLink="register" routerLinkActive="active"><i class="add user icon"></i>Sign up</a>
+            <a *ngIf="userModel?.isLoggedIn" id="sign-out" class="item" (click)="logOut()"><i class="sign out icon"></i>Sign out</a>
+            <a *ngIf="!userModel?.isLoggedIn" class="item" routerLink="login" routerLinkActive="active"><i class="sign in icon"></i>Sign in</a>
+            <a *ngIf="!userModel?.isLoggedIn" id="sign-up" class="item" routerLink="register" routerLinkActive="active"><i class="add user icon"></i>Sign up</a>
         </div>
     </div>
 </nav>

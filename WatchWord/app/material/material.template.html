@@ -60,12 +60,6 @@
     </form>
 </div>
 
-<div *ngIf="model.serverErrors.length > 0">
-    <div *ngFor="let error of model.serverErrors">
-        {{error}}
-    </div>
-</div>
-
 <div class="ui relaxed divided items">
     <div class="item">
         <div *ngIf="material.image" class="ui image">
@@ -82,7 +76,7 @@
                     Delete
                 </button>
             </div>
-            <div class="material-stats">
+            <div *ngIf="wordCompositions?.length > 0" class="material-stats">
                 <div *ngFor="let stat of materialStats">
                     <div class="inline">{{stat.name}}:</div>
                     <div class="inline">{{stat.value}}</div>
@@ -92,8 +86,8 @@
     </div>
 </div>
 
-<div *ngIf="model.wordCompositions && model.wordCompositions.length !== 0" class="words">
-    <word *ngFor="let wordComposition of model.wordCompositions" [model]="wordComposition"></word>
+<div *ngIf="wordCompositions && wordCompositions.length !== 0" class="words">
+    <word *ngFor="let wordComposition of wordCompositions" [model]="wordComposition"></word>
 </div>
 
 <br />

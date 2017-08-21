@@ -9,7 +9,6 @@ let cfg = require('../config').appConfig;
 @Injectable()
 export class MaterialsSearchService {
     private baseUrl: string = cfg.apiRoute;
-    private connectionErrorModel = { sucess: false, errors: ['Connection error'] };
 
     constructor(private http: Http) { }
 

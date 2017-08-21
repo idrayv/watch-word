@@ -1,10 +1,8 @@
-﻿import { Component, ElementRef, OnDestroy, OnInit, ViewContainerRef, ApplicationRef } from '@angular/core';
+﻿import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { MaterialsSearchModel, RequestStatus } from './materials-search.models';
 import { MaterialsSearchService } from './materials-search.service';
 import { Subscription } from 'rxjs/Subscription';
-import { ServiceLocator } from "../global/service-locator";
-import { ToastService } from "../global/toast/toast.service";
-import { BaseComponent } from "../global/base-component";
+import { BaseComponent } from '../global/base-component';
 
 @Component({
     selector: 'materials-search',
@@ -29,7 +27,7 @@ export class MaterialsSearchComponent extends BaseComponent implements OnDestroy
         return this.status === RequestStatus.InProgress;
     }
 
-    inputChanged(): void {
+    public inputChanged(): void {
         if (!this.isFocused) {
             this.isFocused = true;
         }
@@ -41,32 +39,29 @@ export class MaterialsSearchComponent extends BaseComponent implements OnDestroy
         this.timer = setTimeout(() => {
             let text: string = this.model.input || '';
 
-            this.searchSubscription = this.searchSevice.search(text).subscribe(
-                response => {
-                    this.model.entities = response.entities;
+            this.searchSubscription = this.searchSevice.search(text).subscribe(response => {
+                this.model.entities = response.entities;
 
-                    if (!response.success) {
-                        this.processErrors(response.errors);
-                    } else {
-                        this.status = RequestStatus.NotStarted;
-                    }
-                },
-                err => {
-                    this.displayConnectionError();
+                if (!response.success) {
+                    this.processErrors(response.errors);
+                } else {
+                    this.status = RequestStatus.NotStarted;
                 }
-            );
+            }, () => {
+                this.displayConnectionError();
+            });
         }, 300);
     }
 
-    processErrors(errors: string[]) {
+    public processErrors(errors: string[]) {
         this.status = RequestStatus.CompletedWithError;
 
         errors.forEach((err) => {
             this.displayError(err);
-        })
+        });
     }
 
-    clearInput(): void {
+    public clearInput(): void {
         this.model.input = '';
         this.model.entities = [];
     }

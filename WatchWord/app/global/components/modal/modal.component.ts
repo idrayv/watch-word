@@ -7,7 +7,6 @@ import { ModalService } from './modal.service';
 })
 
 export class ModalComponent implements OnInit, OnDestroy {
-    private element: any;
     @Input('id') id: string;
     @ViewChild('modalBody') modalBody: ElementRef;
 

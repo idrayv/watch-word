@@ -1,4 +1,4 @@
-﻿<div *ngIf="model.serverErrors.length === 0">
+﻿<div *ngIf="learnWords()?.length > 0 || knownWords()?.length > 0">
     Learn words:
     <div class="words">
         <word [model]="learnWord" *ngFor="let learnWord of learnWords()"></word>
@@ -11,10 +11,4 @@
     <modal id="dictionaries-modal">
         <translation-modal modalId="dictionaries-modal"></translation-modal>
     </modal>
-</div>
-
-<div *ngIf="model.serverErrors.length > 0">
-    <div *ngFor="let error of model.serverErrors">
-        {{error}}
-    </div>
 </div>

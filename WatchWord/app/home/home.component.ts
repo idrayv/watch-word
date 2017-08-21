@@ -4,4 +4,6 @@ import { Component } from '@angular/core';
     templateUrl: 'app/home/home.template.html'
 })
 
-export class HomeComponent { name = 'Home'; }
+export class HomeComponent {
+    name = 'Home';
+}

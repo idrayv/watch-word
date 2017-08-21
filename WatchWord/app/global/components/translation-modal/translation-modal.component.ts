@@ -11,7 +11,6 @@ import { TranslationModalModel } from './translation-modal.models';
 
 export class TranslationModalComponent implements OnInit, OnDestroy {
     @Input() modalId: string;
-
     private model: TranslationModalModel = new TranslationModalModel();
     private modelSubscription: Subscription;
 

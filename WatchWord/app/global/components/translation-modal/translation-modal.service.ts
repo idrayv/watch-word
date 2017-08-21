@@ -4,19 +4,21 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 import { TranslatePostResponseModel, TranslationModalModel } from './translation-modal.models';
 import { TranslationModalResponseModel } from './translation-modal.models';
-import { VocabType, WordComposition, WordCompositionsModel } from '../../../material/material.models';
+import { VocabType, WordComposition } from '../../../material/material.models';
 import { SpinnerService } from '../../spinner/spinner.service';
 import { DictionariesService } from '../../../dictionaries/dictionaries.service';
+import { BaseComponent } from '../../base-component';
 let cfg = require('../../../config').appConfig;
 
 @Injectable()
-export class TranslationModalService {
+export class TranslationModalService extends BaseComponent {
     private baseUrl: string = cfg.apiRoute;
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
     private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
     public constructor(private http: Http, private dictionariesService: DictionariesService,
         private spinner: SpinnerService) {
+        super();
     }
 
     public get translationModalResponseObserverable(): Observable<TranslationModalResponseModel> {
@@ -85,13 +87,13 @@ export class TranslationModalService {
         });
     }
 
-    public fillWordCompositionsModel(response: TranslationModalResponseModel, model: WordCompositionsModel): void {
+    public fillWordCompositionsModel(response: TranslationModalResponseModel, composition: WordComposition[]): void {
         if (response.success) {
-            let index = model.wordCompositions.findIndex(
+            let index = composition.findIndex(
                 c => c.materialWord.theWord === response.wordComposition.materialWord.theWord);
-            model.wordCompositions[index] = response.wordComposition;
+            composition[index] = response.wordComposition;
         } else {
-            model.serverErrors = response.errors;
+            response.errors.forEach(err => this.displayError(err, 'Composition error'));
         }
     }
 

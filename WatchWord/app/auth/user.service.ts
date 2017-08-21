@@ -1,25 +1,27 @@
 ﻿import { Injectable } from '@angular/core';
-import { UserModel } from './auth.models';
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { UserModel } from './auth.models';
 
 @Injectable()
 export class UserService {
-    private userModelSubject: Subject<UserModel> = new Subject<UserModel>();
+    private userModelSubject: ReplaySubject<UserModel> = new ReplaySubject<UserModel>(1);
 
     constructor() { }
 
     public initializeUser() {
-        let name = localStorage.getItem('UserName');
-        let userModel = new UserModel(name ? name : '', localStorage.getItem('UserIsLoggedIn') === 'true');
-
-        this.userModelSubject.next(userModel);
+        var currentUserStorage = localStorage.getItem('currentUser');
+        if (currentUserStorage) {
+            this.userModelSubject.next(JSON.parse(currentUserStorage));
+        } else {
+            var userModel: UserModel = new UserModel('', false);
+            this.setUser(userModel);
+        }
     }
 
     public setUser(user: UserModel) {
         this.userModelSubject.next(user);
-        localStorage.setItem('UserName', user.name);
-        localStorage.setItem('UserIsLoggedIn', '' + user.isLoggedIn);
+        localStorage.setItem('currentUser', JSON.stringify(user));
     }
 
     public getUserObservable(): Observable<UserModel> {

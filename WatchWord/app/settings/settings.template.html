@@ -1,25 +1,16 @@
 ﻿<div>
-    <div [ngSwitch]="model.hasErrors">
-        <div *ngSwitchCase="true">
-            <div *ngFor="let error of model.serverErrors">
-                {{error}}
+    <form novalidate (submit)="submitForm()">
+        <div *ngFor="let setting of model.settings">
+            <!--TODO: component-->
+            <div>
+                <label>
+                    {{model.getNameByKey(setting.key)}}
+                    <input type="text" [(ngModel)]="setting.string" name="{{model.getNameByKey(setting.key)}}" />
+                </label>
             </div>
         </div>
-        <div *ngSwitchCase="false">
-            <form novalidate (submit)="submitForm()">
-                <div *ngFor="let setting of model.settings">
-                    <!--TODO: component-->
-                    <div>
-                        <label>
-                            {{model.getNameByKey(setting.key)}}
-                            <input type="text" [(ngModel)]="setting.string" name="{{model.getNameByKey(setting.key)}}" />
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <button type="submit">Send</button>
-                </div>
-            </form>
+        <div>
+            <button type="submit">Send</button>
         </div>
-    </div>
+    </form>
 </div>

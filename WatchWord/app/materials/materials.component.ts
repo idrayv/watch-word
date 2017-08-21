@@ -6,19 +6,22 @@ import { SpinnerService } from '../global/spinner/spinner.service';
 import { CountResponseModel, PaginationResponseModel } from '../global/components/pagination/pagination.models';
 import { MaterialsPaginationService } from './materials-pagination.service';
 import { MaterialModel } from '../material/material.models';
+import { BaseComponent } from '../global/base-component';
 
 @Component({
     templateUrl: 'app/materials/materials.template.html'
 })
 
-export class MaterialsComponent implements OnInit, OnDestroy {
+export class MaterialsComponent extends BaseComponent implements OnInit, OnDestroy {
     public model: MaterialsModel = new MaterialsModel();
     private routeSubscription: ISubscription;
     private itemsPerPage: number = 24;
     private materialsRoute: string = '/materials/page';
 
     constructor(private router: Router, private route: ActivatedRoute,
-        private materialsService: MaterialsPaginationService, private spinner: SpinnerService) { }
+        private materialsService: MaterialsPaginationService, private spinner: SpinnerService) { 
+        super();
+    }
 
     ngOnInit(): void {
         this.routeSubscription = this.route.params.subscribe(param => this.onRouteChanged(+param['id']));
@@ -52,7 +55,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
                 route: this.materialsRoute
             };
         } else {
-            this.model.serverErrors = response.errors;
+            response.errors.forEach(err => this.displayError(err, 'Pagination error'));
         }
     }
 
@@ -60,7 +63,7 @@ export class MaterialsComponent implements OnInit, OnDestroy {
         if (response.success) {
             this.model.materials = response.entities;
         } else {
-            this.model.serverErrors = response.errors;
+            response.errors.forEach(err => this.displayError(err, 'Fill materials error'));
         }
     }
 

@@ -3,11 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { MaterialService } from './material.service';
-import { MaterialModel, MaterialMode, WordCompositionsModel, MaterialStats } from './material.models';
+import { MaterialModel, MaterialMode, MaterialStats, VocabType } from './material.models';
+import { WordComposition } from './material.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
 import { BaseComponent } from '../global/base-component';
 import { ComponentValidation } from '../global/component-validation';
+import { UserModel } from '../auth/auth.models';
+import { UserService } from '../auth/user.service';
 
 @Component({
     templateUrl: 'app/material/material.template.html'
@@ -15,57 +18,43 @@ import { ComponentValidation } from '../global/component-validation';
 
 export class MaterialComponent extends BaseComponent implements OnInit, OnDestroy {
     public mode: MaterialMode = null;
-    public model: WordCompositionsModel = new WordCompositionsModel();
+    public wordCompositions: WordComposition[] = [];
     public material: MaterialModel = new MaterialModel();
-    public materialStats: MaterialStats[];
+    public userModel: UserModel;
     public formSubmited = false;
     private routeSubscription: ISubscription;
-    private modalResponse: ISubscription;
+    private userSubscription: ISubscription;
+    private modalResponseSubscription: ISubscription;
 
     constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router,
-        private spinner: SpinnerService, private translationModalService: TranslationModalService) {
+        private spinner: SpinnerService, private translationModalService: TranslationModalService,
+        private userService: UserService) {
         super();
     }
 
     ngOnInit() {
-        this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
-        this.modalResponse = this.translationModalService.translationModalResponseObserverable.subscribe(response => {
-            this.translationModalService.fillWordCompositionsModel(response, this.model);
+        this.userSubscription = this.userService.getUserObservable().subscribe(user => {
+            this.userModel = user;
         });
+
+        this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
+        this.modalResponseSubscription = this.translationModalService.translationModalResponseObserverable
+            .subscribe(response => {
+                this.translationModalService.fillWordCompositionsModel(response, this.wordCompositions);
+            });
     }
 
     private onRouteChanged(param: string): void {
-        this.model.serverErrors = [];
-
         if (param === 'create') {
             this.mode = MaterialMode.Add;
             this.material = new MaterialModel();
-            this.model.wordCompositions = [];
-            this.materialStats = [];
+            this.wordCompositions = [];
         } else if (+param) {
             this.initializeMaterial(+param);
         } else {
             console.log('404');
             // TODO: redirect to 404
         }
-    }
-
-    private initializeMaterial(id: number): void {
-        this.spinner.displaySpinner(true);
-        
-        this.materialService.getMaterial(id).then(response => {
-            this.spinner.displaySpinner(false);
-            if (response.success) {
-                this.mode = MaterialMode.Read;
-                this.material = response.material;
-                this.model.wordCompositions = this.materialService.composeWordWithVocabulary(this.material.words,
-                    response.vocabWords);
-                this.model.serverErrors = [];
-            } else {
-                this.mode = null;
-                this.model.serverErrors = response.errors;
-            }
-        });
     }
 
     public editMaterial(): void {
@@ -79,8 +68,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
             if (response.success) {
                 this.router.navigateByUrl('materials');
             } else {
-                response.errors.forEach(err => console.log(err));
-                this.model.serverErrors = response.errors;
+                response.errors.forEach(err => this.displayError(err, 'Delete material error'));
             }
         });
     }
@@ -89,30 +77,75 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         this.formSubmited = true;
         if (form.valid) {
             this.spinner.displaySpinner(true);
-            this.materialService.saveMaterial(this.material, this.model.wordCompositions).then(response => {
+            this.materialService.saveMaterial(this.material, this.wordCompositions).then(response => {
                 this.spinner.displaySpinner(false);
                 if (response.success) {
                     if (this.mode == MaterialMode.Add) {
                         this.router.navigateByUrl('material/' + response.id);
                     } else {
-                        this.model.serverErrors = [];
                         this.mode = MaterialMode.Read;
                     }
                 } else {
-                    response.errors.forEach(err => console.log(err));
-                    this.model.serverErrors = response.errors;
+                    response.errors.forEach(err => this.displayError(err, 'Save material error'));
                 }
             });
             this.formSubmited = false;
         }
     }
 
+    get materialStats(): MaterialStats[] {
+        let stats: MaterialStats[] = [];
+
+        var totalCount = this.wordCompositions
+            .map(c => c.materialWord.count).reduce((pre, curr) => pre + curr, 0);
+
+        var uniqueCount = this.wordCompositions.length;
+        this.pushStatToStats(stats, 'Total words', totalCount.toString());
+        this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
+
+        if (this.userModel.isLoggedIn) {
+            var learnCount = this.wordCompositions.filter(c => c.vocabWord.type === VocabType.LearnWord).length;
+            var knownCount = this.wordCompositions.filter(c => c.vocabWord.type === VocabType.KnownWord).length;
+
+            this.pushStatToStats(stats, 'Learn words', learnCount.toString());
+            this.pushStatToStats(stats, 'Known words', knownCount.toString());
+            this.pushStatToStats(stats, 'Unsigned words', (uniqueCount - (learnCount + knownCount)).toString());
+        }
+
+        return stats;
+    }
+
     public validationErrors(state: NgModel): string[] {
         return ComponentValidation.validationErrors(state);
     }
 
+    private pushStatToStats(stats: MaterialStats[], name: string, value: string) {
+        stats.push({
+            name: name,
+            value: value
+        });
+    }
+
+    private initializeMaterial(id: number): void {
+        this.spinner.displaySpinner(true);
+
+        this.materialService.getMaterial(id).then(response => {
+            this.spinner.displaySpinner(false);
+            if (response.success) {
+                this.mode = MaterialMode.Read;
+                this.material = response.material;
+                this.wordCompositions = this.materialService.composeWordWithVocabulary(this.material.words,
+                    response.vocabWords);
+            } else {
+                this.mode = null;
+                response.errors.forEach(err => this.displayError(err, 'Initialize material error'));
+            }
+        });
+    }
+
     ngOnDestroy() {
         this.routeSubscription.unsubscribe();
-        this.modalResponse.unsubscribe();
+        this.userSubscription.unsubscribe();
+        this.modalResponseSubscription.unsubscribe();
     }
 }

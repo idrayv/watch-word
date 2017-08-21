@@ -1,34 +1,23 @@
-﻿<div>
-    <form novalidate #form="ngForm" (submit)="logIn(form)">
-        <div>
-            <label>Login:
-                <input type="text" required maxlength="20" [(ngModel)]="model.login" name="login" #login="ngModel">
-            </label>
-            <div *ngIf="(formSubmited || login.dirty) && login.invalid">
-                <ul *ngFor="let error of validationErrors(login)">
-                    <li>{{error}}</li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <label>
-                Password:
-                <input type="password" required minlength="4" [(ngModel)]="model.password" name="password" #password="ngModel"/>
-            </label>
-            <div *ngIf="(formSubmited || password.dirty) && password.invalid">
-                <ul *ngFor="let error of validationErrors(password)">
-                    <li>{{error}}</li>
-                </ul>
-            </div>
-        </div>
-        <div>
-            <input type="submit" value="LogIn" />
-        </div>
-        <div *ngIf="authenticationErrors.length !== 0">
-            <ul *ngFor="let error of authenticationErrors">
-                {{error}}
-            </ul>
-            {{error}}
-        </div>
-    </form>
-</div>
+﻿<form novalidate #form="ngForm">
+    <div>
+        <label>Login:
+            <input type="text" name="login" required maxlength="20" [(ngModel)]="model.login" #login="ngModel">
+        </label>
+        <ul class="text-danger list-unstyled" *ngIf="(formSubmited || login.dirty) && login.invalid">
+            <li *ngFor="let error of validationErrors(login)">{{error}}</li>
+        </ul>
+    </div>
+    <div>
+        <label>
+            Password:
+            <input type="password" name="password" required minlength="4" [(ngModel)]="model.password"
+                   #password="ngModel" />
+        </label>
+        <ul class="text-danger list-unstyled" *ngIf="(formSubmited || password.dirty) && password.invalid">
+            <li *ngFor="let error of validationErrors(password)">>{{error}}</li>
+        </ul>
+    </div>
+    <div>
+        <input type="button" value="LogIn" (click)="logIn(form)" />
+    </div>
+</form>

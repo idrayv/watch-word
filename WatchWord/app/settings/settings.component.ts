@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { ISubscription } from 'rxjs/Subscription';
 import { SettingsService } from './settings.service';
-import { SettingsResponseModel, SettingsModel, SettingKey } from './settings.models';
+import { SettingsResponseModel, SettingsModel } from './settings.models';
+import { BaseComponent } from '../global/base-component';
 
 @Component({
     templateUrl: 'app/settings/settings.template.html'
 })
 
-export class SettingsComponent implements OnInit {
+export class SettingsComponent extends BaseComponent implements OnInit {
     public model: SettingsModel = new SettingsModel();
 
-    constructor(private settingService: SettingsService) { }
+    constructor(private settingService: SettingsService) {
+        super();
+    }
 
     ngOnInit(): void {
         this.settingService.getUnfilledSiteSettings().then(response => this.initializeModel(response));
@@ -21,7 +22,7 @@ export class SettingsComponent implements OnInit {
         if (response.success) {
             this.model.settings = response.settings;
         } else {
-            this.model.serverErrors = ['Server error occured.'];
+            this.displayConnectionError();
         }
     }
 

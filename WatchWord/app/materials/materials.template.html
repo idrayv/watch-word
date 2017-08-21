@@ -1,10 +1,4 @@
-﻿<div *ngIf="model.hasErrors">
-    <div *ngFor="let error of model.serverErrors">
-        {{error}}
-    </div>
-</div>
-
-<div *ngIf="!model.hasErrors" class="ms">
+﻿<div class="ms">
     <div *ngFor="let material of model.materials" class="ms-material" (click)="onMaterialClick(material.id)">
         <div class="ms-material-name">{{material.name}}</div>
         <img [src]="material.image" class="ms-material-image" />

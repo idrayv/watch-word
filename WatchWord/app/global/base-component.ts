@@ -1,7 +1,6 @@
 ﻿import { ToastService } from './toast/toast.service';
 import { ServiceLocator } from './service-locator';
 
-
 export class BaseComponent {
     private toastService: ToastService = ServiceLocator.Injector.get(ToastService);
 

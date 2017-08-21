@@ -1,15 +1,11 @@
 ﻿import { BaseResponseModel } from '../global/models';
 
 export enum SettingType {
-    Int,
-    String,
-    Boolean,
-    Date
+    Int, String, Boolean, Date
 }
 
 export enum SettingKey {
-    yandexTranslateApiKey,
-    yandexDictionaryApiKey
+    yandexTranslateApiKey, yandexDictionaryApiKey
 }
 
 export class Setting {
@@ -18,7 +14,7 @@ export class Setting {
     public int: number;
     public string: string;
     public boolean: boolean;
-    public date?: Date
+    public date?: Date;
 }
 
 export class SettingsResponseModel extends BaseResponseModel {
@@ -26,20 +22,17 @@ export class SettingsResponseModel extends BaseResponseModel {
 }
 
 export class SettingsModel {
-
-    private settingNames: { key: SettingKey, value: string }[];
-    public serverErrors: string[];
     public settings: Setting[] = [];
-
-    get hasErrors(): boolean {
-        return !!(this.serverErrors && this.serverErrors.length > 0);
-    }
+    private settingNames: { key: SettingKey, value: string }[];
 
     constructor() {
-        this.settingNames = [
-            { key: SettingKey.yandexTranslateApiKey, value: 'Yandex Translate Api Key' },
-            { key: SettingKey.yandexDictionaryApiKey, value: 'Yandex Dictionary Api Key' }
-        ];
+        this.settingNames = [{
+            key: SettingKey.yandexTranslateApiKey,
+            value: 'Yandex Translate Api Key'
+        }, {
+            key: SettingKey.yandexDictionaryApiKey,
+            value: 'Yandex Dictionary Api Key'
+        }];
     }
 
     public getNameByKey(key: SettingKey): string {

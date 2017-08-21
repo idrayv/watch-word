@@ -17,6 +17,11 @@ export class ComponentValidation {
                     case 'required':
                         errors.push(`${name} must be filled in!`);
                         break;
+                    case 'pattern':
+                        if (state.name === 'email') {
+                            errors.push(`${name} must be a valid email!`);
+                        }
+                        break;
                     case 'subtitlesInput':
                         (<string[]>state.errors[error]).forEach((er) => errors.push(er));
                         break;

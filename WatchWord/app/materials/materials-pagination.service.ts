@@ -6,6 +6,6 @@ import { MaterialModel } from '../material/material.models';
 @Injectable()
 export class MaterialsPaginationService extends PaginationService<MaterialModel> {
     constructor(http: Http) {
-        super(http, 'materials');
+        super(http, 'Materials');
     }
 }
