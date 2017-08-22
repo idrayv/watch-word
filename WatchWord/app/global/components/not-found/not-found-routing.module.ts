@@ -1,13 +1,10 @@
 ﻿import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MaterialComponent } from './material.component';
+import { NotFoundComponent } from './not-found.component';
 
 const routes: Routes = [{
-    path: ':id',
-    component: MaterialComponent
-},{
-    path: 'create',
-    component: MaterialComponent
+    path: '',
+    component: NotFoundComponent
 }];
 
 @NgModule({
@@ -15,5 +12,5 @@ const routes: Routes = [{
     exports: [RouterModule]
 })
 
-export class MaterialRoutingModule {
+export class NotFoundRoutingModule {
 }

@@ -9,11 +9,14 @@ export const routes: Routes = [
     { path: 'material', loadChildren: 'app/material/material.module#MaterialModule' },
     { path: 'login', loadChildren: 'app/auth/login/login.module#LoginModule' },
     { path: 'register', loadChildren: 'app/auth/register/register.module#RegisterModule' },
-    { path: 'settings', loadChildren: 'app/settings/settings.module#SettingsModule' }
+    { path: 'settings', loadChildren: 'app/settings/settings.module#SettingsModule' },
+    { path: '404', loadChildren: 'app/global/components/not-found/not-found.module#NotFoundModule' },
+    { path: '**', redirectTo: '/404'}
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

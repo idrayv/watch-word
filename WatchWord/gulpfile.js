@@ -75,24 +75,7 @@ if (cfg.appConfig.isDebug === true) {
 }
 
 gulp.task('compile-ts', buildAppDeps, function () {
-    var tsProject = ts.createProject('tsconfig.json');
-    var tsResult = gulp.src('app/**/*.ts')
-        .pipe(sourcemaps.init())
-        .pipe(tsProject());
-
-    var tsResultJs = tsResult.js;
-    if (cfg.appConfig.isDebug === true) {
-        // Generete map if debug
-        util.log("debug mode: ts maps added");
-        tsResultJs = tsResultJs.pipe(sourcemaps.write({
-            sourceRoot: function (file) {
-                var sourceFile = path.join(file.cwd, file.sourceMap.file);
-                return path.relative(path.dirname(sourceFile), file.cwd);
-            }
-        }));
-    }
-
-    return tsResultJs.pipe(gulp.dest('wwwroot/app'));
+    return compileTs();
 });
 
 gulp.task('only-copy-js', [], function () {
@@ -117,22 +100,29 @@ gulp.task('only-copy-ts', [], function () {
 });
 
 gulp.task('only-compile-ts', ['only-copy-ts'], function () {
+    return compileTs();
+});
+
+function compileTs() {
     var tsProject = ts.createProject('tsconfig.json');
     var tsResult = gulp.src('app/**/*.ts')
         .pipe(sourcemaps.init())
         .pipe(tsProject());
 
     var tsResultJs = tsResult.js;
-
-    tsResultJs = tsResultJs.pipe(sourcemaps.write({
-        sourceRoot: function (file) {
-            var sourceFile = path.join(file.cwd, file.sourceMap.file);
-            return path.relative(path.dirname(sourceFile), file.cwd);
-        }
-    }));
+    if (cfg.appConfig.isDebug === true) {
+        // Generete map if debug
+        util.log("debug mode: ts maps added");
+        tsResultJs = tsResultJs.pipe(sourcemaps.write({
+            sourceRoot: function (file) {
+                var sourceFile = path.join(file.cwd, file.sourceMap.file);
+                return path.relative(path.dirname(sourceFile), file.cwd);
+            }
+        }));
+    }
 
     return tsResultJs.pipe(gulp.dest('wwwroot/app'));
-});
+}
 
 gulp.task('default', ['copy-lib', 'compile-ts'], function () {
     gulp.watch('app/**/*.ts', { cwd: './' }, ['only-compile-ts']);

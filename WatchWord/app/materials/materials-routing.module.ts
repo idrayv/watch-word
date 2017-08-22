@@ -5,6 +5,9 @@ import { MaterialsComponent } from './materials.component';
 const routes: Routes = [{
     path: 'page/:id',
     component: MaterialsComponent
+}, {
+    path: '',
+    component: MaterialsComponent
 }];
 
 @NgModule({

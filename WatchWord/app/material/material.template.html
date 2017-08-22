@@ -28,7 +28,7 @@
             <div id="material-files" class="field">
                 <label>Subtitles:</label>
                 <subtitles-input name="subtitles" required
-                                 [(ngModel)]="model.wordCompositions" #subtitles="ngModel"></subtitles-input>
+                                 [(ngModel)]="wordCompositions" #subtitles="ngModel"></subtitles-input>
 
                 <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
                     <ul *ngFor="let error of validationErrors(subtitles)">

@@ -19,21 +19,27 @@ export class MaterialsComponent extends BaseComponent implements OnInit, OnDestr
     private materialsRoute: string = '/materials/page';
 
     constructor(private router: Router, private route: ActivatedRoute,
-        private materialsService: MaterialsPaginationService, private spinner: SpinnerService) { 
+        private materialsService: MaterialsPaginationService, private spinner: SpinnerService) {
         super();
     }
 
     ngOnInit(): void {
-        this.routeSubscription = this.route.params.subscribe(param => this.onRouteChanged(+param['id']));
+        this.routeSubscription = this.route.params.subscribe(param => this.onRouteChanged(param['id']));
     }
 
     public onMaterialClick(id: number): void {
         this.router.navigate(['/material', id]);
     }
 
-    private onRouteChanged(id: number): void {
-        let currentPage: number = !id ? 1 : id;
-        this.changeModel(currentPage);
+    private onRouteChanged(param: string): void {
+        if (!param) {
+            this.changeModel(1);
+        } else if (+param) {
+            this.changeModel(+param);
+        } else {
+            console.log('404');
+            // TODO: redirect to 404
+        }
     }
 
     private changeModel(page: number) {
