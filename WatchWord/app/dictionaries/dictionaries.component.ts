@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { DictionariesService } from './dictionaries.service';
 import { VocabType, WordComposition } from '../material/material.models';
-import { VocabWordsModel } from '../material/material.models';
+import { VocabWordsResponseModel as VocabWordsModel } from '../material/material.models';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { BaseComponent } from '../global/base-component';

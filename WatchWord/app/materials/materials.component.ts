@@ -5,7 +5,7 @@ import { MaterialsModel } from './materials.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { CountResponseModel, PaginationResponseModel } from '../global/components/pagination/pagination.models';
 import { MaterialsPaginationService } from './materials-pagination.service';
-import { MaterialModel } from '../material/material.models';
+import { Material as MaterialModel } from '../material/material.models';
 import { BaseComponent } from '../global/base-component';
 
 @Component({

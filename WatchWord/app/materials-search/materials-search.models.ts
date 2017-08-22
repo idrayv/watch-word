@@ -1,4 +1,4 @@
-﻿import { MaterialModel } from '../material/material.models';
+﻿import { Material as MaterialModel } from '../material/material.models';
 import { BaseResponseModel } from '../global/models';
 
 export class MaterialsSearchModel {

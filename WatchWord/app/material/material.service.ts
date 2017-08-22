@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { MaterialPostResponseModel, ParseResponseModel } from '../material/material.models';
-import { ImageResponseModel, MaterialModel } from '../material/material.models';
+import { ImageResponseModel, Material as MaterialModel } from '../material/material.models';
 import { MaterialResponseModel, WordComposition, Word, VocabWord, VocabType } from '../material/material.models';
 import { BaseResponseModel } from '../global/models';
 let cfg = require('../config').appConfig;

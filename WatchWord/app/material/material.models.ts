@@ -30,7 +30,7 @@ export class WordComposition {
     public vocabWord: VocabWord = new VocabWord();
 }
 
-export class MaterialModel {
+export class Material {
     public id: number;
     public materialType: MaterialType;
     public name: string;
@@ -45,7 +45,7 @@ export class MaterialStats {
 }
 
 export class MaterialResponseModel extends BaseResponseModel {
-    public material: MaterialModel;
+    public material: Material;
     public vocabWords: VocabWord[];
 }
 
@@ -62,6 +62,6 @@ export class ImageResponseModel extends BaseResponseModel {
     public base64: string;
 }
 
-export class VocabWordsModel extends BaseResponseModel {
+export class VocabWordsResponseModel extends BaseResponseModel {
     public vocabWords: VocabWord[];
 }

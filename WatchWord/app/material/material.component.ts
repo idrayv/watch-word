@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { MaterialService } from './material.service';
-import { MaterialModel, MaterialMode, MaterialStats, VocabType } from './material.models';
+import { Material as MaterialModel, MaterialMode, MaterialStats, VocabType } from './material.models';
 import { WordComposition } from './material.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';

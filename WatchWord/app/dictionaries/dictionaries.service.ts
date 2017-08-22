@@ -2,7 +2,7 @@
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
-import { VocabWordsModel, VocabWord } from '../material/material.models';
+import { VocabWordsResponseModel as VocabWordsModel, VocabWord } from '../material/material.models';
 import { VocabularyPostResponseModel } from './dictionaries.models';
 let cfg = require('../config').appConfig;
 
