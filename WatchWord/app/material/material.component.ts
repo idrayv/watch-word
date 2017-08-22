@@ -52,8 +52,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         } else if (+param) {
             this.initializeMaterial(+param);
         } else {
-            console.log('404');
-            // TODO: redirect to 404
+            this.router.navigate(['/404']);
         }
     }
 
