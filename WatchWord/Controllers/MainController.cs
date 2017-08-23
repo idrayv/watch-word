@@ -7,19 +7,20 @@ namespace WatchWord.Controllers
 {
     public abstract class MainController : Controller
     {
-        private const string dbError = "Database query error. Please try later.";
+        private const string dbError = "Server error: Please try again later.";
 
         protected static void AddServerError(BaseResponseModel model, Exception ex)
         {
             model.Success = false;
-            Debug.Write(ex.ToString());
+            Trace.TraceError(ex.ToString());
+            Trace.TraceError(ex.StackTrace);
             model.Errors.Add(dbError);
         }
 
         protected static void AddCustomError(BaseResponseModel model, string text)
         {
             model.Success = false;
-            Debug.Write(text);
+            Trace.TraceError(text);
             model.Errors.Add(text);
         }
     }
