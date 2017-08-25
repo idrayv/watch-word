@@ -3,21 +3,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WatchWord.Domain.Identity;
 using WatchWord.Infrastructure;
 using WatchWord.Models;
+using System;
+using WatchWord.DataAccess.Identity;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
-    public class AccountController : Controller
+    public class AccountController : MainController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<WatchWordUser> _userManager;
+        private readonly SignInManager<WatchWordUser> _signInManager;
 
         public AccountController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            UserManager<WatchWordUser> userManager,
+            SignInManager<WatchWordUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,32 +29,39 @@ namespace WatchWord.Controllers
         [Route("Register")]
         public async Task<string> Register([FromBody] AuthRequestModel authModel)
         {
-            var user = new ApplicationUser {UserName = authModel.Login, Email = authModel.Email};
-            var isFirstUser = _userManager.Users.FirstOrDefault() == null;
-            var result = await _userManager.CreateAsync(user, authModel.Password);
             var registerModel = new BaseResponseModel();
-
-            if (result.Succeeded)
+            try
             {
-                if (isFirstUser)
+                var user = new WatchWordUser { UserName = authModel.Login, Email = authModel.Email };
+                var isFirstUser = _userManager.Users.FirstOrDefault() == null;
+                var result = await _userManager.CreateAsync(user, authModel.Password);
+
+                if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Admin");
+                    if (isFirstUser)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Member");
+                    }
+
+                    await _signInManager.SignInAsync(user, false);
+                    registerModel.Success = true;
                 }
                 else
                 {
-                    await _userManager.AddToRoleAsync(user, "Member");
+                    registerModel.Success = false;
+                    foreach (var error in result.Errors)
+                    {
+                        registerModel.Errors.Add(error.Description);
+                    }
                 }
-
-                await _signInManager.SignInAsync(user, false);
-                registerModel.Success = true;
             }
-            else
+            catch (Exception ex)
             {
-                registerModel.Success = false;
-                foreach (var error in result.Errors)
-                {
-                    registerModel.Errors.Add(error.Description);
-                }
+                AddServerError(registerModel, ex);
             }
 
             return ApiJsonSerializer.Serialize(registerModel);
@@ -64,26 +72,28 @@ namespace WatchWord.Controllers
         [Route("Login")]
         public async Task<string> Login([FromBody] AuthRequestModel authModel)
         {
-            var result = await _signInManager.PasswordSignInAsync(authModel.Login, authModel.Password, true, false);
-
             var loginModel = new BaseResponseModel();
-            if (result.Succeeded)
+            try
             {
-                loginModel.Success = true;
+                var result = await _signInManager.PasswordSignInAsync(authModel.Login, authModel.Password, true, false);
+
+                if (result.Succeeded)
+                {
+                    loginModel.Success = true;
+                }
+
+                else if (result.IsLockedOut)
+                {
+                    loginModel.Errors.Add("User account locked out.");
+                }
+                else
+                {
+                    loginModel.Errors.Add("Invalid login attempt.");
+                }
             }
-            else if (result.RequiresTwoFactor)
+            catch (Exception ex)
             {
-                loginModel.Success = false;
-            }
-            else if (result.IsLockedOut)
-            {
-                loginModel.Success = false;
-                loginModel.Errors.Add("User account locked out.");
-            }
-            else
-            {
-                loginModel.Success = false;
-                loginModel.Errors.Add("Invalid login attempt.");
+                AddServerError(loginModel, ex);
             }
 
             return loginModel.ToJson();
@@ -93,17 +103,24 @@ namespace WatchWord.Controllers
         [Route("Logout")]
         public string Logout()
         {
-            var result = _signInManager.SignOutAsync();
             var logoutModel = new BaseResponseModel();
+            try
+            {
+                var result = _signInManager.SignOutAsync();
 
-            if (result.IsCompleted)
-            {
-                logoutModel.Success = true;
+                if (result.IsCompleted)
+                {
+                    logoutModel.Success = true;
+                }
+                else
+                {
+                    logoutModel.Success = false;
+                    logoutModel.Errors.Add(result.Exception.ToString());
+                }
             }
-            else
+            catch (Exception ex)
             {
-                logoutModel.Success = false;
-                logoutModel.Errors.Add(result.Exception.ToString());
+                AddServerError(logoutModel, ex);
             }
 
             return ApiJsonSerializer.Serialize(logoutModel);

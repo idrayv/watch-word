@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using WatchWord.Models;
 using WatchWord.Infrastructure;
-using WatchWord.Domain.Identity;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Abstract;
+using WatchWord.DataAccess.Identity;
 
 namespace WatchWord.Controllers
 {
@@ -18,10 +18,10 @@ namespace WatchWord.Controllers
     {
         private readonly IScanWordParser parser;
         private readonly IVocabularyService vocabularyService;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<WatchWordUser> userManager;
 
         public ParseController(IScanWordParser parser, IVocabularyService vocabularyService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<WatchWordUser> userManager)
         {
             this.parser = parser;
             this.userManager = userManager;

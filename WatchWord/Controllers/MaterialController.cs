@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using WatchWord.Domain.Entity;
 using WatchWord.Models;
 using WatchWord.Service.Abstract;
-using WatchWord.Domain.Identity;
+using WatchWord.DataAccess.Identity;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
     public class MaterialController : MainController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<WatchWordUser> _userManager;
         private readonly IMaterialsService _materialsService;
         private readonly IVocabularyService _vocabularyService;
 
         public MaterialController(IMaterialsService materialService, IVocabularyService vocabularyService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<WatchWordUser> userManager)
         {
             _userManager = userManager;
             _materialsService = materialService;

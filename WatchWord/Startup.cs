@@ -14,10 +14,11 @@ using WatchWord.Service.Abstract;
 using WatchWord.DataAccess.Repositories;
 using WatchWord.Infrastructure;
 using WatchWord.DataAccess;
-using WatchWord.Domain.Identity;
 using WatchWord.Service.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using WatchWord.DataAccess.Abstract;
+using WatchWord.DataAccess.Identity;
+using System.Diagnostics;
 
 namespace WatchWord
 {
@@ -93,36 +94,19 @@ namespace WatchWord
             services.AddDbContext<WatchWordContext>();
 
             // Idenity
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<WatchWordContext, int>()
+            services.AddIdentity<WatchWordUser, WatchWordRole>()
+                .AddEntityFrameworkStores<WatchWordContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<IdentityOptions>(options =>
+            services.ConfigureApplicationCookie(options =>
             {
-                // Password settings
-                options.Password.RequiredLength = 4;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-
-                // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
-
-                // Cookie settings
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(30);
-                options.Cookies.ApplicationCookie.LoginPath = "/identity/login";
-                options.Cookies.ApplicationCookie.LogoutPath = "/identity/logoff";
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
 
                 // CORS: Only for Dev
-                options.Cookies.ApplicationCookie.CookieSecure = CookieSecurePolicy.SameAsRequest;
-
-                // User settings
-                options.User.RequireUniqueEmail = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
                 // 401 error handler
-                options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents
+                options.Events = new CookieAuthenticationEvents
                 {
                     OnRedirectToLogin = ctx =>
                     {
@@ -140,12 +124,29 @@ namespace WatchWord
                 };
             });
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+
             // Add framework services.
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, RoleManager<WatchWordRole> roleManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -161,26 +162,31 @@ namespace WatchWord
             // Angular 2 PathRoutingStategy
             app.UseMiddleware<Angular2Middleware>();
             app.UseStaticFiles();
-            app.UseIdentity();
+            app.UseAuthentication();
             app.UseMvc();
 
             // Add identity roles
-            await CreateRoles(serviceProvider);
+            CreateRoles(roleManager);
         }
 
-        private async Task CreateRoles(IServiceProvider serviceProvider)
+        private void CreateRoles(RoleManager<WatchWordRole> roleManager)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             string[] roleNames = { "Admin", "Member" };
             IdentityResult roleResult;
 
             foreach (var roleName in roleNames)
             {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                var roleExist = roleManager.RoleExistsAsync(roleName).Result;
                 if (!roleExist)
                 {
-                    roleResult = await roleManager.CreateAsync(new ApplicationRole(roleName));
+                    roleResult = roleManager.CreateAsync(new WatchWordRole(roleName)).Result;
+                    if (roleResult.Succeeded == false)
+                    {
+                        foreach (var er in roleResult.Errors)
+                        {
+                            Trace.TraceError(er.ToString());
+                        }
+                    }
                 }
             }
         }

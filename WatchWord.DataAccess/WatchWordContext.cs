@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using MySQL.Data.Entity.Extensions;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using WatchWord.Domain.Entity;
-using WatchWord.Domain.Identity;
+using WatchWord.DataAccess.Identity;
 
 namespace WatchWord.DataAccess
 {
-    public sealed class WatchWordContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+    public sealed class WatchWordContext : IdentityDbContext<WatchWordUser, WatchWordRole, int>, IDesignTimeDbContextFactory<WatchWordContext>
     {
         private readonly DatabaseSettings _dbSettings;
 
@@ -32,8 +35,7 @@ namespace WatchWord.DataAccess
         /// <summary>Gets or sets translations.</summary>
         public DbSet<Translation> Translations { get; set; }
 
-        // ReSharper disable once UnusedMember.Local
-        private WatchWordContext() { }
+        public WatchWordContext() { }
 
         public WatchWordContext(DatabaseSettings dbSettings)
         {
@@ -45,7 +47,7 @@ namespace WatchWord.DataAccess
         {
             if (_dbSettings.UseMySql)
             {
-                optionsBuilder.UseMySQL(_dbSettings.ConnectionString);
+                optionsBuilder.UseMySql(_dbSettings.ConnectionString);
             }
             else
             {
@@ -105,6 +107,56 @@ namespace WatchWord.DataAccess
 
             modelBuilder.ForSqlServerUseIdentityColumns();
             base.OnModelCreating(modelBuilder);
+        }
+
+        public WatchWordContext CreateDbContext(string[] args)
+        {
+            var mockConfiguration = new CreateDbConfiguration
+            {
+                UseMySql = "False",
+                ConnectionString = "Server=M-SHCHYHOL\\SQLEXPRESS;Database=WatchWord;Integrated Security=SSPI;MultipleActiveResultSets=true"
+            };
+            var dbSettings = new DatabaseSettings(mockConfiguration);
+
+            return new WatchWordContext(dbSettings);
+        }
+
+        private class CreateDbConfiguration : IConfiguration
+        {
+            public string ConnectionString;
+            public string UseMySql;
+
+            public string this[string key]
+            {
+                get
+                {
+                    if (key == "DatabaseSettings:MySql")
+                    {
+                        return UseMySql;
+                    }
+                    if (key == "DatabaseSettings:ConnectionStringIdrayv")
+                    {
+                        return ConnectionString;
+                    }
+                    return "";
+                }
+                set => throw new System.NotImplementedException();
+            }
+
+            public IEnumerable<IConfigurationSection> GetChildren()
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public IChangeToken GetReloadToken()
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public IConfigurationSection GetSection(string key)
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

@@ -3,20 +3,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WatchWord.Domain.Identity;
 using WatchWord.Models;
 using WatchWord.Domain.Entity;
 using WatchWord.Service.Abstract;
+using WatchWord.DataAccess.Identity;
 
 namespace WatchWord.Controllers
 {
     [Route("api/[controller]")]
     public class VocabularyController : MainController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<WatchWordUser> _userManager;
         private readonly IVocabularyService _vocabularyService;
 
-        public VocabularyController(IVocabularyService vocabularyService, UserManager<ApplicationUser> userManager)
+        public VocabularyController(IVocabularyService vocabularyService, UserManager<WatchWordUser> userManager)
         {
             _vocabularyService = vocabularyService;
             _userManager = userManager;
