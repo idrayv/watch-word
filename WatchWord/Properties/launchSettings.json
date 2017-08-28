@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/WatchWord",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:54092/",
       "sslPort": 0

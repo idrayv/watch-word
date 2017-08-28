@@ -1,18 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+    <EnableDefaultContentItems>true</EnableDefaultContentItems>
     <ApplicationInsightsResourceId>/subscriptions/6d4c1964-a24f-4e27-97ba-2588fd680657/resourcegroups/drayv/providers/microsoft.insights/components/WatchWord</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/6d4c1964-a24f-4e27-97ba-2588fd680657/resourcegroups/drayv/providers/microsoft.insights/components/WatchWord</ApplicationInsightsAnnotationResourceId>
     <RootNamespace>WatchWord</RootNamespace>
     <AssemblyName>WatchWord</AssemblyName>
     <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <Configurations>Debug;Release;MYSQL</Configurations>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MYSQL|AnyCPU'" />
-  <ItemGroup>
-    <Content Include="wwwroot\index.html" />
-    <Content Include="wwwroot\systemjs.config.js" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MYSQL|AnyCPU'">
+    <DefineConstants>TRACE;MYSQL;RELEASE;NETCOREAPP2_0</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
@@ -32,36 +31,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WatchWord.DataAccess\WatchWord.DataAccess.csproj" />
     <ProjectReference Include="..\WatchWord.Service\WatchWord.Service.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="wwwroot\lib\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="wwwroot\lib\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="wwwroot\lib\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="wwwroot\css\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="wwwroot\css\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="wwwroot\css\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="wwwroot\app\**" />
-    <Content Remove="wwwroot\app\**" />
-    <Content Remove="wwwroot\css\**" />
-    <Content Remove="wwwroot\lib\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Remove="wwwroot\app\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="wwwroot\app\**" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />

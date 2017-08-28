@@ -1,19 +1,20 @@
-﻿#pragma warning disable 612, 618
-
-#if MYSQL
+﻿#if MYSQL
 
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WatchWord.DataAccess.Migrations
 {
     [DbContext(typeof(WatchWordContext))]
-    partial class WatchWordContextModelSnapshot : ModelSnapshot
+    [Migration("20170828105454_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
@@ -389,6 +390,7 @@ namespace WatchWord.DataAccess.Migrations
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
+#pragma warning restore 612, 618
         }
     }
 }
@@ -399,14 +401,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WatchWord.DataAccess.Migrations
 {
     [DbContext(typeof(WatchWordContext))]
-    partial class WatchWordContextModelSnapshot : ModelSnapshot
+    [Migration("20170828105454_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
+#pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -781,10 +786,9 @@ namespace WatchWord.DataAccess.Migrations
                     .HasForeignKey("MaterialId")
                     .OnDelete(DeleteBehavior.Cascade);
             });
+#pragma warning restore 612, 618
         }
     }
 }
 
 #endif
-
-#pragma warning restore 612, 618

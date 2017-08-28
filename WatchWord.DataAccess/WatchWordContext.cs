@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -113,8 +112,10 @@ namespace WatchWord.DataAccess
         {
             var mockConfiguration = new CreateDbConfiguration
             {
-                UseMySql = "False",
-                ConnectionString = "Server=M-SHCHYHOL\\SQLEXPRESS;Database=WatchWord;Integrated Security=SSPI;MultipleActiveResultSets=true"
+                /*UseMySql = "False",
+                ConnectionString = "Server=M-SHCHYHOL\\SQLEXPRESS;Database=WatchWord;Integrated Security=SSPI;MultipleActiveResultSets=true"*/
+                UseMySql = "True",
+                ConnectionString = "server=localhost;user id=root;password=password;database=WatchWord;Port=3306;"
             };
             var dbSettings = new DatabaseSettings(mockConfiguration);
 
@@ -134,7 +135,8 @@ namespace WatchWord.DataAccess
                     {
                         return UseMySql;
                     }
-                    if (key == "DatabaseSettings:ConnectionStringIdrayv")
+                    /*if (key == "DatabaseSettings:ConnectionStringIdrayv")*/
+                    if (key == "DatabaseSettings:ConnectionStringMySql")
                     {
                         return ConnectionString;
                     }
