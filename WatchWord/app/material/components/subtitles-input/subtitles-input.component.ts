@@ -1,7 +1,7 @@
-﻿import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+﻿import { Component, ElementRef, forwardRef, ViewChild, Output, Input, EventEmitter } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl } from '@angular/forms';
 import { MaterialService } from '../../material.service';
-import { Word, WordComposition } from '../../material.models';
+import { VocabWord, Word } from '../../material.models';
 import { SpinnerService } from '../../../global/spinner/spinner.service';
 
 @Component({
@@ -26,19 +26,26 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
 
     @ViewChild('file') fileInput: ElementRef;
 
+    @Input() vocabWords: VocabWord[];
+    @Output() vocabWordsChange: EventEmitter<VocabWord[]> = new EventEmitter<VocabWord[]>();
+
+    @Input() words: Word[];
+    @Output() wordsChange: EventEmitter<Word[]> = new EventEmitter<Word[]>();
+
     fileChanged() {
         this.spinner.displaySpinner(true);
         let file: File = this.fileInput.nativeElement.files[0];
-        let words: WordComposition[];
+  
         this.materialService.parseSubtitles(file).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
-                words = this.materialService.composeWordWithVocabulary(response.words, response.vocabWords);
+                this.vocabWordsChange.emit(response.vocabWords);
+                this.wordsChange.emit(response.words);
                 this.serverErrors = [];
             } else {
                 this.serverErrors = response.errors;
             }
-            this.onChangeCallback(words);
+            //this.onChangeCallback(vocabWords);
         });
     }
 
@@ -53,7 +60,7 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
         return { 'subtitlesInput': this.serverErrors };
     }
 
-    writeValue(subbtitles: Word[]): void {}
+    writeValue(VocabWord: VocabWord[]): void {}
 
     registerOnValidatorChange(fn: () => void): void {}
 

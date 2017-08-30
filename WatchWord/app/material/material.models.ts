@@ -25,11 +25,6 @@ export class VocabWord {
     public type: VocabType = VocabType.LearnWord;
 }
 
-export class WordComposition {
-    public materialWord: Word = new Word();
-    public vocabWord: VocabWord = new VocabWord();
-}
-
 export class Material {
     public id: number;
     public materialType: MaterialType;

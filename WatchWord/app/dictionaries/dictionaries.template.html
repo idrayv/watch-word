@@ -1,11 +1,11 @@
 ﻿<div *ngIf="learnWords()?.length > 0 || knownWords()?.length > 0">
     Learn words:
     <div class="words">
-        <word [model]="learnWord" *ngFor="let learnWord of learnWords()"></word>
+        <word [vocabWord]="learnWord" *ngFor="let learnWord of learnWords()"></word>
     </div>
     Known words:
     <div class="words">
-        <word [model]="knownWord" *ngFor="let knownWord of knownWords()"></word>
+        <word [vocabWord]="knownWord" *ngFor="let knownWord of knownWords()"></word>
     </div>
 
     <modal id="dictionaries-modal">

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { DictionariesService } from './dictionaries.service';
-import { VocabType, WordComposition } from '../material/material.models';
+import { VocabType, VocabWord } from '../material/material.models';
 import { VocabWordsResponseModel as VocabWordsModel } from '../material/material.models';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
 import { SpinnerService } from '../global/spinner/spinner.service';
@@ -12,7 +12,7 @@ import { BaseComponent } from '../global/base-component';
 })
 
 export class DictionariesComponent extends BaseComponent implements OnInit, OnDestroy {
-    private wordCompositions: WordComposition[] = [];
+    private vocabWords: VocabWord[] = [];
     private modalResponse: ISubscription;
 
     constructor(private dictionariesService: DictionariesService, private spinner: SpinnerService,
@@ -21,41 +21,29 @@ export class DictionariesComponent extends BaseComponent implements OnInit, OnDe
     }
 
     ngOnInit(): void {
-
         this.spinner.displaySpinner(true);
         this.dictionariesService.getDictionaries().then((response) => {
-            this.fillModelFromResponse(response);
+
+            if (response.success) {
+                this.vocabWords = response.vocabWords;
+            } else {
+                response.errors.forEach(err => this.displayError(err, 'Response error'));
+            }
+
             this.spinner.displaySpinner(false);
         });
 
         this.modalResponse = this.translationModalService.translationModalResponseObserverable.subscribe(response => {
-            this.translationModalService.fillWordCompositionsModel(response, this.wordCompositions);
+            this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
         });
     }
 
-    public learnWords(): WordComposition[] {
-        return this.wordCompositions.filter(word => word.vocabWord.type === VocabType.LearnWord);
+    public learnWords(): VocabWord[] {
+        return this.vocabWords.filter(v => v.type === VocabType.LearnWord);
     }
 
-    public knownWords(): WordComposition[] {
-        return this.wordCompositions.filter(word => word.vocabWord.type === VocabType.KnownWord);
-    }
-
-    private fillModelFromResponse(response: VocabWordsModel): void {
-        if (response.success) {
-            this.wordCompositions = response.vocabWords.map(v => {
-                return {
-                    vocabWord: v,
-                    materialWord: {
-                        theWord: v.word,
-                        count: 0,
-                        id: 0
-                    }
-                };
-            });
-        } else {
-            response.errors.forEach(err => this.displayError(err, 'Response error'));
-        }
+    public knownWords(): VocabWord[] {
+        return this.vocabWords.filter(v => v.type === VocabType.KnownWord);
     }
 
     ngOnDestroy(): void {

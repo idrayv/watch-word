@@ -27,8 +27,8 @@
         <div class="two fields">
             <div id="material-files" class="field">
                 <label>Subtitles:</label>
-                <subtitles-input name="subtitles" required
-                                 [(ngModel)]="wordCompositions" #subtitles="ngModel"></subtitles-input>
+                <subtitles-input name="subtitles" required [(ngModel)]="vocabWords" [(words)]="material.words"
+                                 [(vocabWords)]="vocabWords" #subtitles="ngModel"></subtitles-input>
 
                 <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
                     <ul *ngFor="let error of validationErrors(subtitles)">
@@ -76,7 +76,7 @@
                     Delete
                 </button>
             </div>
-            <div *ngIf="wordCompositions?.length > 0" class="material-stats">
+            <div *ngIf="vocabWords?.length > 0" class="material-stats">
                 <div *ngFor="let stat of materialStats">
                     <div class="inline">{{stat.name}}:</div>
                     <div class="inline">{{stat.value}}</div>
@@ -86,8 +86,8 @@
     </div>
 </div>
 
-<div *ngIf="wordCompositions && wordCompositions.length !== 0" class="words">
-    <word *ngFor="let wordComposition of wordCompositions" [model]="wordComposition"></word>
+<div *ngIf="vocabWords?.length !== 0" class="words">
+    <word *ngFor="let vocabWord of vocabWords" [vocabWord]="vocabWord"></word>
 </div>
 
 <br />

@@ -4,7 +4,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { MaterialPostResponseModel, ParseResponseModel } from '../material/material.models';
 import { ImageResponseModel, Material as MaterialModel } from '../material/material.models';
-import { MaterialResponseModel, WordComposition, Word, VocabWord, VocabType } from '../material/material.models';
+import { MaterialResponseModel, Word, VocabWord, VocabType } from '../material/material.models';
 import { BaseResponseModel } from '../global/models';
 let cfg = require('../config').appConfig;
 
@@ -49,9 +49,16 @@ export class MaterialService {
     }
 
     public saveMaterial(material: MaterialModel,
-        wordCompositions: WordComposition[]): Promise<MaterialPostResponseModel> {
+        vocabWords: VocabWord[]): Promise<MaterialPostResponseModel> {
 
-        material.words = wordCompositions.map(wordComposition => wordComposition.materialWord);
+        material.words = vocabWords.map((vocabWord) => {
+            return <Word>{
+                id: 0,
+                theWord: vocabWord.word,
+                count: material.words.find(w => w.theWord === vocabWord.word).count
+            };
+        });
+
         return this.http.post(this.baseUrl + '/material/save', material).toPromise()
             .then((res: Response) => res.json())
             .catch(() => {
@@ -65,21 +72,5 @@ export class MaterialService {
             .catch(() => {
                 return this.connectionErrorModel;
             });
-    }
-
-    public composeWordWithVocabulary(words: Word[], vocabWords: VocabWord[]): WordComposition[] {
-        let vocabWordsObject = {};
-        vocabWords.forEach(vocabWord => vocabWordsObject[vocabWord.word] = vocabWord);
-        return words.map((word) => {
-            return {
-                materialWord: word,
-                vocabWord: vocabWordsObject[word.theWord] ? vocabWordsObject[word.theWord] : {
-                    id: 0,
-                    type: VocabType.UnsignedWord,
-                    word: word.theWord,
-                    translation: ''
-                }
-            };
-        });
     }
 }

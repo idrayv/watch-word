@@ -53,7 +53,6 @@ namespace WatchWord.Service
             return await _unitOfWork.SaveAsync();
         }
 
-        // TODO: return "unsigned words" instead of merge in js
         public async Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, int userId)
         {
             var arrayOfWords = materialWords == null
@@ -61,8 +60,11 @@ namespace WatchWord.Service
                 : materialWords.Select(n => n.TheWord).ToArray();
 
             var owner = await _accountsService.GetByExternalIdAsync(userId);
-            var vocabWords =
-                await _vocabWordsRepository.GetAllAsync(v => v.Owner.Id == owner.Id && arrayOfWords.Contains(v.Word));
+            var vocabWords = await _vocabWordsRepository
+                .GetAllAsync(v => v.Owner.Id == owner.Id && arrayOfWords.Contains(v.Word));
+
+            vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
+                .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));
 
             return vocabWords;
         }

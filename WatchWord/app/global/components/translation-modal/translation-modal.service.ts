@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 import { TranslatePostResponseModel, TranslationModalModel } from './translation-modal.models';
 import { TranslationModalResponseModel } from './translation-modal.models';
-import { VocabType, WordComposition } from '../../../material/material.models';
+import { VocabType, VocabWord } from '../../../material/material.models';
 import { SpinnerService } from '../../spinner/spinner.service';
 import { DictionariesService } from '../../../dictionaries/dictionaries.service';
 import { BaseComponent } from '../../base-component';
@@ -41,28 +41,19 @@ export class TranslationModalService extends BaseComponent {
             });
     }
 
-    public pushToModal(wordComposition: WordComposition): void {
+    public pushToModal(vocabWord: VocabWord): void {
         this.spinner.displaySpinner(true);
 
-        if (!wordComposition.vocabWord || !wordComposition.vocabWord.word) {
-            wordComposition.vocabWord = {
-                word: wordComposition.materialWord.theWord,
-                id: 0,
-                type: 0,
-                translation: ''
-            };
-        }
-
-        if (wordComposition.vocabWord.type === VocabType.UnsignedWord) {
+        if (vocabWord.type === VocabType.UnsignedWord) {
             // TODO: check last user choise for unsigned words
-            wordComposition.vocabWord.type = VocabType.LearnWord;
+            vocabWord.type = VocabType.LearnWord;
         }
 
-        this.getTranslation(wordComposition.materialWord.theWord).then(response => {
+        this.getTranslation(vocabWord.word).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
                 this.translationModel.next({
-                    wordComposition: wordComposition,
+                    vocabWord: vocabWord,
                     translations: response.translations
                 });
             } else {
@@ -71,14 +62,14 @@ export class TranslationModalService extends BaseComponent {
         });
     }
 
-    public saveToVocabulary(wordComposition: WordComposition): void {
+    public saveToVocabulary(vocabWord: VocabWord): void {
         this.spinner.displaySpinner(true);
-        this.dictionariesService.saveToVocabulary(wordComposition.vocabWord).then(response => {
+        this.dictionariesService.saveToVocabulary(vocabWord).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
                 this.responseModel.next({
                     errors: [],
-                    wordComposition: wordComposition,
+                    vocabWord: vocabWord,
                     success: true
                 });
             } else {
@@ -87,21 +78,17 @@ export class TranslationModalService extends BaseComponent {
         });
     }
 
-    public fillWordCompositionsModel(response: TranslationModalResponseModel, composition: WordComposition[]): void {
-        if (response.success) {
-            let index = composition.findIndex(
-                c => c.materialWord.theWord === response.wordComposition.materialWord.theWord);
-            composition[index] = response.wordComposition;
-        } else {
-            response.errors.forEach(err => this.displayError(err, 'Composition error'));
-        }
+    public updateVocabWordInCollection(vocabWord: VocabWord, vocabWords: VocabWord[]) {
+        let existingVocabWord = vocabWords.find(v => v.word === vocabWord.word);
+        existingVocabWord.type = vocabWord.type;
+        existingVocabWord.translation = vocabWord.translation;
     }
 
     private getResponseWithErrors(errors: string[]): TranslationModalResponseModel {
         return {
             success: false,
             errors: errors,
-            wordComposition: null
+            vocabWord: null
         };
     }
 }

@@ -23,8 +23,8 @@ export class TranslationModalComponent implements OnInit, OnDestroy {
         private componentElement: ElementRef) { }
 
     public selectTranslation(translation: string): void {
-        this.model.wordComposition.vocabWord.translation = translation;
-        this.translationModalService.saveToVocabulary(this.model.wordComposition);
+        this.model.vocabWord.translation = translation;
+        this.translationModalService.saveToVocabulary(this.model.vocabWord);
         this.modalService.hideModal(this.modalId);
     }
 

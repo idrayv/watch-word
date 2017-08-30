@@ -4,7 +4,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { MaterialService } from './material.service';
 import { Material as MaterialModel, MaterialMode, MaterialStats, VocabType } from './material.models';
-import { WordComposition } from './material.models';
+import { VocabWord } from './material.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
 import { BaseComponent } from '../global/base-component';
@@ -18,13 +18,13 @@ import { UserService } from '../auth/user.service';
 
 export class MaterialComponent extends BaseComponent implements OnInit, OnDestroy {
     public mode: MaterialMode = null;
-    public wordCompositions: WordComposition[] = [];
+    public vocabWords: VocabWord[] = [];
     public material: MaterialModel = new MaterialModel();
     public userModel: UserModel;
     public formSubmited = false;
     private routeSubscription: ISubscription;
     private userSubscription: ISubscription;
-    private modalResponseSubscription: ISubscription;
+    private translationModalResponseSubscription: ISubscription;
 
     constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router,
         private spinner: SpinnerService, private translationModalService: TranslationModalService,
@@ -38,9 +38,9 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         });
 
         this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
-        this.modalResponseSubscription = this.translationModalService.translationModalResponseObserverable
+        this.translationModalResponseSubscription = this.translationModalService.translationModalResponseObserverable
             .subscribe(response => {
-                this.translationModalService.fillWordCompositionsModel(response, this.wordCompositions);
+                this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
             });
     }
 
@@ -48,7 +48,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         if (param === 'create') {
             this.mode = MaterialMode.Add;
             this.material = new MaterialModel();
-            this.wordCompositions = [];
+            this.vocabWords = [];
         } else if (+param) {
             this.initializeMaterial(+param);
         } else {
@@ -76,7 +76,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         this.formSubmited = true;
         if (form.valid) {
             this.spinner.displaySpinner(true);
-            this.materialService.saveMaterial(this.material, this.wordCompositions).then(response => {
+            this.materialService.saveMaterial(this.material, this.vocabWords).then(response => {
                 this.spinner.displaySpinner(false);
                 if (response.success) {
                     if (this.mode == MaterialMode.Add) {
@@ -95,16 +95,16 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     get materialStats(): MaterialStats[] {
         let stats: MaterialStats[] = [];
 
-        var totalCount = this.wordCompositions
-            .map(c => c.materialWord.count).reduce((pre, curr) => pre + curr, 0);
+        var totalCount = this.material.words
+            .map(w => w.count).reduce((pre, curr) => pre + curr, 0);
 
-        var uniqueCount = this.wordCompositions.length;
+        var uniqueCount = this.vocabWords.length;
         this.pushStatToStats(stats, 'Total words', totalCount.toString());
         this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
 
         if (this.userModel.isLoggedIn) {
-            var learnCount = this.wordCompositions.filter(c => c.vocabWord.type === VocabType.LearnWord).length;
-            var knownCount = this.wordCompositions.filter(c => c.vocabWord.type === VocabType.KnownWord).length;
+            var learnCount = this.vocabWords.filter(v => v.type === VocabType.LearnWord).length;
+            var knownCount = this.vocabWords.filter(v => v.type === VocabType.KnownWord).length;
 
             this.pushStatToStats(stats, 'Learn words', learnCount.toString());
             this.pushStatToStats(stats, 'Known words', knownCount.toString());
@@ -133,8 +133,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
             if (response.success) {
                 this.mode = MaterialMode.Read;
                 this.material = response.material;
-                this.wordCompositions = this.materialService.composeWordWithVocabulary(this.material.words,
-                    response.vocabWords);
+                this.vocabWords = response.vocabWords;
             } else {
                 this.mode = null;
                 response.errors.forEach(err => this.displayError(err, 'Initialize material error'));
@@ -145,6 +144,6 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     ngOnDestroy() {
         this.routeSubscription.unsubscribe();
         this.userSubscription.unsubscribe();
-        this.modalResponseSubscription.unsubscribe();
+        this.translationModalResponseSubscription.unsubscribe();
     }
 }
