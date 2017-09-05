@@ -6,12 +6,15 @@
     <ApplicationInsightsAnnotationResourceId>/subscriptions/6d4c1964-a24f-4e27-97ba-2588fd680657/resourcegroups/drayv/providers/microsoft.insights/components/WatchWord</ApplicationInsightsAnnotationResourceId>
     <RootNamespace>WatchWord</RootNamespace>
     <AssemblyName>WatchWord</AssemblyName>
-    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
     <Configurations>Debug;Release;MYSQL</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MYSQL|AnyCPU'">
     <DefineConstants>TRACE;MYSQL;RELEASE;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="app\global\base-service.ts" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
@@ -31,6 +34,9 @@
   <ItemGroup>
     <ProjectReference Include="..\WatchWord.DataAccess\WatchWord.DataAccess.csproj" />
     <ProjectReference Include="..\WatchWord.Service\WatchWord.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="app\global\base-service.ts" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />

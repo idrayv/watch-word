@@ -6,7 +6,9 @@
         'rxjs': 'lib/rxjs',
         'ng2-toastr': 'lib/ng2-toastr',
         '@angular/animations/browser': 'lib/@angular/animations/bundles/animations-browser.umd.js',
-        '@angular/platform-browser/animations': 'lib/@angular/platform-browser/bundles/platform-browser-animations.umd.js'
+        '@angular/platform-browser/animations': 'lib/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
+        '@angular/common/http': 'lib/@angular/common/bundles/common-http.umd.js',
+        'tslib': 'lib/tslib/tslib.js'
     };
     // packages tells the System loader how to load when no filename and/or no extension
     var packages = {

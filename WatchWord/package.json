@@ -31,7 +31,8 @@
     "zone.js": "~0.8.17",
     "semantic-ui": "~2.2.13",
     "jquery": "~3.2.1",
-    "ng2-toastr": "~4.1.2"
+    "ng2-toastr": "~4.1.2",
+    "tslib": "~1.7.1"
   },
   "devDependencies": {
     "express": "latest",

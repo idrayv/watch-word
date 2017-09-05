@@ -11,8 +11,8 @@ namespace WatchWord.DataAccess.Repositories
 {
     public abstract class GenericRepository<TEntity, TIdentity> : IGenericRepository<TEntity, TIdentity> where TEntity : Entity<TIdentity>, new()
     {
-        private DbContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        private readonly DbContext _context;
+        protected readonly DbSet<TEntity> _dbSet;
 
         /// <summary>Initializes a new instance of the <see cref="GenericRepository{TEntity,TIdentity}"/> class.</summary>
         /// <param name="context">Entity framework context.</param>
@@ -24,7 +24,7 @@ namespace WatchWord.DataAccess.Repositories
 
         #region CREATE
 
-        public async virtual void Insert(TEntity entity)
+        public virtual async void Insert(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
         }
@@ -74,6 +74,12 @@ namespace WatchWord.DataAccess.Repositories
                 _context.Entry(entity).State = EntityState.Unchanged;
             }
             return entity;
+        }
+
+        public async Task<ICollection<TEntity>> GetRandomEntititiesByConditionAsync(int count = 1, Expression<Func<TEntity, bool>> whereProperties = null)
+        {
+            return await AggregateQueryProperties(_dbSet.AsNoTracking(), whereProperties)
+              .OrderBy(e => Guid.NewGuid()).Select(e => e).Take(count).ToListAsync();
         }
 
         #endregion

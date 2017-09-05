@@ -16,10 +16,12 @@ import { ToastOptions } from 'ng2-toastr/src/toast-options';
 import { ServiceLocator } from './global/service-locator';
 import { ToastService } from './global/toast/toast.service';
 import { CustomOption } from './global/toast/toast.models';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     imports: [
         BrowserModule,
+        HttpClientModule,
         BrowserAnimationsModule,
         HttpModule,
         AppRoutingModule,

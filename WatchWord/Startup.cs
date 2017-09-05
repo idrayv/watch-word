@@ -62,6 +62,7 @@ namespace WatchWord
             services.AddScoped<IMaterialsService, MaterialsService>();
             services.AddScoped<IVocabularyService, VocabularyService>();
             services.AddScoped<ITranslationService, TranslationService>();
+            services.AddScoped<IStatisticService, StatisticService>();
 
             // Development
             services.AddSingleton<WatchWordProxy, WatchWordProxy>();
@@ -146,7 +147,7 @@ namespace WatchWord
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, RoleManager<WatchWordRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, RoleManager<WatchWordRole> roleManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

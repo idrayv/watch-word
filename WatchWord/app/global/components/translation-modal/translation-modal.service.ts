@@ -11,14 +11,13 @@ import { BaseComponent } from '../../base-component';
 let cfg = require('../../../config').appConfig;
 
 @Injectable()
-export class TranslationModalService extends BaseComponent {
+export class TranslationModalService {
     private baseUrl: string = cfg.apiRoute;
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
     private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
     public constructor(private http: Http, private dictionariesService: DictionariesService,
         private spinner: SpinnerService) {
-        super();
     }
 
     public get translationModalResponseObserverable(): Observable<TranslationModalResponseModel> {

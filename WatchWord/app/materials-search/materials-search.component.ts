@@ -48,17 +48,14 @@ export class MaterialsSearchComponent extends BaseComponent implements OnDestroy
                     this.status = RequestStatus.NotStarted;
                 }
             }, () => {
-                this.displayConnectionError();
+                this.displayError('Server unavaliable', 'Error');
             });
         }, 300);
     }
 
     public processErrors(errors: string[]) {
         this.status = RequestStatus.CompletedWithError;
-
-        errors.forEach((err) => {
-            this.displayError(err);
-        });
+        this.displayErrors(errors, 'Search error');
     }
 
     public clearInput(): void {

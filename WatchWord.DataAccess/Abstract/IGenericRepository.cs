@@ -60,6 +60,8 @@ namespace WatchWord.DataAccess.Abstract
         Task<TEntity> GetByConditionAsync(Expression<Func<TEntity, bool>> whereProperties = null,
             params Expression<Func<TEntity, object>>[] includeProperties);
 
+        Task<ICollection<TEntity>> GetRandomEntititiesByConditionAsync(int count = 1, Expression<Func<TEntity, bool>> whereProperties = null);
+
         #endregion
 
         #region UPDATE

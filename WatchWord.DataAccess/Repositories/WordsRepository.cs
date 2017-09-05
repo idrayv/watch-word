@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WatchWord.DataAccess.Abstract;
 using WatchWord.Domain.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace WatchWord.DataAccess.Repositories
 {
@@ -11,6 +14,12 @@ namespace WatchWord.DataAccess.Repositories
         /// <param name="context">Entity framework context.</param>
         public WordsRepository(DbContext context) : base(context)
         {
+        }
+
+        public async Task<List<Word>>GetTopWordsByMaterialAsync(int count, int materialId)
+        {
+            return await _dbSet.AsNoTracking().Where(m => m.Material.Id == materialId)
+                .OrderByDescending(m => m.Count).Take(count).ToListAsync();
         }
     }
 }

@@ -22,7 +22,7 @@ export class SettingsComponent extends BaseComponent implements OnInit {
         if (response.success) {
             this.model.settings = response.settings;
         } else {
-            this.displayConnectionError();
+            this.displayErrors(response.errors, 'Settings error');
         }
     }
 
