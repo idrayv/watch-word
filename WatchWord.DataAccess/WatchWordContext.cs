@@ -44,14 +44,11 @@ namespace WatchWord.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (_dbSettings.UseMySql)
-            {
-                optionsBuilder.UseMySql(_dbSettings.ConnectionString);
-            }
-            else
-            {
-                optionsBuilder.UseSqlServer(_dbSettings.ConnectionString);
-            }
+#if MYSQL
+            optionsBuilder.UseMySql(_dbSettings.ConnectionString);
+#elif !MYSQL
+            optionsBuilder.UseSqlServer(_dbSettings.ConnectionString);
+#endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -79,10 +76,9 @@ namespace WatchWord.DataAccess
             {
                 material.ToTable("Materials");
                 material.Property(m => m.Id).ValueGeneratedOnAdd();
-                if (_dbSettings.UseMySql)
-                {
-                    material.Property(m => m.Image).HasColumnType("TEXT").HasMaxLength(20000);
-                }
+#if MYSQL
+                material.Property(m => m.Image).HasColumnType("TEXT").HasMaxLength(20000);
+#endif
                 material.Property(m => m.Description);
             });
 
@@ -112,10 +108,11 @@ namespace WatchWord.DataAccess
         {
             var mockConfiguration = new CreateDbConfiguration
             {
-                /*UseMySql = "False",
-                ConnectionString = "Server=M-SHCHYHOL\\SQLEXPRESS;Database=WatchWord;Integrated Security=SSPI;MultipleActiveResultSets=true"*/
-                UseMySql = "True",
+#if MYSQL
                 ConnectionString = "server=localhost;user id=root;password=password;database=WatchWord;Port=3306;"
+#elif !MYSQL
+                ConnectionString = "Server=M-SHCHYHOL\\SQLEXPRESS;Database=WatchWord;Integrated Security=SSPI;MultipleActiveResultSets=true"
+#endif
             };
             var dbSettings = new DatabaseSettings(mockConfiguration);
 
@@ -125,18 +122,16 @@ namespace WatchWord.DataAccess
         private class CreateDbConfiguration : IConfiguration
         {
             public string ConnectionString;
-            public string UseMySql;
 
             public string this[string key]
             {
                 get
                 {
-                    if (key == "DatabaseSettings:MySql")
-                    {
-                        return UseMySql;
-                    }
-                    /*if (key == "DatabaseSettings:ConnectionStringIdrayv")*/
+#if MYSQL
                     if (key == "DatabaseSettings:ConnectionStringMySql")
+#elif !MYSQL
+                    if (key == "DatabaseSettings:ConnectionStringIdrayv")
+#endif
                     {
                         return ConnectionString;
                     }
