@@ -58,19 +58,21 @@ namespace WatchWord.DataAccess
             {
                 word.Property(w => w.Id).ValueGeneratedOnAdd();
                 word.ToTable("Words");
-                word.HasOne(w => w.Material).WithMany(m => m.Words).OnDelete(DeleteBehavior.Cascade);
+                word.HasOne(w => w.Material).WithMany(m => m.Words).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.Entity<Composition>(composition =>
             {
                 composition.ToTable("Compositions");
                 composition.Property(c => c.Id).ValueGeneratedOnAdd();
+                composition.HasOne(c => c.Word).WithMany(w => w.Compositions).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.Entity<Account>(account =>
             {
                 account.ToTable("Accounts");
                 account.Property(a => a.Id).ValueGeneratedOnAdd();
+                account.HasIndex(a => a.ExternalId);
             });
 
             modelBuilder.Entity<Material>(material =>
@@ -80,25 +82,43 @@ namespace WatchWord.DataAccess
 #if MYSQL
                 material.Property(m => m.Image).HasColumnType("TEXT").HasMaxLength(20000);
 #endif
-                material.Property(m => m.Description);
+                material.Property(m => m.Name).HasMaxLength(256).IsRequired();
+                material.Property(m => m.Image).IsRequired();
+                material.Property(m => m.Description).HasMaxLength(1024).IsRequired();
+                material.HasIndex(a => a.Type);
+                material.HasOne(m => m.Owner).WithMany(a => a.Materials).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
-            modelBuilder.Entity<VocabWord>(knownWord =>
+            modelBuilder.Entity<VocabWord>(vocabWord =>
             {
-                knownWord.ToTable("VocabWords");
-                knownWord.Property(v => v.Id).ValueGeneratedOnAdd();
+                vocabWord.ToTable("VocabWords");
+                vocabWord.Property(v => v.Id).ValueGeneratedOnAdd();
+                vocabWord.HasOne(v => v.Owner).WithMany(a => a.VocabWords).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.Entity<Setting>(setting =>
             {
                 setting.ToTable("Settings");
                 setting.Property(s => s.Id).ValueGeneratedOnAdd();
+                setting.HasIndex(s => s.Key);
+                setting.HasOne(s => s.Owner).WithMany(a => a.Settings).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.Entity<Translation>(translation =>
             {
                 translation.ToTable("Translations");
                 translation.Property(t => t.Id).ValueGeneratedOnAdd();
+                translation.Property(t => t.Translate).HasMaxLength(256).IsRequired();
+                translation.Property(t => t.Word).HasMaxLength(256).IsRequired();
+                translation.HasIndex(t => t.Word);
+            });
+
+            modelBuilder.Entity<SubtitleFile>(subtitleFile =>
+            {
+                subtitleFile.ToTable("SubtitleFiles");
+                subtitleFile.Property(s => s.Id).ValueGeneratedOnAdd();
+                subtitleFile.Property(s => s.SubtitleText).IsRequired();
+                subtitleFile.HasOne(s => s.Material).WithMany(m => m.SubtitleFiles).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.ForSqlServerUseIdentityColumns();

@@ -28,14 +28,14 @@ namespace WatchWord.Controllers
         public async Task<string> RandomMaterialTopWords()
         {
             var response = new RandomWordsResponseModel { Success = true };
-            var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
+            var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id ?? 0;
 
             try
             {
                 response.Material = await _statisticService.GetRandomMaterialAsync();
                 if (response.Material != null)
                 {
-                    response.VocabWords = await _statisticService.GetTop(count, response.Material.Id, userId ?? 0);
+                    response.VocabWords = await _statisticService.GetTop(count, response.Material.Id, userId);
                 }
                 else
                 {

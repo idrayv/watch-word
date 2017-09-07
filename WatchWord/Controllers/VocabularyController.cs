@@ -29,7 +29,7 @@ namespace WatchWord.Controllers
             var response = new BaseResponseModel { Success = true };
             try
             {
-                var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+                var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id ?? 0;
                 var result = await _vocabularyService.InsertVocabWordAsync(vocabWord, userId);
 
                 if (result <= 0)
@@ -49,12 +49,12 @@ namespace WatchWord.Controllers
         [HttpGet]
         public async Task<string> Get()
         {
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id ?? 0;
 
             var response = new VocabularyResponseModel { Success = true };
             try
             {
-                response.VocabWords = await _vocabularyService.GetVocabWordsAsync(user?.Id ?? 0);
+                response.VocabWords = await _vocabularyService.GetVocabWordsAsync(userId);
             }
             catch (Exception ex)
             {

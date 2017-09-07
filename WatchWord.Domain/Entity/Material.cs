@@ -32,5 +32,8 @@ namespace WatchWord.Domain.Entity
 
         /// <summary>Gets or sets the collection of words.</summary>
         public virtual ICollection<Word> Words { get; set; }
+
+        /// <summary>Gets or sets the collection of subtitle files.</summary>
+        public virtual ICollection<SubtitleFile> SubtitleFiles { get; set; }
     }
 }

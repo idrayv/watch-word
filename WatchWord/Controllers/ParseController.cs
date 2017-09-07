@@ -16,16 +16,16 @@ namespace WatchWord.Controllers
     [Route("api/[controller]")]
     public class ParseController : MainController
     {
-        private readonly IScanWordParser parser;
-        private readonly IVocabularyService vocabularyService;
-        private readonly UserManager<WatchWordUser> userManager;
+        private readonly IScanWordParser _parser;
+        private readonly IVocabularyService _vocabularyService;
+        private readonly UserManager<WatchWordUser> _userManager;
 
         public ParseController(IScanWordParser parser, IVocabularyService vocabularyService,
             UserManager<WatchWordUser> userManager)
         {
-            this.parser = parser;
-            this.userManager = userManager;
-            this.vocabularyService = vocabularyService;
+            _parser = parser;
+            _userManager = userManager;
+            _vocabularyService = vocabularyService;
         }
 
         [HttpPost]
@@ -46,9 +46,9 @@ namespace WatchWord.Controllers
                     try
                     {
                         var stream = file.OpenReadStream();
-                        var words = parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
-                        var userId = (await userManager.GetUserAsync(HttpContext.User)).Id;
-                        var vocabWords = await vocabularyService.GetSpecifiedVocabWordsAsync(words, userId);
+                        var words = _parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
+                        var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id ?? 0;
+                        var vocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(words, userId);
 
                         if (words.Count > 0)
                         {

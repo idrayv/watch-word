@@ -1,4 +1,5 @@
-﻿using WatchWord.Domain.Entity.Common;
+﻿using System.Collections.Generic;
+using WatchWord.Domain.Entity.Common;
 
 namespace WatchWord.Domain.Entity
 {
@@ -13,5 +14,8 @@ namespace WatchWord.Domain.Entity
 
         /// <summary>Gets or sets count of words in material.</summary>
         public int Count { get; set; }
+
+        /// <summary>Gets or sets the collection of compositions.</summary>
+        public virtual ICollection<Composition> Compositions { get; set; }
     }
 }

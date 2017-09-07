@@ -16,13 +16,15 @@ namespace WatchWord.Controllers
         private readonly UserManager<WatchWordUser> _userManager;
         private readonly IMaterialsService _materialsService;
         private readonly IVocabularyService _vocabularyService;
+        private readonly IAccountsService _accountsService;
 
         public MaterialController(IMaterialsService materialService, IVocabularyService vocabularyService,
-            UserManager<WatchWordUser> userManager)
+            IAccountsService accountsService, UserManager<WatchWordUser> userManager)
         {
-            _userManager = userManager;
             _materialsService = materialService;
             _vocabularyService = vocabularyService;
+            _accountsService = accountsService;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -33,11 +35,22 @@ namespace WatchWord.Controllers
             var response = new SaveMaterialResponseModel { Success = true };
             try
             {
-                response.Id = await _materialsService.SaveMaterial(material);
+                var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id ?? 0;
+                material.Owner = await _accountsService.GetByExternalIdAsync(userId);
 
-                if (response.Id <= 0)
+                // TODO: Allow for admin
+                var oldMaterial = await _materialsService.GetMaterial(material.Id);
+                if (oldMaterial != null && oldMaterial.Owner.Id != material.Owner.Id)
                 {
-                    AddCustomError(response, "Material wasn't saved to the database!");
+                    AddCustomError(response, "You are not allowed to change other owner's materials!");
+                }
+                else
+                {
+                    response.Id = await _materialsService.SaveMaterial(material);
+                    if (response.Id <= 0)
+                    {
+                        AddCustomError(response, "Material wasn't saved to the database!");
+                    }
                 }
             }
             catch (Exception ex)
@@ -85,9 +98,9 @@ namespace WatchWord.Controllers
                 }
                 else
                 {
-                    var user = await _userManager.GetUserAsync(HttpContext.User);
+                    var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id ?? 0;
                     response.VocabWords =
-                        await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, user?.Id ?? 0);
+                        await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, userId);
                 }
             }
             catch (Exception ex)

@@ -12,6 +12,7 @@ namespace WatchWord.Service
     {
         private readonly IWatchWordUnitOfWork _unitOfWork;
         private readonly ISettingsRepository _settingsRepository;
+        private readonly IAccountsService _accountsService;
 
         /// <summary>These keys contain the specified data types.</summary>
         private static readonly Dictionary<SettingKey, SettingType> SettingKeyToTypeMapping =
@@ -28,18 +29,13 @@ namespace WatchWord.Service
             SettingKey.YandexTranslateApiKey
         };
 
-        /// <summary>Prevents a default instance of the <see cref="SettingsService"/> class from being created.</summary>
-        // ReSharper disable once UnusedMember.Local
-        private SettingsService()
-        {
-        }
-
         /// <summary>Initializes a new instance of the <see cref="SettingsService"/> class.</summary>
         /// <param name="unitOfWork">Unit of work over WatchWord repositories.</param>
-        public SettingsService(IWatchWordUnitOfWork unitOfWork)
+        public SettingsService(IWatchWordUnitOfWork unitOfWork, IAccountsService accountsService)
         {
             _unitOfWork = unitOfWork;
             _settingsRepository = unitOfWork.Repository<ISettingsRepository>();
+            _accountsService = accountsService;
         }
 
         public async Task<List<Setting>> GetUnfilledSiteSettings()
@@ -52,11 +48,14 @@ namespace WatchWord.Service
             return unfilledAdminSettings;
         }
 
-        public async Task<int> InsertSiteSettings(List<Setting> settings)
+        public async Task<int> InsertSiteSettings(List<Setting> settings, int userId)
         {
             //TODO: universal parser
+
+            var owner = await _accountsService.GetByExternalIdAsync(userId);
             foreach (var setting in settings)
             {
+                setting.Owner = owner;
                 if (setting.Type == SettingType.String && !string.IsNullOrEmpty(setting.String))
                 {
                     _settingsRepository.Insert(setting);
@@ -68,7 +67,7 @@ namespace WatchWord.Service
 
         public async Task<Setting> GetSiteSettingAsync(SettingKey key)
         {
-            return await _settingsRepository.GetByConditionAsync(s => s.Key == key && s.Owner == null);
+            return await _settingsRepository.GetByConditionAsync(s => s.Key == key);
         }
 
         /// <summary>Creates new empty setting with the specified key.</summary>

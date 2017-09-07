@@ -72,8 +72,8 @@ namespace WatchWord.DataAccess.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AddDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Source = table.Column<int>(type: "int", nullable: false),
-                    Translate = table.Column<string>(type: "longtext", nullable: true),
-                    Word = table.Column<string>(type: "longtext", nullable: true)
+                    Translate = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false),
+                    Word = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,10 +86,10 @@ namespace WatchWord.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "longtext", nullable: true),
-                    Image = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: true),
-                    Name = table.Column<string>(type: "longtext", nullable: true),
-                    OwnerId = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "varchar(1024)", maxLength: 1024, nullable: false),
+                    Image = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: false),
+                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -100,7 +100,7 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,7 +113,7 @@ namespace WatchWord.DataAccess.Migrations
                     Date = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Int = table.Column<int>(type: "int", nullable: false),
                     Key = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<int>(type: "int", nullable: true),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
                     String = table.Column<string>(type: "longtext", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false)
                 },
@@ -125,7 +125,7 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,7 +134,7 @@ namespace WatchWord.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OwnerId = table.Column<int>(type: "int", nullable: true),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
                     Translation = table.Column<string>(type: "longtext", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Word = table.Column<string>(type: "longtext", nullable: true)
@@ -147,7 +147,7 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -257,13 +257,33 @@ namespace WatchWord.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubtitleFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
+                    SubtitleText = table.Column<string>(type: "longtext", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubtitleFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubtitleFiles_Materials_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Materials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Words",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Count = table.Column<int>(type: "int", nullable: false),
-                    MaterialId = table.Column<int>(type: "int", nullable: true),
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
                     TheWord = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
@@ -285,7 +305,7 @@ namespace WatchWord.DataAccess.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Column = table.Column<int>(type: "int", nullable: false),
                     Line = table.Column<int>(type: "int", nullable: false),
-                    WordId = table.Column<int>(type: "int", nullable: true)
+                    WordId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -295,8 +315,13 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.WordId,
                         principalTable: "Words",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_ExternalId",
+                table: "Accounts",
+                column: "ExternalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -346,9 +371,29 @@ namespace WatchWord.DataAccess.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Materials_Type",
+                table: "Materials",
+                column: "Type");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Settings_Key",
+                table: "Settings",
+                column: "Key");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Settings_OwnerId",
                 table: "Settings",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubtitleFiles_MaterialId",
+                table: "SubtitleFiles",
+                column: "MaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Translations_Word",
+                table: "Translations",
+                column: "Word");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VocabWords_OwnerId",
@@ -385,6 +430,9 @@ namespace WatchWord.DataAccess.Migrations
                 name: "Settings");
 
             migrationBuilder.DropTable(
+                name: "SubtitleFiles");
+
+            migrationBuilder.DropTable(
                 name: "Translations");
 
             migrationBuilder.DropTable(
@@ -416,7 +464,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WatchWord.DataAccess.Migrations
 {
-    public partial class Init : Migration
+    public partial class SubtitleFiles : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -482,8 +530,8 @@ namespace WatchWord.DataAccess.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AddDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Source = table.Column<int>(type: "int", nullable: false),
-                    Translate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Word = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Translate = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Word = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -496,10 +544,10 @@ namespace WatchWord.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -510,7 +558,7 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -523,7 +571,7 @@ namespace WatchWord.DataAccess.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Int = table.Column<int>(type: "int", nullable: false),
                     Key = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<int>(type: "int", nullable: true),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
                     String = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false)
                 },
@@ -535,7 +583,7 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -544,7 +592,7 @@ namespace WatchWord.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    OwnerId = table.Column<int>(type: "int", nullable: true),
+                    OwnerId = table.Column<int>(type: "int", nullable: false),
                     Translation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Word = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -557,7 +605,7 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -667,13 +715,33 @@ namespace WatchWord.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubtitleFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
+                    SubtitleText = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubtitleFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubtitleFiles_Materials_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Materials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Words",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Count = table.Column<int>(type: "int", nullable: false),
-                    MaterialId = table.Column<int>(type: "int", nullable: true),
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
                     TheWord = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -695,7 +763,7 @@ namespace WatchWord.DataAccess.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Column = table.Column<int>(type: "int", nullable: false),
                     Line = table.Column<int>(type: "int", nullable: false),
-                    WordId = table.Column<int>(type: "int", nullable: true)
+                    WordId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -705,8 +773,13 @@ namespace WatchWord.DataAccess.Migrations
                         column: x => x.WordId,
                         principalTable: "Words",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounts_ExternalId",
+                table: "Accounts",
+                column: "ExternalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -758,9 +831,29 @@ namespace WatchWord.DataAccess.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Materials_Type",
+                table: "Materials",
+                column: "Type");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Settings_Key",
+                table: "Settings",
+                column: "Key");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Settings_OwnerId",
                 table: "Settings",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubtitleFiles_MaterialId",
+                table: "SubtitleFiles",
+                column: "MaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Translations_Word",
+                table: "Translations",
+                column: "Word");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VocabWords_OwnerId",
@@ -795,6 +888,9 @@ namespace WatchWord.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "SubtitleFiles");
 
             migrationBuilder.DropTable(
                 name: "Translations");

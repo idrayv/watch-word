@@ -53,6 +53,7 @@ namespace WatchWord.Service
             return await _unitOfWork.SaveAsync();
         }
 
+        // TODO: Optimize for SQL: use material id instead of list of words
         public async Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, int userId)
         {
             var arrayOfWords = materialWords == null

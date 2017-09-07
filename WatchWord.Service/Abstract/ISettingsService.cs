@@ -12,8 +12,9 @@ namespace WatchWord.Service.Abstract
 
         /// <summary>Inserts the site configuration settings to the data storage. Owner will not be filled.</summary>
         /// <param name="settings">List of the site configuration settings.</param>
+        /// /// <param name="settings">User id.</param>
         /// <returns>The count of changed elements in data storage.</returns>
-        Task<int> InsertSiteSettings(List<Setting> settings);
+        Task<int> InsertSiteSettings(List<Setting> settings, int userId);
 
         /// <summary>Gets the site configuration setting by its key.</summary>
         /// <param name="key">Setting key.</param>
