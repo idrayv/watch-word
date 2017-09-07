@@ -1,18 +1,17 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { SearchResponseModel } from './materials-search.models';
 import 'rxjs/add/operator/map';
+import { SearchResponseModel } from './materials-search.models';
+import { BaseService } from "../global/base-service";
 
-let cfg = require('../config').appConfig;
 
 @Injectable()
-export class MaterialsSearchService {
-    private baseUrl: string = cfg.apiRoute;
-
-    constructor(private http: Http) { }
+export class MaterialsSearchService extends BaseService {
+    constructor() {
+        super();
+    }
 
     public search(text: string): Observable<SearchResponseModel> {
-        return this.http.get(`${this.baseUrl}/materials/search/${text}`).map(response => response.json());
+        return this.http.get<SearchResponseModel>(`${this.baseUrl}/materials/search/${text}`);
     }
 }

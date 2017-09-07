@@ -1,11 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WatchWord.Infrastructure;
 using WatchWord.Models;
-using System;
 using WatchWord.DataAccess.Identity;
 
 namespace WatchWord.Controllers

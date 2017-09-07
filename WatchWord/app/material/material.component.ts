@@ -40,7 +40,11 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
         this.translationModalResponseSubscription = this.translationModalService.translationModalResponseObserverable
             .subscribe(response => {
-                this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
+                if (response.success) {
+                    this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
+                } else {
+                    this.displayErrors(response.errors);
+                }
             });
     }
 

@@ -1,5 +1,4 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs';
 import { TranslatePostResponseModel, TranslationModalModel } from './translation-modal.models';
@@ -8,16 +7,16 @@ import { VocabType, VocabWord } from '../../../material/material.models';
 import { SpinnerService } from '../../spinner/spinner.service';
 import { DictionariesService } from '../../../dictionaries/dictionaries.service';
 import { BaseComponent } from '../../base-component';
-let cfg = require('../../../config').appConfig;
+import { BaseService } from "../../base-service";
 
 @Injectable()
-export class TranslationModalService {
-    private baseUrl: string = cfg.apiRoute;
+export class TranslationModalService extends BaseService {
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
+    // TODO: delete TranslationModalResponseModel, use link to original VocabWord instead
     private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
-    public constructor(private http: Http, private dictionariesService: DictionariesService,
-        private spinner: SpinnerService) {
+    public constructor(private dictionariesService: DictionariesService, private spinner: SpinnerService) {
+        super();
     }
 
     public get translationModalResponseObserverable(): Observable<TranslationModalResponseModel> {
@@ -29,15 +28,8 @@ export class TranslationModalService {
     }
 
     public getTranslation(word: string): Promise<TranslatePostResponseModel> {
-        return this.http.get(this.baseUrl + '/Translate/' + word).toPromise()
-            .then((res: Response) => res.json())
-            .catch(() => {
-                return {
-                    errors: ['Connection error'],
-                    success: false,
-                    translations: []
-                };
-            });
+        return this.http.get<TranslatePostResponseModel>(this.baseUrl + '/Translate/' + word).toPromise()
+            .catch(() => { return this.getConnectionError<TranslatePostResponseModel>() });
     }
 
     public pushToModal(vocabWord: VocabWord): void {
@@ -56,7 +48,7 @@ export class TranslationModalService {
                     translations: response.translations
                 });
             } else {
-                this.responseModel.next(this.getResponseWithErrors(response.errors));
+                this.responseModel.next(this.getTranslationModalResponseModel(false, null, response.errors));
             }
         });
     }
@@ -66,28 +58,27 @@ export class TranslationModalService {
         this.dictionariesService.saveToVocabulary(vocabWord).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
-                this.responseModel.next({
-                    errors: [],
-                    vocabWord: vocabWord,
-                    success: true
-                });
+                this.responseModel.next(this.getTranslationModalResponseModel(true, vocabWord, []));
             } else {
-                this.responseModel.next(this.getResponseWithErrors(response.errors));
+                this.responseModel.next(this.getTranslationModalResponseModel(false, null, response.errors));
             }
         });
     }
 
+    // TODO: delete updateVocabWordInCollection, use link to original VocabWord instead
     public updateVocabWordInCollection(vocabWord: VocabWord, vocabWords: VocabWord[]) {
         let existingVocabWord = vocabWords.find(v => v.word === vocabWord.word);
         existingVocabWord.type = vocabWord.type;
         existingVocabWord.translation = vocabWord.translation;
     }
 
-    private getResponseWithErrors(errors: string[]): TranslationModalResponseModel {
+    private getTranslationModalResponseModel(success: boolean,
+        vocabWord: VocabWord,
+        errors: string[]): TranslationModalResponseModel {
         return {
-            success: false,
+            success: success,
             errors: errors,
-            vocabWord: null
+            vocabWord: vocabWord
         };
     }
 }

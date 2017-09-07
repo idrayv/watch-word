@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WatchWord.Models;
 using WatchWord.Service.Abstract;
 using WatchWord.DataAccess.Identity;
-using System.Collections.Generic;
 using WatchWord.Domain.Entity;
 
 namespace WatchWord.Controllers

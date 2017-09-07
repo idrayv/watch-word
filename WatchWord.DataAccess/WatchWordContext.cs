@@ -40,6 +40,7 @@ namespace WatchWord.DataAccess
         {
             _dbSettings = dbSettings;
             Database.Migrate();
+            Database.SetCommandTimeout(120);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

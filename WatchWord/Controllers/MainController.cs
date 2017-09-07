@@ -7,7 +7,7 @@ namespace WatchWord.Controllers
 {
     public abstract class MainController : Controller
     {
-        private const string dbError = "Server error: Please try again later.";
+        private const string dbError = "Server error. Please try again later.";
 
         protected static void AddServerError(BaseResponseModel model, Exception ex)
         {

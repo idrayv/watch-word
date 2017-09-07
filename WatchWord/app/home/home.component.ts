@@ -6,5 +6,4 @@ import { BaseComponent } from '../global/base-component';
 })
 
 export class HomeComponent extends BaseComponent {
-    name = 'Home';
 }

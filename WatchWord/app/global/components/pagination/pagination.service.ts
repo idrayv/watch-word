@@ -1,46 +1,27 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, RequestOptions, URLSearchParams } from '@angular/http';
+import { HttpParams } from "@angular/common/http";
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 import { PaginationResponseModel, CountResponseModel } from './pagination.models';
-let cfg = require('../../../config.js').appConfig;
+import { BaseService } from "../../base-service";
 
 @Injectable()
-export abstract class PaginationService<TEntity> {
+export abstract class PaginationService<TEntity> extends BaseService {
     private url: string;
 
-    constructor(private http: Http, entityPath: string) {
-        this.url = `${cfg.apiRoute}/${entityPath}`;
+    constructor(entityPath: string) {
+        super();
+        this.url = `${this.baseUrl}/${entityPath}`;
     }
 
     public getCount(): Promise<CountResponseModel> {
-        return this.http.get(this.url + '/GetCount').toPromise()
-            .then(response => response.json())
-            .catch(() => {
-                return {
-                    errors: ['Server error'],
-                    success: false,
-                    count: 0
-                };
-            });
+        return this.http.get<CountResponseModel>(this.url + '/GetCount').toPromise()
+            .catch(() => { return this.getConnectionError<CountResponseModel>() });
     }
 
     public getEntities(page: number, count: number): Promise<PaginationResponseModel<TEntity>> {
-        let requestOptions: RequestOptions = new RequestOptions();
-        let params: URLSearchParams = new URLSearchParams();
-
-        params.set('page', page.toString());
-        params.set('count', count.toString());
-        requestOptions.params = params;
-
-        return this.http.get(this.url, requestOptions).toPromise()
-            .then(response => response.json())
-            .catch(() => {
-                return {
-                    errors: ['Server error'],
-                    success: false,
-                    materials: []
-                };
-            });
+        return this.http.get<PaginationResponseModel<TEntity>>(this.url, {
+            params: new HttpParams().set('page', page.toString()).set('count', count.toString())
+        }).toPromise().catch(() => { return this.getConnectionError<PaginationResponseModel<TEntity>>() });
     }
 }

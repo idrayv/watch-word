@@ -1,51 +1,37 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { MaterialPostResponseModel, ParseResponseModel } from '../material/material.models';
 import { ImageResponseModel, Material as MaterialModel } from '../material/material.models';
 import { MaterialResponseModel, Word, VocabWord, VocabType } from '../material/material.models';
 import { BaseResponseModel } from '../global/models';
-let cfg = require('../config').appConfig;
+import { BaseService } from "../global/base-service";
 
 @Injectable()
-export class MaterialService {
-    private baseUrl: string = cfg.apiRoute;
-    private connectionErrorModel = {
-        sucess: false,
-        errors: ['Connection error']
-    };
-
-    constructor(private http: Http) { }
+export class MaterialService extends BaseService {
+    constructor() {
+        super();
+    }
 
     public parseSubtitles(subtitlesFile: any): Promise<ParseResponseModel> {
         let input = new FormData();
         input.append('file', subtitlesFile);
 
-        return this.http.post(this.baseUrl + '/parse/file', input).toPromise()
-            .then((res: Response) => res.json())
-            .catch(() => {
-                return this.connectionErrorModel;
-            });
+        return this.http.post<ParseResponseModel>(this.baseUrl + '/parse/file', input).toPromise()
+            .catch(() => { return this.getConnectionError<ParseResponseModel>() });
     }
 
     public parseImage(imageFile: any): Promise<ImageResponseModel> {
         let input = new FormData();
         input.append('file', imageFile);
 
-        return this.http.post(this.baseUrl + '/image/parse', input).toPromise()
-            .then((res: Response) => res.json())
-            .catch(() => {
-                return this.connectionErrorModel;
-            });
+        return this.http.post<ImageResponseModel>(this.baseUrl + '/image/parse', input).toPromise()
+            .catch(() => { return this.getConnectionError<ImageResponseModel>() });
     }
 
     public getMaterial(id: number): Promise<MaterialResponseModel> {
-        return this.http.get(this.baseUrl + '/material/' + id).toPromise()
-            .then((res: Response) => res.json())
-            .catch(() => {
-                return this.connectionErrorModel;
-            });
+        return this.http.get<MaterialResponseModel>(this.baseUrl + '/material/' + id).toPromise()
+            .catch(() => { return this.getConnectionError<MaterialResponseModel>() });
     }
 
     public saveMaterial(material: MaterialModel,
@@ -59,18 +45,12 @@ export class MaterialService {
             };
         });
 
-        return this.http.post(this.baseUrl + '/material/save', material).toPromise()
-            .then((res: Response) => res.json())
-            .catch(() => {
-                return this.connectionErrorModel;
-            });
+        return this.http.post<MaterialPostResponseModel>(this.baseUrl + '/material/save', material).toPromise()
+            .catch(() => { return this.getConnectionError<MaterialPostResponseModel>() });
     }
 
     public deleteMaterial(id: number): Promise<BaseResponseModel> {
-        return this.http.delete(this.baseUrl + '/material/' + id).toPromise()
-            .then((res: Response) => res.json())
-            .catch(() => {
-                return this.connectionErrorModel;
-            });
+        return this.http.delete<BaseResponseModel>(this.baseUrl + '/material/' + id).toPromise()
+            .catch(() => { return this.getConnectionError<BaseResponseModel>() });
     }
 }
