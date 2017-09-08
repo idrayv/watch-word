@@ -6,7 +6,7 @@ namespace WatchWord.Service.Abstract
 {
     public interface IStatisticService
     {
-        Task<Material> GetRandomMaterialAsync();
+        Task<List<Material>> GetRandomMaterialsAsync(int count);
 
         Task<List<VocabWord>> GetTop(int count, int materialId, int userId);
     }

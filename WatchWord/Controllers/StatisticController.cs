@@ -7,6 +7,7 @@ using WatchWord.Models;
 using WatchWord.Service.Abstract;
 using WatchWord.DataAccess.Identity;
 using WatchWord.Domain.Entity;
+using System.Linq;
 
 namespace WatchWord.Controllers
 {
@@ -32,7 +33,7 @@ namespace WatchWord.Controllers
 
             try
             {
-                response.Material = await _statisticService.GetRandomMaterialAsync();
+                response.Material = (await _statisticService.GetRandomMaterialsAsync(1)).FirstOrDefault();
                 if (response.Material != null)
                 {
                     response.VocabWords = await _statisticService.GetTop(count, response.Material.Id, userId);
@@ -41,6 +42,23 @@ namespace WatchWord.Controllers
                 {
                     response.VocabWords = new List<VocabWord>();
                 }
+            }
+            catch (Exception ex)
+            {
+                AddServerError(response, ex);
+            }
+
+            return response.ToJson();
+        }
+
+        [HttpGet]
+        [Route("materials/random")]
+        public async Task<string> GetRandomMaterials()
+        {
+            var response = new RandomMaterialsResponseModel { Success = true };
+            try
+            {
+                response.Materials = await _statisticService.GetRandomMaterialsAsync(count);
             }
             catch (Exception ex)
             {

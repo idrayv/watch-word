@@ -22,9 +22,9 @@ namespace WatchWord.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Material> GetRandomMaterialAsync()
+        public async Task<List<Material>> GetRandomMaterialsAsync(int count)
         {
-            return (await _materialsRepository.GetRandomEntititiesByConditionAsync()).FirstOrDefault();
+            return (await _materialsRepository.GetRandomEntititiesByConditionAsync(count)).ToList();
         }
 
         public async Task<List<VocabWord>> GetTop(int count, int materialId, int userId)

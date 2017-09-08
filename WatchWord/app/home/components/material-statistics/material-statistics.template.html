@@ -1,0 +1,5 @@
+﻿<div *ngIf="materials?.length > 0">
+    <div *ngFor="let material of materials">
+        <a [routerLink]="['material', material.id]">{{material.name}}</a>
+    </div>
+</div>
