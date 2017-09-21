@@ -1,6 +1,6 @@
 ﻿@import 'variables.less';
 
-.words {
+.stat-blocks {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
@@ -8,27 +8,40 @@
     -ms-flex-wrap: wrap;
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+}
 
-    &:after {
-        content: "";
-        -ms-flex: auto;
-        -webkit-flex: auto;
-        flex: auto;
+.stat-block {
+    background-color: #f9f9f9;
+    width: 18em;
+    height: 18em;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 1rem;
+    border: solid #a2a2a2 0.1em;
+
+    .words {
+        justify-content: flex-start;
     }
 }
 
-.word {
-    margin: 0.0em 0.3em;
+.stat-head {
+    border-bottom: solid #a2a2a2 0.1em;
+    padding: 0.2em 0.2em 0.2em 0.8em;
+}
+
+.stat-body {
+    padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.material-button {
+    margin: 0.8em 0.3em 0.1em 0.3em;
     display: inline-block;
     line-height: 1.3;
     -ms-flex: 0 0 auto;
     -webkit-flex: 0 0 auto;
     flex: 0 0 auto;
     cursor: pointer;
-}
-
-.origin {
     background-color: @buttonBackgroundColor;
     border-radius: 0.25em;
     padding: 0.2em 0.6em 0.3em;
@@ -39,19 +52,4 @@
     &:hover {
         background-color: @buttonHoverColor;
     }
-}
-
-.known-word > .origin {
-    background-color: #9cd6ae;
-}
-
-.learn-word > .origin {
-    background-color: #fbd0a8;
-}
-
-.translation {
-    font-size: 70%;
-    text-align: right;
-    color: #333;
-    height: 1.3em;
 }

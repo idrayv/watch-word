@@ -1,5 +1,10 @@
-﻿<div *ngIf="materials?.length > 0">
-    <div *ngFor="let material of materials">
-        <a [routerLink]="['material', material.id]">{{material.name}}</a>
+﻿<div class="stat-block">
+    <div class="stat-head">
+        Random materials
+    </div>
+    <div *ngIf="materials?.length > 0" class="stat-body">
+        <div *ngFor="let material of materials" class="material-button">
+            <a [routerLink]="['material', material.id]">{{material.name}}</a>
+        </div>
     </div>
 </div>

@@ -1,7 +1,11 @@
-﻿<div *ngIf="material?.name">
-    <a [routerLink]="['material', material.id]">{{material.name}}</a>
-</div>
+﻿<div class="stat-block">
+    <div *ngIf="material?.name" class="stat-head">
+        Top words in: <a [routerLink]="['material', material.id]">{{material.name}}</a>
+    </div>
 
-<div *ngIf="vocabWords?.length">
-    <word *ngFor="let vocabWord of vocabWords" [vocabWord]="vocabWord"></word>
+    <div class="stat-body">
+        <div *ngIf="vocabWords?.length" class="words">
+            <word *ngFor="let vocabWord of vocabWords" [vocabWord]="vocabWord"></word>
+        </div>
+    </div>
 </div>
