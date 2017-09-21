@@ -60,3 +60,51 @@ export class ImageResponseModel extends BaseResponseModel {
 export class VocabWordsResponseModel extends BaseResponseModel {
     public vocabWords: VocabWord[];
 }
+
+export class VocabWordFiltration {
+
+    constructor(showLearnWords: boolean = true, showKnownWords: boolean = true, showUnsignedWords: boolean = true) {
+        this._showLearnWords = showLearnWords;
+        this._showKnownWords = showKnownWords;
+        this._showUnsignedWords = showUnsignedWords;
+    }
+
+    private _showLearnWords: boolean;
+    private _showKnownWords: boolean;
+    private _showUnsignedWords: boolean;
+
+    private clone(): VocabWordFiltration {
+        return new VocabWordFiltration(this._showLearnWords, this._showKnownWords, this._showUnsignedWords);
+    }
+
+    public get showLearnWords(): boolean {
+        return this._showLearnWords;
+    }
+
+    public get showKnownWords(): boolean {
+        return this._showKnownWords;
+    }
+
+    public get showUnsignedWords(): boolean {
+        return this._showUnsignedWords;
+    }
+
+    public invertLearnWord(): VocabWordFiltration {
+        let result = this.clone();
+        result._showLearnWords = !this._showLearnWords;
+        return result;
+    }
+
+    public invertKnownWord(): VocabWordFiltration {
+        let result = this.clone();
+        result._showKnownWords = !this._showKnownWords;
+        return result;
+    }
+
+    public invertUnsignedWord(): VocabWordFiltration {
+        let result = this.clone();
+        result._showUnsignedWords = !this._showUnsignedWords;
+        return result;
+    }
+
+}

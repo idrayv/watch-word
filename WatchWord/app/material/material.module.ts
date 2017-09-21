@@ -9,10 +9,11 @@ import { SubtitlesInputComponent } from './components/subtitles-input/subtitles-
 import { TranslationModalModule } from '../global/components/translation-modal/translation-modal.module';
 import { ModalModule } from '../global/components/modal/modal.module';
 import { WordModule } from '../global/components/word/word.module';
+import { VocabWordFiltrarionPipe } from './pipes/vocab-word-filtration.pipe';
 
 @NgModule({
     imports: [CommonModule, MaterialRoutingModule, FormsModule, ModalModule, TranslationModalModule, WordModule],
-    declarations: [MaterialComponent, ImageInputComponent, SubtitlesInputComponent],
+    declarations: [MaterialComponent, ImageInputComponent, SubtitlesInputComponent, VocabWordFiltrarionPipe],
     providers: [MaterialService]
 })
 

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ISubscription } from 'rxjs/Subscription';
 import { MaterialService } from './material.service';
-import { Material as MaterialModel, MaterialMode, MaterialStats, VocabType } from './material.models';
+import { Material as MaterialModel, MaterialMode, MaterialStats, VocabType, VocabWordFiltration } from './material.models';
 import { VocabWord } from './material.models';
 import { SpinnerService } from '../global/spinner/spinner.service';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
@@ -22,6 +22,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     public material: MaterialModel = new MaterialModel();
     public userModel: UserModel;
     public formSubmited = false;
+    public filtration: VocabWordFiltration = new VocabWordFiltration();
     private routeSubscription: ISubscription;
     private userSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
