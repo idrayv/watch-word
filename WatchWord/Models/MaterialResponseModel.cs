@@ -6,6 +6,6 @@ namespace WatchWord.Models
     public class MaterialResponseModel : BaseResponseModel
     {
         public Material Material { get; set; }
-        public List<VocabWord> VocabWords { get; set; }
+        public IEnumerable<VocabWord> VocabWords { get; set; }
     }
 }

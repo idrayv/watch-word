@@ -8,6 +8,6 @@ namespace WatchWord.Service.Abstract
     {
         Task<List<Material>> GetRandomMaterialsAsync(int count);
 
-        Task<List<VocabWord>> GetTop(int count, int materialId, int userId);
+        Task<IEnumerable<VocabWord>> GetTop(int count, int materialId, int userId);
     }
 }

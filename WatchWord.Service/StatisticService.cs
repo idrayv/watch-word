@@ -27,7 +27,7 @@ namespace WatchWord.Service
             return (await _materialsRepository.GetRandomEntititiesByConditionAsync(count)).ToList();
         }
 
-        public async Task<List<VocabWord>> GetTop(int count, int materialId, int userId)
+        public async Task<IEnumerable<VocabWord>> GetTop(int count, int materialId, int userId)
         {
             var words = await _wordsRepository.GetTopWordsByMaterialAsync(count, materialId);
             return await _vocabularyService.GetSpecifiedVocabWordsAsync(words, userId);

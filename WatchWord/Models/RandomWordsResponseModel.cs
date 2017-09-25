@@ -5,7 +5,7 @@ namespace WatchWord.Models
 {
     public class RandomWordsResponseModel: BaseResponseModel
     {
-        public List<VocabWord> VocabWords { get; set; }
+        public IEnumerable<VocabWord> VocabWords { get; set; }
         public Material Material { get; set; }
     }
 }

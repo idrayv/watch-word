@@ -54,7 +54,7 @@ namespace WatchWord.Service
         }
 
         // TODO: Optimize for SQL: use material id instead of list of words
-        public async Task<List<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, int userId)
+        public async Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, int userId)
         {
             var arrayOfWords = materialWords == null
                 ? new string[0]
@@ -67,7 +67,7 @@ namespace WatchWord.Service
             vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
                 .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));
 
-            return vocabWords;
+            return vocabWords.OrderBy(w => w.Type);
         }
     }
 }
