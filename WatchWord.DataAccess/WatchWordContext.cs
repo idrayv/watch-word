@@ -34,6 +34,15 @@ namespace WatchWord.DataAccess
         /// <summary>Gets or sets translations.</summary>
         public DbSet<Translation> Translations { get; set; }
 
+        /// <summary>Gets or sets subtitle files.</summary>
+        public DbSet<SubtitleFile> SubtitleFiles { get; set; }
+
+        /// <summary>Gets or sets word statistics.</summary>
+        public DbSet<WordStatistic> WordStatistics { get; set; }
+
+        /// <summary>Gets or sets favorite materials.</summary>
+        public DbSet<FavoriteMaterial> FavoriteMaterials { get; set; }
+
         public WatchWordContext() { }
 
         public WatchWordContext(DatabaseSettings dbSettings)
@@ -86,7 +95,6 @@ namespace WatchWord.DataAccess
                 material.Property(m => m.Image).IsRequired();
                 material.Property(m => m.Description).HasMaxLength(1024).IsRequired();
                 material.HasIndex(a => a.Type);
-                material.HasOne(m => m.Owner).WithMany(a => a.Materials).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.Entity<VocabWord>(vocabWord =>
@@ -119,6 +127,24 @@ namespace WatchWord.DataAccess
                 subtitleFile.Property(s => s.Id).ValueGeneratedOnAdd();
                 subtitleFile.Property(s => s.SubtitleText).IsRequired();
                 subtitleFile.HasOne(s => s.Material).WithMany(m => m.SubtitleFiles).OnDelete(DeleteBehavior.Cascade).IsRequired();
+            });
+
+            modelBuilder.Entity<WordStatistic>(wordStatistic =>
+            {
+                wordStatistic.ToTable("WordStatistics");
+                wordStatistic.Property(w => w.Id).ValueGeneratedOnAdd();
+                wordStatistic.Property(w => w.Word).IsRequired();
+                wordStatistic.Property(w => w.TotalCount).IsRequired();
+                wordStatistic.Property(w => w.KnownCount).IsRequired();
+                wordStatistic.Property(w => w.LearnCount).IsRequired();
+            });
+
+            modelBuilder.Entity<FavoriteMaterial>(favoriteMaterial =>
+            {
+                favoriteMaterial.ToTable("FavoriteMaterials");
+                favoriteMaterial.Property(f => f.Id).ValueGeneratedOnAdd();
+                favoriteMaterial.HasOne(f => f.Material).WithMany(m => m.FavoriteMaterials).OnDelete(DeleteBehavior.Cascade).IsRequired();
+                favoriteMaterial.HasOne(f => f.Account).WithMany(a => a.FavoriteMaterials).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.ForSqlServerUseIdentityColumns();

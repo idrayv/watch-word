@@ -24,7 +24,7 @@ namespace WatchWord.Service
 
         public async Task<Material> GetMaterial(int id)
         {
-            return await _materialsRepository.GetByConditionAsync(m => m.Id == id, m => m.Words);
+            return await _materialsRepository.GetByConditionAsync(m => m.Id == id, m => m.Words, m => m.Owner);
         }
 
         public async Task<List<Material>> GetMaterialsByPartialNameAsync(string partialName)

@@ -4,13 +4,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WatchWord.DataAccess.Migrations
 {
     [DbContext(typeof(WatchWordContext))]
-    partial class WatchWordContextModelSnapshot : ModelSnapshot
+    [Migration("20170925174733_WordStatistic")]
+    partial class WordStatistic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -504,13 +506,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WatchWord.DataAccess.Migrations
 {
     [DbContext(typeof(WatchWordContext))]
-    partial class WatchWordContextModelSnapshot : ModelSnapshot
+    [Migration("20170925174733_WordStatistic")]
+    partial class WordStatistic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
