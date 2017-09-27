@@ -6,28 +6,30 @@ export class ComponentValidation {
     }
 
     public static validationErrors(state: NgModel): string[] {
-        let errors: string[] = [];
-        let name = this.capitalizeFirstLetter(state.name);
+        const errors: string[] = [];
+        const name = this.capitalizeFirstLetter(state.name);
         if (state.invalid) {
-            for (let error in state.errors) {
-                switch (error) {
-                    case 'minlength':
-                        errors.push(`${name} must be at least ${state.errors[error].requiredLength} characters!`);
-                        break;
-                    case 'required':
-                        errors.push(`${name} must be filled in!`);
-                        break;
-                    case 'pattern':
-                        if (state.name === 'email') {
-                            errors.push(`${name} must be a valid email!`);
-                        }
-                        break;
-                    case 'subtitlesInput':
-                        (<string[]>state.errors[error]).forEach((er) => errors.push(er));
-                        break;
-                    case 'imageInput':
-                        (<string[]>state.errors[error]).forEach((er) => errors.push(er));
-                        break;
+            for (const error in state.errors) {
+                if (error) {
+                    switch (error) {
+                        case 'minlength':
+                            errors.push(`${name} must be at least ${state.errors[error].requiredLength} characters!`);
+                            break;
+                        case 'required':
+                            errors.push(`${name} must be filled in!`);
+                            break;
+                        case 'pattern':
+                            if (state.name === 'email') {
+                                errors.push(`${name} must be a valid email!`);
+                            }
+                            break;
+                        case 'subtitlesInput':
+                            (<string[]>state.errors[error]).forEach((er) => errors.push(er));
+                            break;
+                        case 'imageInput':
+                            (<string[]>state.errors[error]).forEach((er) => errors.push(er));
+                            break;
+                    }
                 }
             }
         }

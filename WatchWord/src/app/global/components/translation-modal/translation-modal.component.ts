@@ -5,7 +5,7 @@ import { ModalService } from '../modal/modal.service';
 import { TranslationModalModel } from './translation-modal.models';
 
 @Component({
-    selector: 'translation-modal',
+    selector: 'ww-translation-modal',
     templateUrl: 'translation-modal.template.html',
     host: {
         '(document:click)': 'documentClick($event.target)'

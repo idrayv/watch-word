@@ -1,9 +1,10 @@
-﻿import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpResponse, HttpEvent, HttpErrorResponse } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
+﻿import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+import { HttpResponse, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
-import { ServiceLocator } from "./service-locator";
+import { ServiceLocator } from './service-locator';
 
 @Injectable()
 export class HttpClientInterceptor implements HttpInterceptor {

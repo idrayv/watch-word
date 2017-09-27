@@ -5,7 +5,7 @@ import { VocabWord, Word } from '../../material.models';
 import { SpinnerService } from '../../../global/spinner/spinner.service';
 
 @Component({
-    selector: 'subtitles-input',
+    selector: 'ww-subtitles-input',
     templateUrl: 'subtitles-input.template.html',
     providers: [{
         provide: NG_VALUE_ACCESSOR,
@@ -22,7 +22,8 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
     private onChangeCallback: Function;
     private serverErrors: string[] = [];
 
-    constructor(private materialService: MaterialService, private spinner: SpinnerService) { }
+    constructor(private materialService: MaterialService, private spinner: SpinnerService) {
+    }
 
     @ViewChild('file') fileInput: ElementRef;
 
@@ -34,8 +35,8 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
 
     fileChanged() {
         this.spinner.displaySpinner(true);
-        let file: File = this.fileInput.nativeElement.files[0];
-  
+        const file: File = this.fileInput.nativeElement.files[0];
+
         this.materialService.parseSubtitles(file).then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
@@ -45,7 +46,6 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
             } else {
                 this.serverErrors = response.errors;
             }
-            //this.onChangeCallback(vocabWords);
         });
     }
 

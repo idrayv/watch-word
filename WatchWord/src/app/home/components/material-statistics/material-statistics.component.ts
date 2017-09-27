@@ -6,7 +6,7 @@ import { ControlValueAccessor } from '@angular/forms/src/forms';
 import { Material, VocabWord } from '../../../material/material.models';
 
 @Component({
-    selector: 'material-statistics',
+    selector: 'ww-material-statistics',
     templateUrl: 'material-statistics.template.html',
 })
 export class MaterialStatisticsComponent extends BaseComponent implements OnInit {
@@ -17,8 +17,8 @@ export class MaterialStatisticsComponent extends BaseComponent implements OnInit
     }
 
     ngOnInit(): void {
-        let attribute = this.el.nativeElement.attributes.getNamedItem('url');
-        var url = <string>attribute.value;
+        const attribute = this.el.nativeElement.attributes.getNamedItem('url');
+        const url = <string>attribute.value;
         this.statisticsService.getRandomMaterials(url).then(response => this.fillModel(response));
     }
 

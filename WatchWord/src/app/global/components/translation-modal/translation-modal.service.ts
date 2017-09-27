@@ -1,13 +1,13 @@
 ﻿import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { TranslatePostResponseModel, TranslationModalModel } from './translation-modal.models';
 import { TranslationModalResponseModel } from './translation-modal.models';
 import { VocabType, VocabWord } from '../../../material/material.models';
 import { SpinnerService } from '../../spinner/spinner.service';
 import { DictionariesService } from '../../../dictionaries/dictionaries.service';
 import { BaseComponent } from '../../base-component';
-import { BaseService } from "../../base-service";
+import { BaseService } from '../../base-service';
 
 @Injectable()
 export class TranslationModalService extends BaseService {
@@ -29,7 +29,7 @@ export class TranslationModalService extends BaseService {
 
     public getTranslation(word: string): Promise<TranslatePostResponseModel> {
         return this.http.get<TranslatePostResponseModel>(this.baseUrl + '/Translate/' + word).toPromise()
-            .catch(() => { return this.getConnectionError<TranslatePostResponseModel>() });
+            .catch(() =>  this.getConnectionError<TranslatePostResponseModel>());
     }
 
     public pushToModal(vocabWord: VocabWord): void {
@@ -67,7 +67,7 @@ export class TranslationModalService extends BaseService {
 
     // TODO: delete updateVocabWordInCollection, use link to original VocabWord instead
     public updateVocabWordInCollection(vocabWord: VocabWord, vocabWords: VocabWord[]) {
-        let existingVocabWord = vocabWords.find(v => v.word === vocabWord.word);
+        const existingVocabWord = vocabWords.find(v => v.word === vocabWord.word);
         existingVocabWord.type = vocabWord.type;
         existingVocabWord.translation = vocabWord.translation;
     }

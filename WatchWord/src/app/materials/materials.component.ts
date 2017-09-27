@@ -15,8 +15,8 @@ import { BaseComponent } from '../global/base-component';
 export class MaterialsComponent extends BaseComponent implements OnInit, OnDestroy {
     public model: MaterialsModel = new MaterialsModel();
     private routeSubscription: ISubscription;
-    private itemsPerPage: number = 24;
-    private materialsRoute: string = '/materials/page';
+    private itemsPerPage = 24;
+    private materialsRoute = '/materials/page';
 
     constructor(private router: Router, private route: ActivatedRoute,
         private materialsService: MaterialsPaginationService, private spinner: SpinnerService) {

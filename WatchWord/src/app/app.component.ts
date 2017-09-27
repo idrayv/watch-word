@@ -1,4 +1,4 @@
-import{ Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from './auth/user.service';
 import { AuthService } from './auth/auth.service';
@@ -9,7 +9,7 @@ import { ToastsManager } from 'ng2-toastr/src/toast-manager';
 import { ToastModel, ToastType } from './global/toast/toast.models';
 
 @Component({
-    selector: 'watch-word',
+    selector: 'ww-app',
     templateUrl: 'app.template.html'
 })
 

@@ -13,6 +13,6 @@ export class WordStatisticsService extends BaseService {
 
     public getWordStatistics(url: string): Promise<WordStatisticsResponseModel> {
         return this.http.get<WordStatisticsResponseModel>(`${this.baseUrl}/${url}`).toPromise()
-            .catch(() => { return this.getConnectionError<WordStatisticsResponseModel>() });
+            .catch(() => this.getConnectionError<WordStatisticsResponseModel>());
     }
 }

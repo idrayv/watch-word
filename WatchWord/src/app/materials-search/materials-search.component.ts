@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { BaseComponent } from '../global/base-component';
 
 @Component({
-    selector: 'materials-search',
+    selector: 'ww-materials-search',
     templateUrl: 'materials-search.template.html',
     host: {
         '(document:click)': 'documentClick($event.target)'
@@ -15,7 +15,7 @@ import { BaseComponent } from '../global/base-component';
 export class MaterialsSearchComponent extends BaseComponent implements OnDestroy, OnInit {
     model: MaterialsSearchModel = new MaterialsSearchModel();
     searchSubscription: Subscription = new Subscription();
-    isFocused: boolean = false;
+    isFocused = false;
     status: RequestStatus = RequestStatus.NotStarted;
     timer: any;
 
@@ -37,7 +37,7 @@ export class MaterialsSearchComponent extends BaseComponent implements OnDestroy
         clearTimeout(this.timer);
 
         this.timer = setTimeout(() => {
-            let text: string = this.model.input || '';
+            const text: string = this.model.input || '';
 
             this.searchSubscription = this.searchSevice.search(text).subscribe(response => {
                 this.model.entities = response.entities;

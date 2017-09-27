@@ -10,21 +10,21 @@ export class ModalService {
     }
 
     public remove(id: string): void {
-        let index = this.modals.findIndex(elem => elem.id === id);
+        const index = this.modals.findIndex(elem => elem.id === id);
         if (index !== -1) {
             this.modals.splice(index, 1);
         }
     }
 
     public showModal(id: string): void {
-        let modal = this.modals.find(elem => elem.id === id);
+        const modal = this.modals.find(elem => elem.id === id);
         if (modal) {
             modal.show();
         }
     }
 
     public hideModal(id: string): void {
-        let modal = this.modals.find(elem => elem.id === id);
+        const modal = this.modals.find(elem => elem.id === id);
         if (modal) {
             modal.hide();
         }

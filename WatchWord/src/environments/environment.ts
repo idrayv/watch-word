@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  //apiRoute: '/api'
-  //apiRoute: 'http://watchword.azurewebsites.net/api'
-  apiRoute: 'http://localhost:54093/api'
+  // apiRoute: '/api'
+  apiRoute: 'http://watchword.azurewebsites.net/api'
+  // apiRoute: 'http://localhost:54093/api'
 };

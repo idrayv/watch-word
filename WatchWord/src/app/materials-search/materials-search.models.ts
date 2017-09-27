@@ -2,7 +2,7 @@
 import { BaseResponseModel } from '../global/models';
 
 export class MaterialsSearchModel {
-    public input: string = '';
+    public input = '';
     public entities: MaterialModel[] = [];
 }
 

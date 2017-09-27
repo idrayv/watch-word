@@ -14,7 +14,7 @@ import { BaseComponent } from '../../global/base-component';
 
 export class LoginComponent extends BaseComponent {
     public model: LoginModel = new LoginModel();
-    public formSubmited: boolean = false;
+    public formSubmited = false;
 
     constructor(private auth: AuthService, private userService: UserService, private router: Router,
         private spinner: SpinnerService) {
@@ -24,7 +24,7 @@ export class LoginComponent extends BaseComponent {
     public logIn(form: NgForm): void {
         this.formSubmited = true;
         if (form.valid) {
-            let login = this.model.login;
+            const login = this.model.login;
             this.spinner.displaySpinner(true);
             this.auth.authenticate(this.model).then(response => {
                 this.spinner.displaySpinner(false);

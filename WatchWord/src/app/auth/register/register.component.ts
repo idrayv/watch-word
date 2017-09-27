@@ -14,7 +14,7 @@ import { BaseComponent } from '../../global/base-component';
 
 export class RegisterComponent extends BaseComponent {
     public model: RegisterModel = new RegisterModel();
-    public formSubmitted: boolean = false;
+    public formSubmitted = false;
 
     constructor(private auth: AuthService, private userService: UserService, private router: Router,
         private spinner: SpinnerService) {
@@ -24,7 +24,7 @@ export class RegisterComponent extends BaseComponent {
     public register(form: NgForm) {
         this.formSubmitted = true;
         if (form.valid) {
-            let login = this.model.login;
+            const login = this.model.login;
             this.spinner.displaySpinner(true);
             this.auth.register(this.model).then(response => {
                 this.spinner.displaySpinner(false);

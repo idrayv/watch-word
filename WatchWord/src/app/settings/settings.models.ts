@@ -36,7 +36,7 @@ export class SettingsModel {
     }
 
     public getNameByKey(key: SettingKey): string {
-        let settingName = this.settingNames.find(n => n.key === key);
+        const settingName = this.settingNames.find(n => n.key === key);
         return settingName ? settingName.value : '';
     }
 }

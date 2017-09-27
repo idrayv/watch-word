@@ -2,7 +2,7 @@
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { SearchResponseModel } from './materials-search.models';
-import { BaseService } from "../global/base-service";
+import { BaseService } from '../global/base-service';
 
 
 @Injectable()

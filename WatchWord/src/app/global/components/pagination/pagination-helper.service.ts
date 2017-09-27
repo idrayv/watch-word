@@ -4,7 +4,7 @@ import { PaginationServiceModel, PaginationModel } from './pagination.models';
 @Injectable()
 export class PaginationHelperService {
     getPaginator(model: PaginationModel): PaginationServiceModel {
-        let totalPages = Math.ceil(model.count / model.itemsPerPage);
+        const totalPages = Math.ceil(model.count / model.itemsPerPage);
         let startPage: number, endPage: number;
 
         if (totalPages < 6) {
@@ -23,9 +23,9 @@ export class PaginationHelperService {
             }
         }
 
-        let pages: number[] = this.range(startPage, endPage);
+        const pages: number[] = this.range(startPage, endPage);
 
-        let result: PaginationServiceModel = {
+        const result: PaginationServiceModel = {
             currentPage: model.currentPage,
             totalPages: totalPages,
             startPage: startPage,
@@ -38,7 +38,7 @@ export class PaginationHelperService {
     }
 
     private range(start: number, end: number): number[] {
-        let result: number[] = [];
+        const result: number[] = [];
         while (end >= start) {
             result.push(start++);
         }

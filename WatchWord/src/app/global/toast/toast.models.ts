@@ -13,6 +13,6 @@ export enum ToastType {
 }
 
 export class CustomOption extends ToastOptions {
-    positionClass: string = 'toast-bottom-center';
-    dismiss: string = 'controlled';
+    positionClass = 'toast-bottom-center';
+    dismiss = 'controlled';
 }

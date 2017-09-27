@@ -3,7 +3,7 @@ import { VocabWord, Word } from '../../../material/material.models';
 import { TranslationModalService } from '../translation-modal/translation-modal.service';
 
 @Component({
-    selector: 'word',
+    selector: 'ww-word',
     templateUrl: 'word.template.html'
 })
 

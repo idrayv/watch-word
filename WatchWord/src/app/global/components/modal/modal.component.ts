@@ -2,7 +2,7 @@
 import { ModalService } from './modal.service';
 
 @Component({
-    selector: 'modal',
+    selector: 'ww-modal',
     templateUrl: 'modal.template.html'
 })
 

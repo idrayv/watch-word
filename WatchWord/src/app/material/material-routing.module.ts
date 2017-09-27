@@ -5,7 +5,7 @@ import { MaterialComponent } from './material.component';
 const routes: Routes = [{
     path: ':id',
     component: MaterialComponent
-},{
+}, {
     path: 'create',
     component: MaterialComponent
 }];

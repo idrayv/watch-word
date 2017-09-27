@@ -90,19 +90,19 @@ export class VocabWordFiltration {
     }
 
     public invertLearnWord(): VocabWordFiltration {
-        let result = this.clone();
+        const result = this.clone();
         result._showLearnWords = !this._showLearnWords;
         return result;
     }
 
     public invertKnownWord(): VocabWordFiltration {
-        let result = this.clone();
+        const result = this.clone();
         result._showKnownWords = !this._showKnownWords;
         return result;
     }
 
     public invertUnsignedWord(): VocabWordFiltration {
-        let result = this.clone();
+        const result = this.clone();
         result._showUnsignedWords = !this._showUnsignedWords;
         return result;
     }

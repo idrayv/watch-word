@@ -4,7 +4,7 @@ import { PaginationServiceModel, PaginationModel } from './pagination.models';
 import { PaginationHelperService } from './pagination-helper.service';
 
 @Component({
-    selector: 'pagination',
+    selector: 'ww-pagination',
     templateUrl: 'pagination.template.html',
     providers: [{
         provide: NG_VALUE_ACCESSOR,

@@ -1,4 +1,4 @@
-﻿import { HttpClient } from "@angular/common/http";
+﻿import { HttpClient } from '@angular/common/http';
 
 import { BaseResponseModel } from './models';
 import { ServiceLocator } from './service-locator';

@@ -1,5 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { UserModel } from './auth.models';
 
@@ -10,11 +10,11 @@ export class UserService {
     constructor() { }
 
     public initializeUser() {
-        var currentUserStorage = localStorage.getItem('currentUser');
+        const currentUserStorage = localStorage.getItem('currentUser');
         if (currentUserStorage) {
             this.userModelSubject.next(JSON.parse(currentUserStorage));
         } else {
-            var userModel: UserModel = new UserModel('', false);
+            const userModel: UserModel = new UserModel('', false);
             this.setUser(userModel);
         }
     }

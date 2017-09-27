@@ -1,14 +1,14 @@
 ﻿import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { ISubscription } from 'rxjs/Subscription';
 import { BaseComponent } from '../../../global/base-component';
 import { WordStatisticsService } from './word-statistics.service';
 import { WordStatisticsResponseModel } from './word-statistics.models';
 import { ControlValueAccessor } from '@angular/forms/src/forms';
 import { Material, VocabWord } from '../../../material/material.models';
 import { TranslationModalService } from '../../../global/components/translation-modal/translation-modal.service';
-import { ISubscription } from 'rxjs/Subscription';
 
 @Component({
-    selector: 'word-statistics',
+    selector: 'ww-word-statistics',
     templateUrl: 'word-statistics.template.html',
 })
 export class WordStatisticsComponent extends BaseComponent implements OnInit, OnDestroy {
@@ -34,10 +34,10 @@ export class WordStatisticsComponent extends BaseComponent implements OnInit, On
                 }
             });
 
-        let attribute = this.el.nativeElement.attributes.getNamedItem('url');
-        var url = <string>attribute.value;
+        const attribute = this.el.nativeElement.attributes.getNamedItem('url');
+        const url = <string>attribute.value;
         this.statisticsService.getWordStatistics(url).then(response => this.fillModel(response));
-    };
+    }
 
     fillModel(response: WordStatisticsResponseModel): void {
         if (response.success) {

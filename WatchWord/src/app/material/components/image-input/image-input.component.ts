@@ -4,7 +4,7 @@ import { MaterialService } from '../../material.service';
 import { SpinnerService } from '../../../global/spinner/spinner.service';
 
 @Component({
-    selector: 'image-input[mimeTypes]',
+    selector: 'ww-image-input[mimeTypes]',
     templateUrl: 'image-input.template.html',
     providers: [{
         provide: NG_VALUE_ACCESSOR,
@@ -27,12 +27,12 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
     constructor(private materialService: MaterialService, private el: ElementRef, private spinner: SpinnerService) { }
 
     ngOnInit() {
-        let attribute = this.el.nativeElement.attributes.getNamedItem('mimeTypes');
+        const attribute = this.el.nativeElement.attributes.getNamedItem('mimeTypes');
         this.types = (<string>attribute.value).split(';');
-    };
+    }
 
     fileChanged(): void {
-        let file = this.fileInput.nativeElement.files[0];
+        const file = this.fileInput.nativeElement.files[0];
         if (file && this.types.some(t => t === file.type)) {
             this.callService(file);
         } else {
@@ -43,7 +43,7 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
     }
 
     callService(file: File): void {
-        let base64: string = '';
+        let base64 = '';
         this.spinner.displaySpinner(true);
         this.materialService.parseImage(file).then(response => {
             this.spinner.displaySpinner(false);

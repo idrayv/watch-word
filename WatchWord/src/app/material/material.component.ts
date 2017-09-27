@@ -84,7 +84,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
             this.materialService.saveMaterial(this.material, this.vocabWords).then(response => {
                 this.spinner.displaySpinner(false);
                 if (response.success) {
-                    if (this.mode == MaterialMode.Add) {
+                    if (this.mode === MaterialMode.Add) {
                         this.router.navigateByUrl('material/' + response.id);
                     } else {
                         this.mode = MaterialMode.Read;
@@ -98,18 +98,18 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     }
 
     get materialStats(): MaterialStats[] {
-        let stats: MaterialStats[] = [];
+        const stats: MaterialStats[] = [];
 
-        var totalCount = this.material.words
+        const totalCount = this.material.words
             .map(w => w.count).reduce((pre, curr) => pre + curr, 0);
 
-        var uniqueCount = this.vocabWords.length;
+        const uniqueCount = this.vocabWords.length;
         this.pushStatToStats(stats, 'Total words', totalCount.toString());
         this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
 
         if (this.userModel.isLoggedIn) {
-            var learnCount = this.vocabWords.filter(v => v.type === VocabType.LearnWord).length;
-            var knownCount = this.vocabWords.filter(v => v.type === VocabType.KnownWord).length;
+            const learnCount = this.vocabWords.filter(v => v.type === VocabType.LearnWord).length;
+            const knownCount = this.vocabWords.filter(v => v.type === VocabType.KnownWord).length;
 
             this.pushStatToStats(stats, 'Learn words', learnCount.toString());
             this.pushStatToStats(stats, 'Known words', knownCount.toString());

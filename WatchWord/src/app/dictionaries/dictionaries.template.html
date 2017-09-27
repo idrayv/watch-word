@@ -1,14 +1,14 @@
 ﻿<div *ngIf="learnWords()?.length > 0 || knownWords()?.length > 0">
     Learn words:
     <div class="words">
-        <word [vocabWord]="learnWord" *ngFor="let learnWord of learnWords()"></word>
+        <ww-word [vocabWord]="learnWord" *ngFor="let learnWord of learnWords()"></ww-word>
     </div>
     Known words:
     <div class="words">
-        <word [vocabWord]="knownWord" *ngFor="let knownWord of knownWords()"></word>
+        <ww-word [vocabWord]="knownWord" *ngFor="let knownWord of knownWords()"></ww-word>
     </div>
 
-    <modal id="dictionaries-modal">
-        <translation-modal modalId="dictionaries-modal"></translation-modal>
-    </modal>
+    <ww-modal id="dictionaries-modal">
+        <ww-translation-modal modalId="dictionaries-modal"></ww-translation-modal>
+    </ww-modal>
 </div>
