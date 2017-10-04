@@ -1,4 +1,6 @@
-﻿export class LoginModel {
+﻿import { BaseResponseModel } from '../global/models';
+
+export class LoginModel {
     public login: string;
     public password: string;
 }
@@ -9,12 +11,16 @@ export class RegisterModel {
     public password: string;
 }
 
-export class UserModel {
-    constructor(name: string, isLoggedIn: boolean) {
+export class Account {
+    constructor(externalId: number, name: string) {
+        this.externalId = externalId;
         this.name = name;
-        this.isLoggedIn = isLoggedIn;
     }
 
+    public externalId: number;
     public name: string;
-    public isLoggedIn: boolean;
+}
+
+export class AuthResponseModel extends BaseResponseModel {
+    public account: Account;
 }

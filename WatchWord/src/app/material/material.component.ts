@@ -9,8 +9,8 @@ import { SpinnerService } from '../global/spinner/spinner.service';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
 import { BaseComponent } from '../global/base-component';
 import { ComponentValidation } from '../global/component-validation';
-import { UserModel } from '../auth/auth.models';
-import { UserService } from '../auth/user.service';
+import { Account } from '../auth/auth.models';
+import { AccountService } from '../auth/account.service';
 
 @Component({
     templateUrl: 'material.template.html'
@@ -20,22 +20,22 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     public mode: MaterialMode = null;
     public vocabWords: VocabWord[] = [];
     public material: MaterialModel = new MaterialModel();
-    public userModel: UserModel;
+    public account: Account;
     public formSubmited = false;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
     private routeSubscription: ISubscription;
-    private userSubscription: ISubscription;
+    private accountSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
 
     constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router,
         private spinner: SpinnerService, private translationModalService: TranslationModalService,
-        private userService: UserService) {
+        private accountService: AccountService) {
         super();
     }
 
     ngOnInit() {
-        this.userSubscription = this.userService.getUserObservable().subscribe(user => {
-            this.userModel = user;
+        this.accountSubscription = this.accountService.getAccountObservable().subscribe(account => {
+            this.account = account;
         });
 
         this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
@@ -107,7 +107,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         this.pushStatToStats(stats, 'Total words', totalCount.toString());
         this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
 
-        if (this.userModel.isLoggedIn) {
+        if (this.account.externalId !== 0) {
             const learnCount = this.vocabWords.filter(v => v.type === VocabType.LearnWord).length;
             const knownCount = this.vocabWords.filter(v => v.type === VocabType.KnownWord).length;
 
@@ -117,6 +117,11 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         }
 
         return stats;
+    }
+
+    get isEditButtonsVisible() {
+        return (this.mode === MaterialMode.Read && this.account && this.material
+            && this.account.externalId === this.material.owner.externalId);
     }
 
     public validationErrors(state: NgModel): string[] {
@@ -148,7 +153,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
 
     ngOnDestroy() {
         this.routeSubscription.unsubscribe();
-        this.userSubscription.unsubscribe();
+        this.accountSubscription.unsubscribe();
         this.translationModalResponseSubscription.unsubscribe();
     }
 }

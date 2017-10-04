@@ -1,4 +1,5 @@
 ﻿import { BaseResponseModel } from '../global/models';
+import { Account } from '../auth/auth.models';
 
 export enum MaterialMode {
     Read, Edit, Add
@@ -32,6 +33,7 @@ export class Material {
     public description: string;
     public image: string;
     public words: Word[] = [];
+    public owner: Account;
 }
 
 export class MaterialStats {

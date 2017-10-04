@@ -69,10 +69,10 @@
             <div id="material-name" class="header">{{material.name}}</div>
             <div id="material-description">{{material.description}}</div>
             <div id="material-edit-buttons">
-                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="editMaterial()">
+                <button *ngIf="isEditButtonsVisible" class="ui secondary mini button" type="button" (click)="editMaterial()">
                     Edit
                 </button>
-                <button *ngIf="mode == 0" class="ui secondary mini button" type="button" (click)="deleteMaterial()">
+                <button *ngIf="isEditButtonsVisible" class="ui secondary mini button" type="button" (click)="deleteMaterial()">
                     Delete
                 </button>
             </div>

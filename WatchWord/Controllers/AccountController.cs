@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using WatchWord.Infrastructure;
 using WatchWord.Models;
 using WatchWord.DataAccess.Identity;
+using WatchWord.Service.Abstract;
 
 namespace WatchWord.Controllers
 {
@@ -15,13 +16,16 @@ namespace WatchWord.Controllers
     {
         private readonly UserManager<WatchWordUser> _userManager;
         private readonly SignInManager<WatchWordUser> _signInManager;
+        private readonly IAccountsService _accountsService;
 
         public AccountController(
             UserManager<WatchWordUser> userManager,
-            SignInManager<WatchWordUser> signInManager)
+            SignInManager<WatchWordUser> signInManager,
+            IAccountsService accountsService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _accountsService = accountsService;
         }
 
         [HttpPost]
@@ -29,7 +33,7 @@ namespace WatchWord.Controllers
         [Route("Register")]
         public async Task<string> Register([FromBody] AuthRequestModel authModel)
         {
-            var registerModel = new BaseResponseModel();
+            var registerModel = new AuthResponseModel();
             try
             {
                 var user = new WatchWordUser { UserName = authModel.Login, Email = authModel.Email };
@@ -48,11 +52,23 @@ namespace WatchWord.Controllers
                     }
 
                     await _signInManager.SignInAsync(user, false);
-                    registerModel.Success = true;
+
+                    var aspUser = await _userManager.FindByNameAsync(authModel.Login);
+
+                    if (aspUser != null)
+                    {
+                        registerModel.Account = await _accountsService.GetOrCreateAccountAsync(
+                            aspUser.Id,
+                            aspUser.UserName
+                        );
+                        registerModel.Success = true;
+                    } else
+                    {
+                        registerModel.Errors.Add("User created but not logged in!");
+                    }
                 }
                 else
                 {
-                    registerModel.Success = false;
                     foreach (var error in result.Errors)
                     {
                         registerModel.Errors.Add(error.Description);
@@ -72,14 +88,27 @@ namespace WatchWord.Controllers
         [Route("Login")]
         public async Task<string> Login([FromBody] AuthRequestModel authModel)
         {
-            var loginModel = new BaseResponseModel();
+            var loginModel = new AuthResponseModel();
             try
             {
                 var result = await _signInManager.PasswordSignInAsync(authModel.Login, authModel.Password, true, false);
 
                 if (result.Succeeded)
                 {
-                    loginModel.Success = true;
+                    var aspUser = await _userManager.FindByNameAsync(authModel.Login);
+
+                    if (aspUser != null)
+                    {
+                        loginModel.Account = await _accountsService.GetOrCreateAccountAsync(
+                            aspUser.Id,
+                            aspUser.UserName
+                        );
+                        loginModel.Success = true;
+                    }
+                    else
+                    {
+                        loginModel.Errors.Add("User account does not exist. Please contact site administrator.");
+                    }
                 }
 
                 else if (result.IsLockedOut)

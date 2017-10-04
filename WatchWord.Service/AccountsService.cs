@@ -19,14 +19,19 @@ namespace WatchWord.Service
             _accountsRepository = unitOfWork.Repository<IAccountsRepository>();
         }
 
-        public async Task<Account> GetByExternalIdAsync(int id)
+        public async Task<Account> GetOrCreateAccountAsync(int id, string name)
         {
             var account = await _accountsRepository.GetByConditionAsync(a => a.ExternalId == id);
             if (account != null) return account;
-            var newAccount = new Account { ExternalId = id };
+            var newAccount = new Account { ExternalId = id, Name = name };
             _accountsRepository.Insert(newAccount);
             await _unitOfWork.SaveAsync();
             return newAccount;
+        }
+
+        public async Task<Account> GetByExternalIdAsync(int id)
+        {
+            return await _accountsRepository.GetByConditionAsync(a => a.ExternalId == id);
         }
     }
 }
