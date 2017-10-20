@@ -45,6 +45,7 @@ namespace WatchWord.Controllers
                     if (isFirstUser)
                     {
                         await _userManager.AddToRoleAsync(user, "Admin");
+                        registerModel.IsAdmin = true;
                     }
                     else
                     {
@@ -104,6 +105,7 @@ namespace WatchWord.Controllers
                             aspUser.UserName
                         );
                         loginModel.Success = true;
+                        loginModel.IsAdmin = await _userManager.IsInRoleAsync(aspUser, "Admin");
                     }
                     else
                     {

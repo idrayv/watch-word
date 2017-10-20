@@ -21,6 +21,16 @@ export class Account {
     public name: string;
 }
 
+export class AccountInformation {
+    constructor(account: Account, isAdmin: boolean = false) {
+        this.account = account;
+        this.isAdmin = isAdmin;
+    }
+    public account: Account;
+    public isAdmin: boolean;
+}
+
 export class AuthResponseModel extends BaseResponseModel {
     public account: Account;
+    public isAdmin: boolean;
 }

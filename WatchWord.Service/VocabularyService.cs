@@ -60,9 +60,9 @@ namespace WatchWord.Service
                 ? new string[0]
                 : materialWords.Select(n => n.TheWord).ToArray();
 
-            var owner = await _accountsService.GetByExternalIdAsync(userId);
+            var ownerId = (await _accountsService.GetByExternalIdAsync(userId))?.Id;
             var vocabWords = await _vocabWordsRepository
-                .GetAllAsync(v => v.Owner.Id == owner.Id && arrayOfWords.Contains(v.Word));
+                .GetAllAsync(v => v.Owner.Id == ownerId && arrayOfWords.Contains(v.Word));
 
             vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
                 .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));

@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { AccountService } from './auth/account.service';
+import { AccountInformationService } from './auth/account-information.service';
 import { AuthService } from './auth/auth.service';
-import { Account } from './auth/auth.models';
+import { Account, AccountInformation } from './auth/auth.models';
 import { SpinnerService } from './global/spinner/spinner.service';
 import { ToastService } from './global/toast/toast.service';
 import { ToastsManager } from 'ng2-toastr/src/toast-manager';
@@ -16,12 +16,13 @@ import { ToastModel, ToastType } from './global/toast/toast.models';
 export class AppComponent implements OnDestroy, OnInit {
     public spinnerStatus: boolean;
     public account: Account;
-    private accountSubscription: Subscription;
+    private accountInformationSubscription: Subscription;
     private spinnerSubscription: Subscription;
     private toastSubscription: Subscription;
 
-    constructor(private accountService: AccountService, private authService: AuthService, private spinner: SpinnerService,
-        private toast: ToastService, private toastr: ToastsManager, private vcr: ViewContainerRef) {
+    constructor(private accountInformationService: AccountInformationService, private authService: AuthService,
+        private spinner: SpinnerService, private toast: ToastService, private toastr: ToastsManager,
+        private vcr: ViewContainerRef) {
     }
 
     ngOnInit() {
@@ -30,10 +31,11 @@ export class AppComponent implements OnDestroy, OnInit {
         this.toastSubscription = this.toast.getObservable().subscribe(value => this.showToast(value));
 
         // auth
-        this.accountService.initializeAccount();
-        this.accountSubscription = this.accountService.getAccountObservable().subscribe(account => {
-            this.account = account;
-        });
+        this.accountInformationService.initializeAccountInformation();
+        this.accountInformationSubscription = this.accountInformationService.getAccountInformationObservable()
+            .subscribe(accountInformation => {
+                this.account = accountInformation.account;
+            });
 
         // spinner
         this.spinnerSubscription = this.spinner.getSpinnerObservable().subscribe(value => {
@@ -46,7 +48,7 @@ export class AppComponent implements OnDestroy, OnInit {
         this.authService.logout().then(response => {
             this.spinner.displaySpinner(false);
             if (response.success) {
-                this.accountService.setAccount(new Account(0, ''));
+                this.accountInformationService.setAccountInformation(new AccountInformation(new Account(0, '')));
             } else {
                 console.log(response.errors);
             }
@@ -67,7 +69,7 @@ export class AppComponent implements OnDestroy, OnInit {
     }
 
     ngOnDestroy() {
-        this.accountSubscription.unsubscribe();
+        this.accountInformationSubscription.unsubscribe();
         this.spinnerSubscription.unsubscribe();
         this.toastSubscription.unsubscribe();
     }

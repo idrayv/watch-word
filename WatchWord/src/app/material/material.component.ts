@@ -9,8 +9,8 @@ import { SpinnerService } from '../global/spinner/spinner.service';
 import { TranslationModalService } from '../global/components/translation-modal/translation-modal.service';
 import { BaseComponent } from '../global/base-component';
 import { ComponentValidation } from '../global/component-validation';
-import { Account } from '../auth/auth.models';
-import { AccountService } from '../auth/account.service';
+import { Account, AccountInformation } from '../auth/auth.models';
+import { AccountInformationService } from '../auth/account-information.service';
 
 @Component({
     templateUrl: 'material.template.html'
@@ -20,7 +20,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     public mode: MaterialMode = null;
     public vocabWords: VocabWord[] = [];
     public material: MaterialModel = new MaterialModel();
-    public account: Account;
+    public accountInformation: AccountInformation;
     public formSubmited = false;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
     private routeSubscription: ISubscription;
@@ -29,13 +29,13 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
 
     constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router,
         private spinner: SpinnerService, private translationModalService: TranslationModalService,
-        private accountService: AccountService) {
+        private accountInformationService: AccountInformationService) {
         super();
     }
 
     ngOnInit() {
-        this.accountSubscription = this.accountService.getAccountObservable().subscribe(account => {
-            this.account = account;
+        this.accountSubscription = this.accountInformationService.getAccountInformationObservable().subscribe(accountInformation => {
+            this.accountInformation = accountInformation;
         });
 
         this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
@@ -107,7 +107,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         this.pushStatToStats(stats, 'Total words', totalCount.toString());
         this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
 
-        if (this.account.externalId !== 0) {
+        if (this.accountInformation.account.externalId !== 0) {
             const learnCount = this.vocabWords.filter(v => v.type === VocabType.LearnWord).length;
             const knownCount = this.vocabWords.filter(v => v.type === VocabType.KnownWord).length;
 
@@ -119,9 +119,12 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         return stats;
     }
 
-    get isEditButtonsVisible() {
-        return (this.mode === MaterialMode.Read && this.account && this.material
-            && this.account.externalId === this.material.owner.externalId);
+    get isEditButtonsVisible(): boolean {
+        if (!this.accountInformation || !this.accountInformation.account || !this.material.owner) {
+            return false;
+        }
+
+        return this.material.owner.externalId === this.accountInformation.account.externalId || this.accountInformation.isAdmin;
     }
 
     public validationErrors(state: NgModel): string[] {

@@ -5,7 +5,6 @@ import 'rxjs/add/operator/catch';
 import { BaseResponseModel } from '../global/models';
 import { BaseService } from '../global/base-service';
 import { LoginModel, RegisterModel } from './auth.models';
-import { AccountService } from './account.service';
 import { AuthResponseModel } from './auth.models';
 
 @Injectable()

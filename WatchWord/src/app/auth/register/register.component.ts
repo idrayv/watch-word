@@ -2,8 +2,8 @@ import { NgForm, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { AccountService } from '../account.service';
-import { RegisterModel, Account } from '../auth.models';
+import { AccountInformationService } from '../account-information.service';
+import { RegisterModel, Account, AccountInformation } from '../auth.models';
 import { SpinnerService } from '../../global/spinner/spinner.service';
 import { ComponentValidation } from '../../global/component-validation';
 import { BaseComponent } from '../../global/base-component';
@@ -16,7 +16,7 @@ export class RegisterComponent extends BaseComponent {
     public model: RegisterModel = new RegisterModel();
     public formSubmitted = false;
 
-    constructor(private auth: AuthService, private accountService: AccountService, private router: Router,
+    constructor(private auth: AuthService, private accountInformationService: AccountInformationService, private router: Router,
         private spinner: SpinnerService) {
         super();
     }
@@ -29,7 +29,9 @@ export class RegisterComponent extends BaseComponent {
             this.auth.register(this.model).then(response => {
                 this.spinner.displaySpinner(false);
                 if (response.success) {
-                    this.accountService.setAccount(new Account(response.account.externalId, response.account.name));
+                    this.accountInformationService.setAccountInformation(
+                        new AccountInformation(new Account(response.account.externalId, response.account.name), response.isAdmin)
+                    );
                     this.router.navigate(['home']);
                 } else {
                     response.errors.forEach((err) => this.displayError(err, 'Register error'));

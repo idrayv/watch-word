@@ -13,7 +13,7 @@ import { CustomOption } from './global/toast/toast.models';
 import { HttpClientInterceptor } from './global/http-interceptor';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AccountService } from './auth/account.service';
+import { AccountInformationService } from './auth/account-information.service';
 import { AuthService } from './auth/auth.service';
 import { MaterialsSearchComponent } from './materials-search/materials-search.component';
 import { MaterialsSearchService } from './materials-search/materials-search.service';
@@ -33,7 +33,7 @@ import { MaterialsSearchService } from './materials-search/materials-search.serv
     ],
     providers: [
         SpinnerService,
-        AccountService,
+        AccountInformationService,
         AuthService,
         { provide: HTTP_INTERCEPTORS, useClass: HttpClientInterceptor, multi: true },
         MaterialsSearchService,

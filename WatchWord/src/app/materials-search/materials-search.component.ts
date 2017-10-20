@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+﻿import { Component, ElementRef, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { MaterialsSearchModel, RequestStatus } from './materials-search.models';
 import { MaterialsSearchService } from './materials-search.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -6,10 +6,7 @@ import { BaseComponent } from '../global/base-component';
 
 @Component({
     selector: 'ww-materials-search',
-    templateUrl: 'materials-search.template.html',
-    host: {
-        '(document:click)': 'documentClick($event.target)'
-    }
+    templateUrl: 'materials-search.template.html'
 })
 
 export class MaterialsSearchComponent extends BaseComponent implements OnDestroy, OnInit {
@@ -25,6 +22,21 @@ export class MaterialsSearchComponent extends BaseComponent implements OnDestroy
 
     get isLoadingVisible(): boolean {
         return this.status === RequestStatus.InProgress;
+    }
+
+    @HostListener('document:click', ['$event.target'])
+    private documentClick(target: ElementRef): void {
+        if (!this.componentElement.nativeElement.contains(target)) {
+            this.isFocused = false;
+        } else {
+            if (this.isFocused === false) {
+                if (this.status !== RequestStatus.NotStarted) {
+                    this.model.entities = [];
+                    this.inputChanged();
+                }
+                this.isFocused = true;
+            }
+        }
     }
 
     public inputChanged(): void {
@@ -61,20 +73,6 @@ export class MaterialsSearchComponent extends BaseComponent implements OnDestroy
     public clearInput(): void {
         this.model.input = '';
         this.model.entities = [];
-    }
-
-    private documentClick(target: ElementRef): void {
-        if (!this.componentElement.nativeElement.contains(target)) {
-            this.isFocused = false;
-        } else {
-            if (this.isFocused === false) {
-                if (this.status !== RequestStatus.NotStarted) {
-                    this.model.entities = [];
-                    this.inputChanged();
-                }
-                this.isFocused = true;
-            }
-        }
     }
 
     ngOnInit(): void {
