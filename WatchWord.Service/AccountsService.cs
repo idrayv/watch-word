@@ -25,7 +25,7 @@ namespace WatchWord.Service
             if (account != null) return account;
             var newAccount = new Account { ExternalId = id, Name = name };
             _accountsRepository.Insert(newAccount);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CommitAsync();
             return newAccount;
         }
 

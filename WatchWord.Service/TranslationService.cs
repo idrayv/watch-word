@@ -97,7 +97,7 @@ namespace WatchWord.Service
             }).ToList();
 
             _translationsRepository.Insert(translationsCache);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CommitAsync();
         }
 
         /// <summary>Gets translations list from the cache for specified word.</summary>

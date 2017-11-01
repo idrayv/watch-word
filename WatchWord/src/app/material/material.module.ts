@@ -10,11 +10,12 @@ import { TranslationModalModule } from '../global/components/translation-modal/t
 import { ModalModule } from '../global/components/modal/modal.module';
 import { WordModule } from '../global/components/word/word.module';
 import { VocabWordFiltrarionPipe } from './pipes/vocab-word-filtration.pipe';
+import { FavoriteMaterialsService } from '../global/favorite-materials/favorite-materils.service';
 
 @NgModule({
     imports: [CommonModule, MaterialRoutingModule, FormsModule, ModalModule, TranslationModalModule, WordModule],
     declarations: [MaterialComponent, ImageInputComponent, SubtitlesInputComponent, VocabWordFiltrarionPipe],
-    providers: [MaterialService]
+    providers: [MaterialService, FavoriteMaterialsService]
 })
 
 export class MaterialModule {

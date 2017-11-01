@@ -50,7 +50,7 @@ namespace WatchWord.Service
                 _vocabWordsRepository.Insert(vocabWord);
             }
 
-            return await _unitOfWork.SaveAsync();
+            return await _unitOfWork.CommitAsync();
         }
 
         // TODO: Optimize for SQL: use material id instead of list of words

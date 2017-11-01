@@ -62,7 +62,7 @@ namespace WatchWord.Service
                 }
             }
 
-            return await _unitOfWork.SaveAsync();
+            return await _unitOfWork.CommitAsync();
         }
 
         public async Task<Setting> GetSiteSettingAsync(SettingKey key)

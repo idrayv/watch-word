@@ -26,7 +26,7 @@ namespace WatchWord.DataAccess
             return serviceProvider.GetService<T>();
         }
 
-        public virtual async Task<int> SaveAsync()
+        public virtual async Task<int> CommitAsync()
         {
             return await context.SaveChangesAsync();
         }

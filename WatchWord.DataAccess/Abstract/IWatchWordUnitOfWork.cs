@@ -11,6 +11,6 @@ namespace WatchWord.DataAccess.Abstract
 
         /// <summary>Saves all pending changes asynchronously.</summary>
         /// <returns>The number of objects in an Added, Modified, or Deleted state.</returns>
-        Task<int> SaveAsync();
+        Task<int> CommitAsync();
     }
 }

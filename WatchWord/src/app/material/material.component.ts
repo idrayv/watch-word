@@ -11,6 +11,7 @@ import { BaseComponent } from '../global/base-component';
 import { ComponentValidation } from '../global/component-validation';
 import { Account, AccountInformation } from '../auth/auth.models';
 import { AccountInformationService } from '../auth/account-information.service';
+import { FavoriteMaterialsService } from '../global/favorite-materials/favorite-materils.service';
 
 @Component({
     templateUrl: 'material.template.html'
@@ -20,6 +21,7 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     public mode: MaterialMode = null;
     public vocabWords: VocabWord[] = [];
     public material: MaterialModel = new MaterialModel();
+    public isFavorite = false;
     public accountInformation: AccountInformation;
     public formSubmited = false;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
@@ -27,7 +29,8 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
     private accountSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
 
-    constructor(private materialService: MaterialService, private route: ActivatedRoute, private router: Router,
+    constructor(private materialService: MaterialService, private route: ActivatedRoute,
+        private router: Router, private favoriteMaterialsService: FavoriteMaterialsService,
         private spinner: SpinnerService, private translationModalService: TranslationModalService,
         private accountInformationService: AccountInformationService) {
         super();
@@ -127,6 +130,13 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         return this.material.owner.externalId === this.accountInformation.account.externalId || this.accountInformation.isAdmin;
     }
 
+    get isAddToFavoritesButtonVisible(): boolean {
+        if (!this.accountInformation || !this.accountInformation.account || this.mode === MaterialMode.Add) {
+            return false;
+        }
+        return true;
+    }
+
     public validationErrors(state: NgModel): string[] {
         return ComponentValidation.validationErrors(state);
     }
@@ -142,7 +152,6 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
         this.spinner.displaySpinner(true);
 
         this.materialService.getMaterial(id).then(response => {
-            this.spinner.displaySpinner(false);
             if (response.success) {
                 this.mode = MaterialMode.Read;
                 this.material = response.material;
@@ -150,6 +159,39 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
             } else {
                 this.mode = null;
                 response.errors.forEach(err => this.displayError(err, 'Initialize material error'));
+            }
+
+            this.favoriteMaterialsService.get(this.material.id).then(resp => {
+                this.spinner.displaySpinner(false);
+                if (resp.success) {
+                    this.isFavorite = resp.isFavorite;
+                } else {
+                    this.displayErrors(resp.errors);
+                }
+            });
+        });
+    }
+
+    public removeFromFavorites(): void {
+        this.spinner.displaySpinner(true);
+        this.favoriteMaterialsService.delete(this.material.id).then(resp => {
+            this.spinner.displaySpinner(false);
+            if (resp.success) {
+                this.isFavorite = !this.isFavorite;
+            } else {
+                this.displayErrors(resp.errors);
+            }
+        });
+    }
+
+    public addToFavorites(): void {
+        this.spinner.displaySpinner(true);
+        this.favoriteMaterialsService.add(this.material.id).then(resp => {
+            this.spinner.displaySpinner(false);
+            if (resp.success) {
+                this.isFavorite = !this.isFavorite;
+            } else {
+                this.displayErrors(resp.errors);
             }
         });
     }

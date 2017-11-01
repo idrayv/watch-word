@@ -81,7 +81,7 @@ namespace WatchWord.Controllers
                 AddServerError(registerModel, ex);
             }
 
-            return ApiJsonSerializer.Serialize(registerModel);
+            return registerModel.ToJson();
         }
 
         [HttpPost]

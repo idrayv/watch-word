@@ -53,6 +53,7 @@ namespace WatchWord
             services.AddScoped<IVocabWordsRepository, VocabWordsRepository>();
             services.AddScoped<ITranslationsRepository, TranslationsRepository>();
             services.AddScoped<IWatchWordUnitOfWork, WatchWordUnitOfWork>();
+            services.AddScoped<IFavoriteMaterialsRepository, FavoriteMaterialsRepository>();
 
             // Services
             services.AddScoped<IPictureService, PictureService>();
@@ -63,6 +64,7 @@ namespace WatchWord
             services.AddScoped<IVocabularyService, VocabularyService>();
             services.AddScoped<ITranslationService, TranslationService>();
             services.AddScoped<IStatisticService, StatisticService>();
+            services.AddScoped<IFavoriteMaterialsService, FavoriteMaterialsService>();
 
             // Development
             services.AddSingleton<WatchWordProxy, WatchWordProxy>();

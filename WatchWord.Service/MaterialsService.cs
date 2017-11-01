@@ -52,14 +52,14 @@ namespace WatchWord.Service
                 _materialsRepository.Update(material);
             }
 
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.CommitAsync();
             return material.Id;
         }
 
         public async Task<int> DeleteMaterial(int id)
         {
             _materialsRepository.Delete(id);
-            return await _unitOfWork.SaveAsync();
+            return await _unitOfWork.CommitAsync();
         }
 
         public async Task<int> TotalCount()

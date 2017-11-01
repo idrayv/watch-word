@@ -13,6 +13,10 @@
     <DefineConstants>TRACE;MYSQL;RELEASE;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="src\app\global\favorite-materials\favorite-materils.service.ts" />
+    <None Remove="src\app\global\favorite-materials\FavoriteMaterialsModels.ts" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.0" />
@@ -24,6 +28,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0-msbuild3-final" />
@@ -31,6 +37,10 @@
   <ItemGroup>
     <ProjectReference Include="..\WatchWord.DataAccess\WatchWord.DataAccess.csproj" />
     <ProjectReference Include="..\WatchWord.Service\WatchWord.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="src\app\global\favorite-materials\favorite-materils.service.ts" />
+    <TypeScriptCompile Include="src\app\global\favorite-materials\FavoriteMaterialsModels.ts" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />

@@ -75,6 +75,12 @@
                 <button *ngIf="isEditButtonsVisible" class="ui secondary mini button" type="button" (click)="deleteMaterial()">
                     Delete
                 </button>
+                <button *ngIf="mode == 0 && isFavorite" class="ui secondary mini button" type="button" (click)="removeFromFavorites()">
+                    Remove from favorites
+                </button>
+                <button *ngIf="mode == 0 && !isFavorite" class="ui secondary mini button" type="button" (click)="addToFavorites()">
+                    Add to favorites
+                </button>
             </div>
             <div *ngIf="vocabWords?.length > 0" class="material-stats">
                 <div *ngFor="let stat of materialStats">
