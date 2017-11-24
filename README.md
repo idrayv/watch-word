@@ -19,7 +19,7 @@ AngularJS project: \WatchWord\WatchWord\src
 06. npm run build
 07. Publish WatchWord.csproj to Azure
 
-# Back-end development:
+# Back-end development
 
 01. Setup connection string in \WatchWord\appsettings.json
 02. Configure auto picking of CS in WatchWord\WatchWord.DataAccess\DatabaseSettings.cs (optional)
