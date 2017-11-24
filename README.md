@@ -1,14 +1,28 @@
 # WatchWord
 
-01. npm install (restore packages)
-02. npm install gulp -g  (install gulp globally, do it once)
+AngularJS project: \WatchWord\WatchWord\src
+.Net core web project: \WatchWord\WatchWord\WatchWord.csproj
 
-03. gulp (use gulp to compile less, ts, copy html e.t.c)
+# Setup
 
-04. Windows: In case of "gulp is not recognized as an internal or external command, operable program or batch file." error:
-4a. Be sure that you have gulp and gulp.cmd (use windows search)
-4b. Copy the path of gulp.cmd (C:\Users\XXXX\AppData\Roaming\npm)
-4c. Add this path to the Path envirement variable or edit PATH environment variable and add %APPDATA%\npm
-4d. Reopen cmd.
+01. cd \WatchWord\WatchWord\src
+02. npm install (restore packages)
+03. npm install --global webpack  (install webpack globally, do it once)
 
-05. node server.js (run on localhost)
+# Development
+
+04. Setup api route in \WatchWord\src\environments\environment.ts as 'http://watchword.azurewebsites.net/api' (cloud back-end API)
+05. npm run start (run on localhost)
+
+# Deploy
+
+06. npm run build
+07. Publish WatchWord.csproj to Azure
+
+# Back-end development:
+
+01. Setup connection string in \WatchWord\appsettings.json
+02. Configure auto picking of CS in WatchWord\WatchWord.DataAccess\DatabaseSettings.cs (optional)
+03. Run WatchWord web project
+04. Setup api route in \WatchWord\src\environments\environment.ts as 'http://localhost:54093/api' (local beck-end API)
+05. npm run start (run on localhost)
