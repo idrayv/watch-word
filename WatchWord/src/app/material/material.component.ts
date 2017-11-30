@@ -12,6 +12,7 @@ import { ComponentValidation } from '../global/component-validation';
 import { Account, AccountInformation } from '../auth/auth.models';
 import { AccountInformationService } from '../auth/account-information.service';
 import { FavoriteMaterialsService } from '../global/favorite-materials/favorite-materils.service';
+declare let ga: any;
 
 @Component({
     templateUrl: 'material.template.html'
@@ -161,13 +162,28 @@ export class MaterialComponent extends BaseComponent implements OnInit, OnDestro
                 response.errors.forEach(err => this.displayError(err, 'Initialize material error'));
             }
 
-            this.favoriteMaterialsService.get(this.material.id).then(resp => {
-                this.spinner.displaySpinner(false);
-                if (resp.success) {
-                    this.isFavorite = resp.isFavorite;
-                } else {
-                    this.displayErrors(resp.errors);
-                }
+            // TODO: Wait accountSubscription
+            if (this.accountInformation.account.name) {
+                this.favoriteMaterialsService.get(this.material.id).then(response => {
+                    this.spinner.displaySpinner(false);
+                    if (response.success) {
+                        this.isFavorite = response.isFavorite;
+                    } else {
+                        this.displayErrors(response.errors);
+                    }
+                });
+            }
+
+            var accountName = this.accountInformation.account.name;
+            var materialName = this.material.name;
+            ga('send', {
+                hitType: 'event',
+                eventCategory: 'Materials',
+                eventAction: 'Visit',
+                eventLabel: materialName,
+                dimension1: accountName,
+                dimension2: materialName,
+                hitCallback: function () { }
             });
         });
     }
