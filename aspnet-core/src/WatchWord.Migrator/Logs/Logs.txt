@@ -1,0 +1,25 @@
+﻿DEBUG 2018-01-17 18:57:16,463 [2    ] Abp.Modules.AbpModuleManager             - Loading Abp modules...
+DEBUG 2018-01-17 18:57:16,670 [2    ] Abp.Modules.AbpModuleManager             - Found 9 ABP modules in total.
+DEBUG 2018-01-17 18:57:16,878 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: WatchWord.Migrator.WatchWordMigratorModule, WatchWord.Migrator, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,881 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: WatchWord.EntityFrameworkCore.WatchWordEntityFrameworkModule, WatchWord.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,882 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: WatchWord.WatchWordCoreModule, WatchWord.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,882 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.AbpZeroCoreModule, Abp.ZeroCore, Version=3.3.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,883 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.AbpZeroCommonModule, Abp.Zero.Common, Version=3.3.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,883 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.AbpKernelModule, Abp, Version=3.3.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,883 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.Zero.EntityFrameworkCore.AbpZeroCoreEntityFrameworkCoreModule, Abp.ZeroCore.EntityFrameworkCore, Version=3.3.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,884 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule, Abp.EntityFrameworkCore, Version=3.3.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,884 [2    ] Abp.Modules.AbpModuleManager             - Loaded module: Abp.EntityFramework.AbpEntityFrameworkCommonModule, Abp.EntityFramework.Common, Version=3.3.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:16,888 [2    ] Abp.Modules.AbpModuleManager             - 9 modules loaded.
+DEBUG 2018-01-17 18:57:17,214 [2    ] ameworkCore.AbpEntityFrameworkCoreModule - Registering DbContext: WatchWord.EntityFrameworkCore.WatchWordDbContext, WatchWord.EntityFrameworkCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+DEBUG 2018-01-17 18:57:17,921 [2    ] Abp.Localization.LocalizationManager     - Initializing 3 localization sources.
+DEBUG 2018-01-17 18:57:17,932 [2    ] Abp.Localization.LocalizationManager     - Initialized localization source: Abp
+DEBUG 2018-01-17 18:57:17,936 [2    ] Abp.Localization.LocalizationManager     - Initialized localization source: AbpZero
+DEBUG 2018-01-17 18:57:17,941 [2    ] Abp.Localization.LocalizationManager     - Initialized localization source: WatchWord
+INFO  2018-01-17 18:57:18,144 [2    ] WatchWord.Migrator.Log                   - Host database: server=idrayv.cxau3l4kdmbp.eu-west-1.rds.amazonaws.com;user id=idrayv;password=YUctxG9GUSp9;database=WatchWordDb;Port=3306;
+INFO  2018-01-17 18:57:18,144 [2    ] WatchWord.Migrator.Log                   - Continue to migration for this host database and all tenants..? (Y/N): 
+INFO  2018-01-17 18:57:29,404 [2    ] WatchWord.Migrator.Log                   - HOST database migration started...
+INFO  2018-01-17 18:58:01,688 [2    ] WatchWord.Migrator.Log                   - HOST database migration completed.
+INFO  2018-01-17 18:58:01,688 [2    ] WatchWord.Migrator.Log                   - --------------------------------------------------------
+INFO  2018-01-17 18:58:02,147 [2    ] WatchWord.Migrator.Log                   - All databases have been migrated.
+DEBUG 2018-01-17 18:58:06,283 [2    ] Abp.Modules.AbpModuleManager             - Shutting down has been started
+DEBUG 2018-01-17 18:58:06,284 [2    ] Abp.Modules.AbpModuleManager             - Shutting down completed.
