@@ -254,3 +254,4 @@ paket-files/
 src/.vs/config/applicationhost.config
 src/WatchWord.Web.Host/AppData/
 src/WatchWord.Web.Host/Properties/PublishProfiles
+src/WatchWord.Migrator/Logs
