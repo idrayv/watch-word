@@ -15,7 +15,7 @@ export class RegisterComponent extends AppComponentBase implements AfterViewInit
 
     model: RegisterInput = new RegisterInput();
 
-    saving: boolean = false;
+    saving = false;
 
     constructor(
         injector: Injector,
@@ -38,14 +38,14 @@ export class RegisterComponent extends AppComponentBase implements AfterViewInit
         this.saving = true;
         this._accountService.register(this.model)
             .finally(() => { this.saving = false; })
-            .subscribe((result:RegisterOutput) => {
+            .subscribe((result: RegisterOutput) => {
                 if (!result.canLogin) {
                     this.notify.success(this.l('SuccessfullyRegistered'));
                     this._router.navigate(['/login']);
                     return;
                 }
 
-                //Autheticate
+                // Autheticate
                 this.saving = true;
                 this._loginService.authenticateModel.userNameOrEmailAddress = this.model.userName;
                 this._loginService.authenticateModel.password = this.model.password;

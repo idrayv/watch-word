@@ -1,13 +1,13 @@
-import { Injector, ElementRef } from '@angular/core';
-import { AppConsts } from '@shared/AppConsts';
-import { LocalizationService } from '@abp/localization/localization.service';
-import { PermissionCheckerService } from '@abp/auth/permission-checker.service';
-import { FeatureCheckerService } from '@abp/features/feature-checker.service';
-import { NotifyService } from '@abp/notify/notify.service';
-import { SettingService } from '@abp/settings/setting.service';
-import { MessageService } from '@abp/message/message.service';
-import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service';
-import { AppSessionService } from '@shared/session/app-session.service';
+import {Injector, ElementRef} from '@angular/core';
+import {AppConsts} from '@shared/AppConsts';
+import {LocalizationService} from '@abp/localization/localization.service';
+import {PermissionCheckerService} from '@abp/auth/permission-checker.service';
+import {FeatureCheckerService} from '@abp/features/feature-checker.service';
+import {NotifyService} from '@abp/notify/notify.service';
+import {SettingService} from '@abp/settings/setting.service';
+import {MessageService} from '@abp/message/message.service';
+import {AbpMultiTenancyService} from '@abp/multi-tenancy/abp-multi-tenancy.service';
+import {AppSessionService} from '@shared/session/app-session.service';
 
 export abstract class AppComponentBase {
 
@@ -52,5 +52,13 @@ export abstract class AppComponentBase {
 
     isGranted(permissionName: string): boolean {
         return this.permission.isGranted(permissionName);
+    }
+
+    displayError(message: string): void {
+        abp.notify.error(message);
+    }
+
+    displayErrors(errors: string[]): void {
+        errors.forEach((error) => abp.notify.error(error));
     }
 }

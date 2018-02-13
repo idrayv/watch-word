@@ -1,22 +1,15 @@
-﻿import { Injectable } from '@angular/core';
-import { PermissionCheckerService } from "@abp/auth/permission-checker.service";
-import { AppSessionService } from '../session/app-session.service';
-
-import {
-    CanActivate, Router,
-    ActivatedRouteSnapshot,
-    RouterStateSnapshot,
-    CanActivateChild
-} from '@angular/router';
+﻿import {Injectable} from '@angular/core';
+import {PermissionCheckerService} from '@abp/auth/permission-checker.service';
+import {AppSessionService} from '../session/app-session.service';
+import {CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild} from '@angular/router';
 
 @Injectable()
 export class AppRouteGuard implements CanActivate, CanActivateChild {
 
-    constructor(
-        private _permissionChecker: PermissionCheckerService,
-        private _router: Router,
-        private _sessionService: AppSessionService,
-    ) { }
+    constructor(private _permissionChecker: PermissionCheckerService,
+                private _router: Router,
+                private _sessionService: AppSessionService) {
+    }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         if (!this._sessionService.user) {
@@ -24,11 +17,11 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
             return false;
         }
 
-        if (!route.data || !route.data["permission"]) {
+        if (!route.data || !route.data['permission']) {
             return true;
         }
 
-        if (this._permissionChecker.isGranted(route.data["permission"])) {
+        if (this._permissionChecker.isGranted(route.data['permission'])) {
             return true;
         }
 
@@ -44,11 +37,11 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
         if (!this._sessionService.user) {
             return '/account/login';
         }
-        
+
         if (this._permissionChecker.isGranted('Pages.Users')) {
             return '/app/admin/users';
         }
 
-        return '/app/home';
+        return '/app/materials';
     }
 }

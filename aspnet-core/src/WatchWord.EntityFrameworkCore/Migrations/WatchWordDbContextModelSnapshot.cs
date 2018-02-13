@@ -15,7 +15,8 @@ namespace WatchWord.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
+                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Abp.Application.Editions.Edition", b =>
                 {
@@ -164,7 +165,8 @@ namespace WatchWord.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasMaxLength(256);
 
                     b.Property<string>("ClaimValue");
 
@@ -198,7 +200,8 @@ namespace WatchWord.Migrations
 
                     b.Property<DateTime?>("DeletionTime");
 
-                    b.Property<string>("EmailAddress");
+                    b.Property<string>("EmailAddress")
+                        .HasMaxLength(256);
 
                     b.Property<bool>("IsDeleted");
 
@@ -214,7 +217,8 @@ namespace WatchWord.Migrations
 
                     b.Property<long?>("UserLinkId");
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(32);
 
                     b.HasKey("Id");
 
@@ -236,7 +240,8 @@ namespace WatchWord.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasMaxLength(256);
 
                     b.Property<string>("ClaimValue");
 
@@ -463,6 +468,102 @@ namespace WatchWord.Migrations
                     b.HasIndex("TenantId", "Name");
 
                     b.ToTable("AbpSettings");
+                });
+
+            modelBuilder.Entity("Abp.EntityHistory.EntityChange", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("ChangeTime");
+
+                    b.Property<byte>("ChangeType");
+
+                    b.Property<long>("EntityChangeSetId");
+
+                    b.Property<string>("EntityId")
+                        .HasMaxLength(48);
+
+                    b.Property<string>("EntityTypeFullName")
+                        .HasMaxLength(192);
+
+                    b.Property<int?>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityChangeSetId");
+
+                    b.HasIndex("EntityTypeFullName", "EntityId");
+
+                    b.ToTable("AbpEntityChanges");
+                });
+
+            modelBuilder.Entity("Abp.EntityHistory.EntityChangeSet", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("BrowserInfo")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ClientIpAddress")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ClientName")
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("ExtensionData");
+
+                    b.Property<int?>("ImpersonatorTenantId");
+
+                    b.Property<long?>("ImpersonatorUserId");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(256);
+
+                    b.Property<int?>("TenantId");
+
+                    b.Property<long?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "CreationTime");
+
+                    b.HasIndex("TenantId", "Reason");
+
+                    b.HasIndex("TenantId", "UserId");
+
+                    b.ToTable("AbpEntityChangeSets");
+                });
+
+            modelBuilder.Entity("Abp.EntityHistory.EntityPropertyChange", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("EntityChangeId");
+
+                    b.Property<string>("NewValue")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("OriginalValue")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("PropertyName")
+                        .HasMaxLength(96);
+
+                    b.Property<string>("PropertyTypeFullName")
+                        .HasMaxLength(192);
+
+                    b.Property<int?>("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityChangeId");
+
+                    b.ToTable("AbpEntityPropertyChanges");
                 });
 
             modelBuilder.Entity("Abp.Localization.ApplicationLanguage", b =>
@@ -875,6 +976,222 @@ namespace WatchWord.Migrations
                     b.ToTable("AbpUsers");
                 });
 
+            modelBuilder.Entity("WatchWord.Domain.Entities.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ExternalId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExternalId");
+
+                    b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.Composition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Column");
+
+                    b.Property<int>("Line");
+
+                    b.Property<int?>("WordId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WordId");
+
+                    b.ToTable("Compositions");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.FavoriteMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("AccountId")
+                        .IsRequired();
+
+                    b.Property<int?>("MaterialId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("FavoriteMaterials");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1024);
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(20000);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<int?>("OwnerId");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("Type");
+
+                    b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.SubtitleFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("MaterialId")
+                        .IsRequired();
+
+                    b.Property<string>("SubtitleText")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("SubtitleFiles");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.Translation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddDate");
+
+                    b.Property<int>("Source");
+
+                    b.Property<string>("Translate")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Word")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Word");
+
+                    b.ToTable("Translations");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.VocabWord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("OwnerId")
+                        .IsRequired();
+
+                    b.Property<string>("Translation");
+
+                    b.Property<int>("Type");
+
+                    b.Property<string>("Word");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("VocabWords");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.WatchWordSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Boolean");
+
+                    b.Property<DateTime?>("Date");
+
+                    b.Property<int>("Int");
+
+                    b.Property<int>("Key");
+
+                    b.Property<int?>("OwnerId")
+                        .IsRequired();
+
+                    b.Property<string>("String");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.Word", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Count");
+
+                    b.Property<int?>("MaterialId")
+                        .IsRequired();
+
+                    b.Property<string>("TheWord");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("Words");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.WordStatistic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("KnownCount");
+
+                    b.Property<int>("LearnCount");
+
+                    b.Property<int>("TotalCount");
+
+                    b.Property<string>("Word")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WordStatistics");
+                });
+
             modelBuilder.Entity("WatchWord.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -1022,6 +1339,22 @@ namespace WatchWord.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("Abp.EntityHistory.EntityChange", b =>
+                {
+                    b.HasOne("Abp.EntityHistory.EntityChangeSet")
+                        .WithMany("EntityChanges")
+                        .HasForeignKey("EntityChangeSetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Abp.EntityHistory.EntityPropertyChange", b =>
+                {
+                    b.HasOne("Abp.EntityHistory.EntityChange")
+                        .WithMany("PropertyChanges")
+                        .HasForeignKey("EntityChangeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Abp.Organizations.OrganizationUnit", b =>
                 {
                     b.HasOne("Abp.Organizations.OrganizationUnit", "Parent")
@@ -1057,6 +1390,66 @@ namespace WatchWord.Migrations
                     b.HasOne("WatchWord.Authorization.Users.User", "LastModifierUser")
                         .WithMany()
                         .HasForeignKey("LastModifierUserId");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.Composition", b =>
+                {
+                    b.HasOne("WatchWord.Domain.Entities.Word", "Word")
+                        .WithMany("Compositions")
+                        .HasForeignKey("WordId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.FavoriteMaterial", b =>
+                {
+                    b.HasOne("WatchWord.Domain.Entities.Account", "Account")
+                        .WithMany("FavoriteMaterials")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WatchWord.Domain.Entities.Material", "Material")
+                        .WithMany("FavoriteMaterials")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.Material", b =>
+                {
+                    b.HasOne("WatchWord.Domain.Entities.Account", "Owner")
+                        .WithMany("Materials")
+                        .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.SubtitleFile", b =>
+                {
+                    b.HasOne("WatchWord.Domain.Entities.Material", "Material")
+                        .WithMany("SubtitleFiles")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.VocabWord", b =>
+                {
+                    b.HasOne("WatchWord.Domain.Entities.Account", "Owner")
+                        .WithMany("VocabWords")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.WatchWordSetting", b =>
+                {
+                    b.HasOne("WatchWord.Domain.Entities.Account", "Owner")
+                        .WithMany("Settings")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WatchWord.Domain.Entities.Word", b =>
+                {
+                    b.HasOne("WatchWord.Domain.Entities.Material", "Material")
+                        .WithMany("Words")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WatchWord.MultiTenancy.Tenant", b =>
