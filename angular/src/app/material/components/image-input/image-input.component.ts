@@ -3,7 +3,7 @@ import {NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, Abstr
 import {MaterialService} from '../../material.service';
 
 @Component({
-    selector: 'app-image-input[mimeTypes]',
+    selector: 'ww-image-input[mimeTypes]',
     templateUrl: 'image-input.template.html',
     providers: [{
         provide: NG_VALUE_ACCESSOR,

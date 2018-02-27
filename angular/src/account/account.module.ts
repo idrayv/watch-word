@@ -10,7 +10,6 @@ import {SharedModule} from '@shared/shared.module';
 import {AccountComponent} from './account.component';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
-import {AccountLanguagesComponent} from './layout/account-languages.component';
 
 import {LoginService} from './login/login.service';
 
@@ -29,8 +28,7 @@ import {LoginService} from './login/login.service';
     declarations: [
         AccountComponent,
         LoginComponent,
-        RegisterComponent,
-        AccountLanguagesComponent
+        RegisterComponent
     ],
     providers: [
         LoginService

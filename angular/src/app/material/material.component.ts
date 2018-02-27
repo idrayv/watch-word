@@ -8,8 +8,6 @@ import {VocabType, VocabWordFiltration} from './material.models';
 import {VocabWord} from './material.models';
 import {TranslationModalService} from '../global/components/translation-modal/translation-modal.service';
 import {ComponentValidation} from '../global/component-validation';
-import {AccountInformation} from '../auth/auth.models';
-import {AccountInformationService} from '../auth/account-information.service';
 import {FavoriteMaterialsService} from '../global/favorite-materials/favorite-materils.service';
 import {AppComponentBase} from '@shared/app-component-base';
 
@@ -24,7 +22,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     public vocabWords: VocabWord[] = [];
     public material: MaterialModel = new MaterialModel();
     public isFavorite = false;
-    public accountInformation: AccountInformation;
+    // public accountInformation: AccountInformation;
     public formSubmitted = false;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
     private routeSubscription: ISubscription;
@@ -36,15 +34,14 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
                 private router: Router,
                 private favoriteMaterialsService: FavoriteMaterialsService,
                 private translationModalService: TranslationModalService,
-                private accountInformationService: AccountInformationService,
                 injector: Injector) {
         super(injector);
     }
 
     ngOnInit() {
-        this.accountSubscription = this.accountInformationService.getAccountInformationObservable().subscribe(accountInformation => {
+        /*this.accountSubscription = this.accountInformationService.getAccountInformationObservable().subscribe(accountInformation => {
             this.accountInformation = accountInformation;
-        });
+        });*/
 
         this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
         this.translationModalResponseSubscription = this.translationModalService.translationModalResponseObserverable
@@ -115,30 +112,31 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         this.pushStatToStats(stats, 'Total words', totalCount.toString());
         this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
 
-        if (this.accountInformation.account.externalId !== 0) {
+        /*if (this.accountInformation.account.externalId !== 0) {
             const learnCount = this.vocabWords.filter(v => v.type === VocabType.LearnWord).length;
             const knownCount = this.vocabWords.filter(v => v.type === VocabType.KnownWord).length;
 
             this.pushStatToStats(stats, 'Learn words', learnCount.toString());
             this.pushStatToStats(stats, 'Known words', knownCount.toString());
             this.pushStatToStats(stats, 'Unsigned words', (uniqueCount - (learnCount + knownCount)).toString());
-        }
+        }*/
 
         return stats;
     }
 
     get isEditButtonsVisible(): boolean {
-        if (!this.accountInformation || !this.accountInformation.account || !this.material.owner) {
+        /*if (!this.accountInformation || !this.accountInformation.account || !this.material.owner) {
             return false;
-        }
+        }*/
 
-        return this.material.owner.externalId === this.accountInformation.account.externalId || this.accountInformation.isAdmin;
+        /*return this.material.owner.externalId === this.accountInformation.account.externalId || this.accountInformation.isAdmin;*/
+        return false;
     }
 
     get isAddToFavoritesButtonVisible(): boolean {
-        if (!this.accountInformation || !this.accountInformation.account || this.mode === MaterialMode.Add) {
+        /*if (!this.accountInformation || !this.accountInformation.account || this.mode === MaterialMode.Add) {
             return false;
-        }
+        }*/
         return true;
     }
 
@@ -167,7 +165,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
             }
 
             // TODO: Wait accountSubscription
-            if (this.accountInformation.account.name) {
+            /*if (this.accountInformation.account.name) {
                 this.favoriteMaterialsService.get(this.material.id).then(res => {
                     abp.ui.clearBusy('body');
                     if (res.success) {
@@ -176,9 +174,9 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
                         this.displayErrors(res.errors);
                     }
                 });
-            }
+            }*/
 
-            const accountName = this.accountInformation.account.name;
+            const accountName = /*this.accountInformation.account.name;*/ '';
             const materialName = this.material.name;
             ga('send', {
                 hitType: 'event',

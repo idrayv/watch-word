@@ -1,7 +1,7 @@
-﻿import { Injectable } from '@angular/core';
-import { SessionServiceProxy, UserLoginInfoDto, TenantLoginInfoDto } from '@shared/service-proxies/service-proxies'
-import { ApplicationInfoDto, GetCurrentLoginInformationsOutput } from '@shared/service-proxies/service-proxies'
-import { AbpMultiTenancyService } from '@abp/multi-tenancy/abp-multi-tenancy.service'
+﻿import {Injectable} from '@angular/core';
+import {SessionServiceProxy, UserLoginInfoDto, TenantLoginInfoDto} from '@shared/service-proxies/service-proxies'
+import {ApplicationInfoDto, GetCurrentLoginInformationsOutput} from '@shared/service-proxies/service-proxies'
+import {AbpMultiTenancyService} from '@abp/multi-tenancy/abp-multi-tenancy.service'
 
 @Injectable()
 export class AppSessionService {
@@ -10,9 +10,8 @@ export class AppSessionService {
     private _tenant: TenantLoginInfoDto;
     private _application: ApplicationInfoDto;
 
-    constructor(
-        private _sessionService: SessionServiceProxy,
-        private _abpMultiTenancyService: AbpMultiTenancyService) {
+    constructor(private _sessionService: SessionServiceProxy,
+                private _abpMultiTenancyService: AbpMultiTenancyService) {
     }
 
     get application(): ApplicationInfoDto {
@@ -37,7 +36,7 @@ export class AppSessionService {
 
     getShownLoginName(): string {
         if (!this._user) {
-            return 'anonymous';
+            return '';
         }
 
         const userName = this._user.userName;

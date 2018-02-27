@@ -1,1 +1,0 @@
-Delete after migrate to abp users and roles

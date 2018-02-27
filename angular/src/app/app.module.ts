@@ -16,11 +16,9 @@ import {RolesComponent} from '@app/roles/roles.component';
 import {CreateRoleComponent} from '@app/roles/create-role/create-role.component';
 import {EditRoleComponent} from './roles/edit-role/edit-role.component';
 import {TopBarComponent} from '@app/layout/topbar.component';
-import {TopBarLanguageSwitchComponent} from '@app/layout/topbar-languageswitch.component';
-import {SideBarUserAreaComponent} from '@app/layout/sidebar-user-area.component';
 import {SideBarNavComponent} from '@app/layout/sidebar-nav.component';
 import {SideBarFooterComponent} from '@app/layout/sidebar-footer.component';
-import {RightSideBarComponent} from '@app/layout/right-sidebar.component';
+import {TopBarUserComponent} from '@app/layout/topbar-user/topbar-user.component';
 
 @NgModule({
     declarations: [
@@ -32,11 +30,9 @@ import {RightSideBarComponent} from '@app/layout/right-sidebar.component';
         CreateRoleComponent,
         EditRoleComponent,
         TopBarComponent,
-        TopBarLanguageSwitchComponent,
-        SideBarUserAreaComponent,
         SideBarNavComponent,
         SideBarFooterComponent,
-        RightSideBarComponent
+        TopBarUserComponent
     ],
     imports: [
         CommonModule,

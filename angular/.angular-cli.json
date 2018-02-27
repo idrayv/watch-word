@@ -28,7 +28,6 @@
             "tsconfig": "tsconfig.json",
             "prefix": "app",
             "styles": [
-                "assets/fonts/roboto/roboto.css",
                 "../node_modules/bootstrap/dist/css/bootstrap.min.css",
                 "../node_modules/simple-line-icons/css/simple-line-icons.css",
                 "../node_modules/font-awesome/css/font-awesome.css",
@@ -37,8 +36,9 @@
                 "../node_modules/node-waves/dist/waves.css",
                 "../src/bsb-theme/css/materialize.css",
                 "../src/bsb-theme/css/style.css",
-                "../src/bsb-theme/css/themes/all-themes.css",
-                "../src/shared/core.less"
+                "../src/bsb-theme/css/themes/theme-red.css",
+                "../src/shared/core.less",
+                "../src/semantic-ui/semantic.css"
             ],
             "scripts": [
                 "../node_modules/jquery/dist/jquery.min.js",
@@ -47,8 +47,6 @@
                 "../node_modules/bootstrap/dist/js/bootstrap.js",
                 "../node_modules/lodash/lodash.min.js",
                 "../node_modules/moment/min/moment.min.js",
-                "../node_modules/signalr/jquery.signalR.js",
-                "../node_modules/@aspnet/signalr-client/dist/browser/signalr-client.min.js",
                 "../node_modules/toastr/toastr.js",
                 "../node_modules/sweetalert/dist/sweetalert.min.js",
                 "../node_modules/block-ui/jquery.blockUI.js",
@@ -76,7 +74,8 @@
                 "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
                 "../src/bsb-theme/js/admin.js",
                 "../src/bsb-theme/js/demo.js",
-                "../src/bsb-theme/js/jquery.validate.js"
+                "../src/bsb-theme/js/jquery.validate.js",
+                "../src/semantic-ui/semantic.js"
             ],
             "environmentSource": "environments/environment.ts",
             "environments": {

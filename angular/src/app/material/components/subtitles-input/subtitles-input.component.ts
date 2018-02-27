@@ -4,7 +4,7 @@ import {MaterialService} from '../../material.service';
 import {VocabWord, Word} from '../../material.models';
 
 @Component({
-    selector: 'app-subtitles-input',
+    selector: 'ww-subtitles-input',
     templateUrl: 'subtitles-input.template.html',
     providers: [{
         provide: NG_VALUE_ACCESSOR,

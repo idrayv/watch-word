@@ -29,15 +29,7 @@ export class LoginComponent extends AppComponentBase implements AfterViewInit {
         $(this.cardBody.nativeElement).find('input:first').focus();
     }
 
-    get multiTenancySideIsTeanant(): boolean {
-        return this._sessionService.tenantId > 0;
-    }
-
     get isSelfRegistrationAllowed(): boolean {
-        if (!this._sessionService.tenantId) {
-            return false;
-        }
-
         return true;
     }
 

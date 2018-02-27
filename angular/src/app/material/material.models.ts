@@ -1,5 +1,4 @@
 ﻿import { BaseResponseModel } from '../global/models';
-import { Account } from '../auth/auth.models';
 
 export enum MaterialMode {
     Read, Edit, Add
@@ -68,7 +67,7 @@ export class VocabWordFiltration {
     private _showKnownWords: boolean;
     private _showUnsignedWords: boolean;
 
-    constructor(showLearnWords = true, showKnownWords = true, showUnsignedWords: boolean = true) {
+    constructor(showLearnWords = true, showKnownWords = true, showUnsignedWords = true) {
         this._showLearnWords = showLearnWords;
         this._showKnownWords = showKnownWords;
         this._showUnsignedWords = showUnsignedWords;
