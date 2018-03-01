@@ -2,14 +2,14 @@ import {NgForm, NgModel} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit, OnDestroy, Injector} from '@angular/core';
 import {ISubscription} from 'rxjs/Subscription';
-import {MaterialService} from './material.service';
-import {Material as MaterialModel, MaterialMode, MaterialStats} from './material.models';
-import {VocabType, VocabWordFiltration} from './material.models';
-import {VocabWord} from './material.models';
+import {MaterialMode, MaterialStats} from './material.models';
+import {VocabWordFiltration} from './material.models';
 import {TranslationModalService} from '../global/components/translation-modal/translation-modal.service';
 import {ComponentValidation} from '../global/component-validation';
 import {FavoriteMaterialsService} from '../global/favorite-materials/favorite-materils.service';
 import {AppComponentBase} from '@shared/app-component-base';
+
+import {MaterialServiceProxy, Word, Material, VocabWord, VocabWordType} from 'shared/service-proxies/service-proxies';
 
 declare let ga: any;
 
@@ -20,7 +20,7 @@ declare let ga: any;
 export class MaterialComponent extends AppComponentBase implements OnInit, OnDestroy {
     public mode: MaterialMode = null;
     public vocabWords: VocabWord[] = [];
-    public material: MaterialModel = new MaterialModel();
+    public material: Material = new Material();
     public isFavorite = false;
     // public accountInformation: AccountInformation;
     public formSubmitted = false;
@@ -29,7 +29,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     private accountSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
 
-    constructor(private materialService: MaterialService,
+    constructor(private materialService: MaterialServiceProxy,
                 private route: ActivatedRoute,
                 private router: Router,
                 private favoriteMaterialsService: FavoriteMaterialsService,
@@ -47,7 +47,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         this.translationModalResponseSubscription = this.translationModalService.translationModalResponseObserverable
             .subscribe(response => {
                 if (response.success) {
-                    this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
+                    // this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
                 } else {
                     this.displayErrors(response.errors);
                 }
@@ -57,7 +57,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     private onRouteChanged(param: string): void {
         if (param === 'create') {
             this.mode = MaterialMode.Add;
-            this.material = new MaterialModel();
+            this.material = new Material();
             this.vocabWords = [];
         } else if (+param) {
             this.initializeMaterial(+param);
@@ -72,21 +72,21 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
 
     public deleteMaterial(): void {
         abp.ui.setBusy('body');
-        this.materialService.deleteMaterial(this.material.id).then(response => {
+        /*this.materialService.deleteMaterial(this.material.id).then(response => {
             abp.ui.clearBusy('body');
             if (response.success) {
                 this.router.navigateByUrl('materials');
             } else {
                 response.errors.forEach(err => this.displayError(err));
             }
-        });
+        });*/
     }
 
     public saveMaterial(form: NgForm): void {
         this.formSubmitted = true;
         if (form.valid) {
             abp.ui.setBusy('body');
-            this.materialService.saveMaterial(this.material, this.vocabWords).then(response => {
+            /*this.materialService.saveMaterial(this.material, this.vocabWords).then(response => {
                 abp.ui.clearBusy('body');
                 if (response.success) {
                     if (this.mode === MaterialMode.Add) {
@@ -97,7 +97,18 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
                 } else {
                     response.errors.forEach(err => this.displayError(err));
                 }
+            });*/
+
+            this.material.words = this.vocabWords.map((vocabWord) => {
+                return <Word>{
+                    id: 0,
+                    theWord: vocabWord.word,
+                    count: this.material.words.find(w => w.theWord === vocabWord.word).count
+                };
             });
+
+            this.materialService.save(this.material);
+
             this.formSubmitted = false;
         }
     }
@@ -154,41 +165,41 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     private initializeMaterial(id: number): void {
         abp.ui.setBusy('body');
 
-        this.materialService.getMaterial(id).then(response => {
-            if (response.success) {
-                this.mode = MaterialMode.Read;
-                this.material = response.material;
-                this.vocabWords = response.vocabWords;
-            } else {
-                this.mode = null;
-                response.errors.forEach(err => this.displayError(err));
-            }
+        /* this.materialService.getMaterial(id).then(response => {
+             if (response.success) {
+                 this.mode = MaterialMode.Read;
+                 this.material = response.material;
+                 this.vocabWords = response.vocabWords;
+             } else {
+                 this.mode = null;
+                 response.errors.forEach(err => this.displayError(err));
+             }
 
-            // TODO: Wait accountSubscription
-            /*if (this.accountInformation.account.name) {
-                this.favoriteMaterialsService.get(this.material.id).then(res => {
-                    abp.ui.clearBusy('body');
-                    if (res.success) {
-                        this.isFavorite = res.isFavorite;
-                    } else {
-                        this.displayErrors(res.errors);
-                    }
-                });
-            }*/
+             // TODO: Wait accountSubscription
+             /!*if (this.accountInformation.account.name) {
+                 this.favoriteMaterialsService.get(this.material.id).then(res => {
+                     abp.ui.clearBusy('body');
+                     if (res.success) {
+                         this.isFavorite = res.isFavorite;
+                     } else {
+                         this.displayErrors(res.errors);
+                     }
+                 });
+             }*!/
 
-            const accountName = /*this.accountInformation.account.name;*/ '';
-            const materialName = this.material.name;
-            ga('send', {
-                hitType: 'event',
-                eventCategory: 'Materials',
-                eventAction: 'Visit',
-                eventLabel: materialName,
-                dimension1: accountName,
-                dimension2: materialName,
-                hitCallback: function () {
-                }
-            });
-        });
+             const accountName = /!*this.accountInformation.account.name;*!/ '';
+             const materialName = this.material.name;
+             ga('send', {
+                 hitType: 'event',
+                 eventCategory: 'Materials',
+                 eventAction: 'Visit',
+                 eventLabel: materialName,
+                 dimension1: accountName,
+                 dimension2: materialName,
+                 hitCallback: function () {
+                 }
+             });
+         });*/
     }
 
     public removeFromFavorites(): void {
@@ -217,7 +228,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
 
     ngOnDestroy() {
         this.routeSubscription.unsubscribe();
-        this.accountSubscription.unsubscribe();
+        // this.accountSubscription.unsubscribe();
         this.translationModalResponseSubscription.unsubscribe();
     }
 }

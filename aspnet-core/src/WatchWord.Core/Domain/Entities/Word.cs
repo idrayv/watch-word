@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using WatchWord.Domain.Entities.Common;
+using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>Word in the material Entity.</summary>
-    public class Word : Entity<int>
+    public class Word : Entity<long>
     {
         /// <summary>Gets or sets the material.</summary>
         public virtual Material Material { get; set; }

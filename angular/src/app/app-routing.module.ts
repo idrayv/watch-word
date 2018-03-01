@@ -25,8 +25,13 @@ import {RolesComponent} from '@app/roles/roles.component';
                         canActivate: [AppRouteGuard]
                     },
                     {
+                        path: 'material',
+                        loadChildren: 'app/material/material.module#MaterialModule',
+                        data: {preload: true}
+                    },
+                    {
                         path: 'materials',
-                        loadChildren: 'app/materials/materials.module#MaterialsModule', // Lazy load account module
+                        loadChildren: 'app/materials/materials.module#MaterialsModule',
                         data: {preload: true}
                     }
                 ]

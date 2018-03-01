@@ -1,9 +1,9 @@
-﻿using WatchWord.Domain.Entities.Common;
+﻿using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>A pointer to a specific word in the file.</summary>
-    public class Composition : Entity<int>
+    public class Composition : Entity<long>
     {
         /// <summary>Gets or sets link to the words table.</summary>
         public virtual Word Word { get; set; }

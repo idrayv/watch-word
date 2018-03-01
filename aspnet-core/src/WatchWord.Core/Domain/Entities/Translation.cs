@@ -1,10 +1,10 @@
 ﻿using System;
-using WatchWord.Domain.Entities.Common;
+using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>Word translation cache.</summary>
-    public class Translation : Entity<int>
+    public class Translation : Entity<long>
     {
         /// <summary>Gets or sets the original word.</summary>
         public string Word { get; set; }

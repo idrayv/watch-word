@@ -19,7 +19,7 @@ import {VocabWord, Word} from '../../material.models';
 
 export class SubtitlesInputComponent implements ControlValueAccessor, Validator {
     private onChangeCallback: Function;
-    private serverErrors: string[] = [];
+    private serverError: string[] = [];
 
     @ViewChild('file')
     fileInput: ElementRef;
@@ -44,11 +44,12 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
         this.materialService.parseSubtitles(file).then(response => {
             abp.ui.clearBusy('body');
             if (response.success) {
-                this.vocabWordsChange.emit(response.vocabWords);
-                this.wordsChange.emit(response.words);
-                this.serverErrors = [];
+                const responseObject = JSON.parse(response.result);
+                this.vocabWordsChange.emit(responseObject.vocabWords);
+                this.wordsChange.emit(responseObject.words);
+                this.serverError = [];
             } else {
-                this.serverErrors = response.errors;
+                this.serverError = response.error;
             }
         });
     }
@@ -58,10 +59,10 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
     }
 
     validate(c: AbstractControl): { [key: string]: any; } {
-        if (c.value && this.serverErrors.length === 0) {
+        if (c.value && this.serverError.length === 0) {
             return null;
         }
-        return {'subtitlesInput': this.serverErrors};
+        return {'subtitlesInput': this.serverError};
     }
 
     writeValue(vocabWord: VocabWord[]): void {

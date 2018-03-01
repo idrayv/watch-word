@@ -1,56 +1,42 @@
-﻿import {Injectable} from '@angular/core';
+﻿import {Inject, Injectable, Optional} from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
-import {MaterialPostResponseModel, ParseResponseModel} from '../material/material.models';
-import {ImageResponseModel, Material as MaterialModel} from '../material/material.models';
-import {MaterialResponseModel, Word, VocabWord} from '../material/material.models';
-import {BaseResponseModel} from '../global/models';
-import {BaseService} from '../global/base-service';
+import {HttpClient} from '@angular/common/http';
+import {API_BASE_URL} from 'shared/service-proxies/service-proxies';
 
 @Injectable()
-export class MaterialService extends BaseService {
-    constructor() {
-        super();
+export class MaterialService {
+    private baseUrl: string;
+
+    constructor(private http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.baseUrl = baseUrl ? baseUrl : '';
     }
 
-    public parseSubtitles(subtitlesFile: any): Promise<ParseResponseModel> {
+    public parseSubtitles(subtitlesFile: any): Promise<any> {
         const input = new FormData();
         input.append('file', subtitlesFile);
 
-        return this.http.post<ParseResponseModel>(this.baseUrl + '/parse/file', input).toPromise()
-            .catch(() => this.getConnectionError<ParseResponseModel>());
+        return this.http.post(this.baseUrl + '/api/parse/file', input).toPromise()
+            .catch((response) => this.getConnectionError(response));
     }
 
-    public parseImage(imageFile: any): Promise<ImageResponseModel> {
+    public parseImage(imageFile: any): Promise<any> {
         const input = new FormData();
         input.append('file', imageFile);
 
-        return this.http.post<ImageResponseModel>(this.baseUrl + '/image/parse', input).toPromise()
-            .catch(() => this.getConnectionError<ImageResponseModel>());
+        return this.http.post(this.baseUrl + '/api/image/parse', input).toPromise()
+            .catch((response) => this.getConnectionError(response));
     }
 
-    public getMaterial(id: number): Promise<MaterialResponseModel> {
-        return this.http.get<MaterialResponseModel>(this.baseUrl + '/material/' + id).toPromise()
-            .catch(() => this.getConnectionError<MaterialResponseModel>());
-    }
+    protected getConnectionError(response: any): any {
+        let error = 'Server error. Please try again later.';
+        if (response && response.error && response.error.error && response.error.error.message) {
+            error = response.error.error.message;
+        }
 
-    public saveMaterial(material: MaterialModel,
-                        vocabWords: VocabWord[]): Promise<MaterialPostResponseModel> {
-
-        material.words = vocabWords.map((vocabWord) => {
-            return <Word>{
-                id: 0,
-                theWord: vocabWord.word,
-                count: material.words.find(w => w.theWord === vocabWord.word).count
-            };
-        });
-
-        return this.http.post<MaterialPostResponseModel>(this.baseUrl + '/material/save', material).toPromise()
-            .catch(() => this.getConnectionError<MaterialPostResponseModel>());
-    }
-
-    public deleteMaterial(id: number): Promise<BaseResponseModel> {
-        return this.http.delete<BaseResponseModel>(this.baseUrl + '/material/' + id).toPromise()
-            .catch(() => this.getConnectionError<BaseResponseModel>());
+        return {
+            error: [error],
+            success: false
+        };
     }
 }

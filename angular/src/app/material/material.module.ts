@@ -11,9 +11,10 @@ import {ModalModule} from '../global/components/modal/modal.module';
 import {WordModule} from '../global/components/word/word.module';
 import {VocabWordFiltrationPipe} from './pipes/vocab-word-filtration.pipe';
 import {FavoriteMaterialsService} from '../global/favorite-materials/favorite-materils.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
-    imports: [CommonModule, MaterialRoutingModule, FormsModule, ModalModule, TranslationModalModule, WordModule],
+    imports: [CommonModule, MaterialRoutingModule, FormsModule, ModalModule, TranslationModalModule, WordModule, HttpClientModule],
     declarations: [MaterialComponent, ImageInputComponent, SubtitlesInputComponent, VocabWordFiltrationPipe],
     providers: [MaterialService, FavoriteMaterialsService]
 })

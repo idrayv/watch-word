@@ -1,9 +1,9 @@
-﻿using WatchWord.Domain.Entities.Common;
+﻿using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>Word statistic.</summary>
-    public class WordStatistic : Entity<int>
+    public class WordStatistic : Entity<long>
     {
         /// <summary>Gets or sets word.</summary>
         public string Word { get; set; }

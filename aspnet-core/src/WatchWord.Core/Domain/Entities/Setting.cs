@@ -1,9 +1,9 @@
 ﻿using System;
-using WatchWord.Domain.Entities.Common;
+using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
-    public class WatchWordSetting : Entity<int>
+    public class WatchWordSetting : Entity<long>
     {
         public SettingKey Key { get; set; }
         public SettingType Type { get; set; }

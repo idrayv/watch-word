@@ -1,9 +1,9 @@
-﻿using WatchWord.Domain.Entities.Common;
+﻿using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>Stores full text of subtitle file.</summary>
-    public class SubtitleFile : Entity<int>
+    public class SubtitleFile : Entity<long>
     {
         /// <summary>Gets or sets the material.</summary>
         public virtual Material Material { get; set; }

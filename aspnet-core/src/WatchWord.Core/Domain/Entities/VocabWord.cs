@@ -1,9 +1,9 @@
-﻿using WatchWord.Domain.Entities.Common;
+﻿using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>The word from vocabulary of words.</summary>
-    public class VocabWord : Entity<int>
+    public class VocabWord : Entity<long>
     {
         /// <summary>Gets or sets the original word.</summary>
         public string Word { get; set; }

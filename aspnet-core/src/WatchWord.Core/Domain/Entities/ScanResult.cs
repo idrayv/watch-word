@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Abp.Domain.Entities;
+using System.Collections.Generic;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>Nested type of scan result.</summary>
-    public class ScanResult
+    public class ScanResult : Entity<long>
     {
         /// <summary>Gets or sets unsorted collection of words in the file.</summary>
         public List<Word> Words { get; set; }

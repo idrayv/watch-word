@@ -2,13 +2,20 @@
 import {Routes, RouterModule} from '@angular/router';
 import {MaterialComponent} from './material.component';
 
-const routes: Routes = [{
-    path: ':id',
-    component: MaterialComponent
-}, {
-    path: 'create',
-    component: MaterialComponent
-}];
+const routes: Routes = [
+    {
+        path: '',
+        redirectTo: 'create',
+        pathMatch: 'full'
+    },
+    {
+        path: ':id',
+        component: MaterialComponent
+    }, {
+        path: 'create',
+        component: MaterialComponent
+    }
+];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],

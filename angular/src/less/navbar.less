@@ -4,41 +4,16 @@
     border-radius: 0px;
 }
 
-#logo-menu-item {
-    background: @blackBackgroundColor;
-}
-
-@media only screen and (min-width: 767px) {
-    #logo-menu-item {
-        margin-left: -1rem;
-        padding-left: 1rem;
-    }
-}
-
-#sign-up, #sign-out {
-    margin-right: -1rem;
-    padding-right: 1rem;
-}
-
 .ui.inverted.menu {
     background: @blackBackgroundColor;
 }
 
-.ui.inverted.segment,
-.ui.primary.inverted.segment {
-    background: @blackBackgroundColor;
-}
-
-// fixed in 2.2.11 semantic ui
-@media only screen and (max-width: 767px) {
-    .ui.stackable.menu .right.menu,
-    .ui.stackable.menu .left.menu {
-        flex-direction: column;
-    }
-}
-
-.ui.menu .item {
-    padding: .6em 1em;
+@media only screen and (max-width: 1169px) {
+   .navbar-brand {
+       &.logo-menu-item {
+           margin-left: 45px;
+       }
+   }
 }
 
 .materials-search {

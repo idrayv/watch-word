@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using WatchWord.Domain.Entities.Common;
+﻿using Abp.Domain.Entities;
+using System.Collections.Generic;
 
 namespace WatchWord.Domain.Entities
 {
     /// <summary>WatchWord user's account entity.</summary>
-    public class Account : Entity<int>
+    public class Account : Entity<long>
     {
         /// <summary>Gets or sets the user's id.</summary>
-        public int ExternalId { get; set; }
+        public long ExternalId { get; set; }
 
         /// <summary>Gets or sets the user's Name.</summary>
         public string Name { get; set; }

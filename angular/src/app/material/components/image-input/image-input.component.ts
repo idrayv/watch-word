@@ -18,7 +18,7 @@ import {MaterialService} from '../../material.service';
 
 export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
     private onChangeCallback: Function;
-    private errors: string[] = [];
+    private error: string[] = [];
     private types: string[] = [];
 
     @ViewChild('file') fileInput: ElementRef;
@@ -49,17 +49,19 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
             abp.ui.clearBusy('body');
             if (response.success) {
                 base64 = response.base64;
-                this.errors = [];
+                this.error = [];
 
+            } else if (this.error) {
+                this.addErrorsAndCleanInput(response.error);
             } else {
-                this.addErrorsAndCleanInput(response.errors);
+                this.addErrorsAndCleanInput(['Server unavailable.']);
             }
-            this.onChangeCallback(base64);
+            this.onChangeCallback(response.result);
         });
     }
 
-    addErrorsAndCleanInput(errors: string[]): void {
-        this.errors = errors;
+    addErrorsAndCleanInput(error: string[]): void {
+        this.error = error;
         this.fileInput.nativeElement.value = null;
     }
 
@@ -68,10 +70,10 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
     }
 
     validate(c: AbstractControl): { [key: string]: any; } {
-        if (c.value && this.errors.length === 0) {
+        if (c.value && this.error.length === 0) {
             return null;
         }
-        return {'imageInput': this.errors};
+        return {'imageInput': this.error};
     }
 
     writeValue(image: string): void {

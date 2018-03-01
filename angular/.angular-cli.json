@@ -38,7 +38,8 @@
                 "../src/bsb-theme/css/style.css",
                 "../src/bsb-theme/css/themes/theme-red.css",
                 "../src/shared/core.less",
-                "../src/semantic-ui/semantic.css"
+                "../src/semantic-ui/semantic.css",
+                "../src/less/main.less"
             ],
             "scripts": [
                 "../node_modules/jquery/dist/jquery.min.js",

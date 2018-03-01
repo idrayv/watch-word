@@ -1,10 +1,5 @@
-<div class="top-bar-user">
-    <div *ngIf="shownLoginName" class="ui simple dropdown item user-dd">
-        <i class="user icon"></i> {{shownLoginName}}<i class="dropdown icon mr-5"></i>
-        <div class="menu">
-            <a class="item"><i class="configure icon"></i>Settings</a>
-        </div>
-    </div>
+<div class="right menu top-bar-user">
+    <a *ngIf="shownLoginName" class="item"><i class="user icon"></i>{{shownLoginName}}</a>
     <a *ngIf="!shownLoginName" class="item" (click)="login()">&nbsp;<i class="sign in icon"></i>Sign in</a>
     <a *ngIf="shownLoginName" id="sign-out" class="item" (click)="logout()">&nbsp;<i class="sign out icon"></i>Sign out</a>
 </div>

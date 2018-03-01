@@ -2,7 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using Abp.Dependency;
 using WatchWord.Configuration;
+using WatchWord.Pictures;
+using WatchWord.ScanWordParser;
 
 namespace WatchWord.Web.Host.Startup
 {
@@ -22,6 +25,8 @@ namespace WatchWord.Web.Host.Startup
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(WatchWordWebHostModule).GetAssembly());
+            IocManager.Register<IPictureService, PictureService>(DependencyLifeStyle.Transient);
+            IocManager.Register<IScanWordParser, ScanWordParser.ScanWordParser>(DependencyLifeStyle.Transient);
         }
     }
 }

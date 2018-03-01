@@ -1,5 +1,14 @@
 ﻿import { BaseResponseModel } from '../global/models';
 
+export class ParseResponseModel {
+    public words: Word[];
+    public vocabWords: VocabWord[];
+}
+
+export class ImageResponseModel {
+    public base64: string;
+}
+
 export enum MaterialMode {
     Read, Edit, Add
 }
@@ -45,17 +54,8 @@ export class MaterialResponseModel extends BaseResponseModel {
     public vocabWords: VocabWord[];
 }
 
-export class ParseResponseModel extends BaseResponseModel {
-    public words: Word[];
-    public vocabWords: VocabWord[];
-}
-
 export class MaterialPostResponseModel extends BaseResponseModel {
     public id: number;
-}
-
-export class ImageResponseModel extends BaseResponseModel {
-    public base64: string;
 }
 
 export class VocabWordsResponseModel extends BaseResponseModel {

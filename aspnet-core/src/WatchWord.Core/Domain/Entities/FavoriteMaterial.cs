@@ -1,8 +1,8 @@
-﻿using WatchWord.Domain.Entities.Common;
+﻿using Abp.Domain.Entities;
 
 namespace WatchWord.Domain.Entities
 {
-    public class FavoriteMaterial : Entity<int>
+    public class FavoriteMaterial : Entity<long>
     {
         /// <summary>Gets or sets the material.</summary>
         public virtual Material Material { get; set; }

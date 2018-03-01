@@ -1,4 +1,4 @@
-﻿namespace WatchWord.Models
+﻿namespace WatchWord.Web.Host.Models
 {
     public class ImageResponseModel
     {
