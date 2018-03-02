@@ -29,7 +29,7 @@ namespace WatchWord.Accounts
 
         public async Task<Account> GetByExternalIdAsync(long id)
         {
-            return await _accountsRepository.GetAll().Where(a => a.ExternalId == id).FirstOrDefaultAsync(); ;
+            return await _accountsRepository.GetAll().Where(a => a.ExternalId == id).FirstOrDefaultAsync();
         }
     }
 }

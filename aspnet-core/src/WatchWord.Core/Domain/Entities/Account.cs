@@ -13,15 +13,15 @@ namespace WatchWord.Domain.Entities
         public string Name { get; set; }
 
         /// <summary>Gets or sets the collection of materials.</summary>
-        public virtual ICollection<Material> Materials { get; set; }
+        public virtual List<Material> Materials { get; set; }
 
         /// <summary>Gets or sets the collection of settings.</summary>
-        public virtual ICollection<WatchWordSetting> Settings { get; set; }
+        public virtual List<WatchWordSetting> Settings { get; set; }
 
         /// <summary>Gets or sets the collection of vocab words.</summary>
-        public virtual ICollection<VocabWord> VocabWords { get; set; }
+        public virtual List<VocabWord> VocabWords { get; set; }
 
         /// <summary>Gets or sets the collection of favorite materials.</summary>
-        public virtual ICollection<FavoriteMaterial> FavoriteMaterials { get; set; }
+        public virtual List<FavoriteMaterial> FavoriteMaterials { get; set; }
     }
 }

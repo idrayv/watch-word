@@ -16,6 +16,6 @@ namespace WatchWord.Domain.Entities
         public int Count { get; set; }
 
         /// <summary>Gets or sets the collection of compositions.</summary>
-        public virtual ICollection<Composition> Compositions { get; set; }
+        public virtual List<Composition> Compositions { get; set; }
     }
 }

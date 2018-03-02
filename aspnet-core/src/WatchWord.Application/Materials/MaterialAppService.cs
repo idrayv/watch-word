@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Abp.Domain.Repositories;
 using Abp.UI;
@@ -37,7 +38,7 @@ namespace WatchWord.Materials
                 material.Owner = await _accountsService.GetByExternalIdAsync(userId);
 
                 // TODO: Allow for admin
-                var oldMaterial = await _materialsRepository.GetAllIncluding(m => m.Id == material.Id, m => m.Words, m => m.Owner).FirstOrDefaultAsync();
+                var oldMaterial = await _materialsRepository.GetAll().Where(m => m.Id == material.Id).Include(m => m.Owner).FirstOrDefaultAsync();
                 if (oldMaterial != null && oldMaterial.Owner.Id != material.Owner.Id)
                 {
                     throw new UserFriendlyException("You are not allowed to change other owner's materials!");
@@ -80,7 +81,7 @@ namespace WatchWord.Materials
             var response = new MaterialResponseDto { };
             try
             {
-                response.Material = await _materialsRepository.GetAllIncluding(m => m.Id == id, m => m.Words, m => m.Owner).FirstOrDefaultAsync();
+                response.Material = await _materialsRepository.GetAll().Where(m => m.Id == id).Include(m => m.Owner).Include(m => m.Words).FirstOrDefaultAsync();
 
                 if (response.Material == null)
                 {

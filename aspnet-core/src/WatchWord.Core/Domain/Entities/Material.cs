@@ -31,12 +31,12 @@ namespace WatchWord.Domain.Entities
         public virtual Account Owner { get; set; }
 
         /// <summary>Gets or sets the collection of words.</summary>
-        public virtual ICollection<Word> Words { get; set; }
+        public virtual List<Word> Words { get; set; }
 
         /// <summary>Gets or sets the collection of subtitle files.</summary>
-        public virtual ICollection<SubtitleFile> SubtitleFiles { get; set; }
+        public virtual List<SubtitleFile> SubtitleFiles { get; set; }
 
         /// <summary>Gets or sets the collection of favorite materials.</summary>
-        public virtual ICollection<FavoriteMaterial> FavoriteMaterials { get; set; }
+        public virtual List<FavoriteMaterial> FavoriteMaterials { get; set; }
     }
 }

@@ -86,30 +86,28 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         this.formSubmitted = true;
         if (form.valid) {
             abp.ui.setBusy('body');
-            /*this.materialService.saveMaterial(this.material, this.vocabWords).then(response => {
-                abp.ui.clearBusy('body');
-                if (response.success) {
+
+            this.material.words = this.vocabWords.map((vocabWord) => {
+                const word = new Word();
+                word.id = 0;
+                word.theWord = vocabWord.word;
+                word.count = this.material.words.find(w => w.theWord === vocabWord.word).count;
+
+                return word;
+            });
+
+            this.materialService.save(this.material)
+                .finally(() => {
+                    abp.ui.clearBusy('body');
+                    this.formSubmitted = false;
+                })
+                .subscribe((response) => {
                     if (this.mode === MaterialMode.Add) {
                         this.router.navigateByUrl('material/' + response.id);
                     } else {
                         this.mode = MaterialMode.Read;
                     }
-                } else {
-                    response.errors.forEach(err => this.displayError(err));
-                }
-            });*/
-
-            this.material.words = this.vocabWords.map((vocabWord) => {
-                return <Word>{
-                    id: 0,
-                    theWord: vocabWord.word,
-                    count: this.material.words.find(w => w.theWord === vocabWord.word).count
-                };
-            });
-
-            this.materialService.save(this.material);
-
-            this.formSubmitted = false;
+                });
         }
     }
 
