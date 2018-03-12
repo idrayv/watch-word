@@ -17,9 +17,10 @@ using WatchWord.EntityFrameworkCore;
 namespace WatchWord.Migrations
 {
     [DbContext(typeof(WatchWordDbContext))]
-    partial class WatchWordDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180312232539_DeleteAccount")]
+    partial class DeleteAccount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

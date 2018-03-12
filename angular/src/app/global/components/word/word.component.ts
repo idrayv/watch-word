@@ -1,6 +1,7 @@
 ﻿import {Component, Input} from '@angular/core';
-import {VocabWord, Word} from '../../../material/material.models';
+import {Word} from '../../../material/material.models';
 import {TranslationModalService} from '../translation-modal/translation-modal.service';
+import {VocabWord} from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'ww-word',
@@ -16,6 +17,6 @@ export class WordComponent {
     }
 
     public getTranslation(): void {
-        this.translationModalService.pushToModal({...this.vocabWord});
+        this.translationModalService.pushToModal(this.vocabWord.clone());
     }
 }

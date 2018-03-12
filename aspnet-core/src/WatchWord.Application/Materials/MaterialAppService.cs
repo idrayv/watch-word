@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Abp.Domain.Repositories;
 using Abp.UI;
-using WatchWord.Accounts;
 using WatchWord.Authorization.Users;
 using WatchWord.Domain.Entities;
 using WatchWord.Materials.Dto;
@@ -17,14 +17,14 @@ namespace WatchWord.Materials
         private readonly UserManager _userManager;
         private readonly IRepository<Material, long> _materialsRepository;
         private readonly IVocabularyService _vocabularyService;
-        private readonly IAccountsService _accountsService;
 
-        public MaterialAppService(IRepository<Material, long> materialsRepository, IVocabularyService vocabularyService,
-            IAccountsService accountsService, UserManager userManager)
+        public MaterialAppService(
+            IRepository<Material, long> materialsRepository,
+            IVocabularyService vocabularyService,
+            UserManager userManager)
         {
             _materialsRepository = materialsRepository;
             _vocabularyService = vocabularyService;
-            _accountsService = accountsService;
             _userManager = userManager;
         }
 
@@ -52,7 +52,7 @@ namespace WatchWord.Materials
             }
             else
             {
-                var userId = GetCurrentUserAsync()?.Id ?? 0;
+                var userId = AbpSession.UserId ?? 0;
                 response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, userId);
             }
 
@@ -78,9 +78,7 @@ namespace WatchWord.Materials
         public async Task<SaveMaterialResponseDto> Save(Material material)
         {
             var response = new SaveMaterialResponseDto { };
-
-            var userId = GetCurrentUserAsync()?.Id ?? 0;
-            material.Owner = await _accountsService.GetByExternalIdAsync(userId);
+            material.Owner = await GetCurrentUserAsync();
 
             // TODO: Allow for admin
             var oldMaterial = await _materialsRepository.GetAll().Where(m => m.Id == material.Id).Include(m => m.Owner).FirstOrDefaultAsync();

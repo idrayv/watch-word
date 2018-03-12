@@ -136,121 +136,6 @@ export class AccountServiceProxy {
 }
 
 @Injectable()
-export class AccountsServiceServiceProxy {
-    private http: Http;
-    private baseUrl: string;
-    protected jsonParseReviver: (key: string, value: any) => any = undefined;
-
-    constructor(@Inject(Http) http: Http, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * @name (optional) 
-     * @return Success
-     */
-    getOrCreateAccountAsync(id: number, name: string): Observable<Account> {
-        let url_ = this.baseUrl + "/api/services/app/AccountsService/GetOrCreateAccountAsync?";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined and cannot be null.");
-        else
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
-        if (name !== undefined)
-            url_ += "name=" + encodeURIComponent("" + name) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processGetOrCreateAccountAsync(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGetOrCreateAccountAsync(<any>response_);
-                } catch (e) {
-                    return <Observable<Account>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<Account>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetOrCreateAccountAsync(response: Response): Observable<Account> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? Account.fromJS(resultData200) : new Account();
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<Account>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getByExternalIdAsync(id: number): Observable<Account> {
-        let url_ = this.baseUrl + "/api/services/app/AccountsService/GetByExternalIdAsync?";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined and cannot be null.");
-        else
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processGetByExternalIdAsync(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGetByExternalIdAsync(<any>response_);
-                } catch (e) {
-                    return <Observable<Account>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<Account>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetByExternalIdAsync(response: Response): Observable<Account> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? Account.fromJS(resultData200) : new Account();
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<Account>(<any>null);
-    }
-}
-
-@Injectable()
 export class ConfigurationServiceProxy {
     private http: Http;
     private baseUrl: string;
@@ -2063,6 +1948,118 @@ export class UserServiceProxy {
 }
 
 @Injectable()
+export class VocabularyServiceProxy {
+    private http: Http;
+    private baseUrl: string;
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(@Inject(Http) http: Http, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @vocabWord (optional) 
+     * @return Success
+     */
+    post(vocabWord: VocabWord): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/Post";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(vocabWord);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processPost(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processPost(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<number>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processPost(response: Response): Observable<number> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<number>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    get(): Observable<VocabWord[]> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/Get";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processGet(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<VocabWord[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<VocabWord[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGet(response: Response): Observable<VocabWord[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(VocabWord.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<VocabWord[]>(<any>null);
+    }
+}
+
+@Injectable()
 export class VocabularyServiceServiceProxy {
     private http: Http;
     private baseUrl: string;
@@ -2438,558 +2435,6 @@ export interface IRegisterOutput {
     canLogin: boolean;
 }
 
-export class Account implements IAccount {
-    externalId: number;
-    name: string;
-    materials: Material[];
-    settings: WatchWordSetting[];
-    vocabWords: VocabWord[];
-    favoriteMaterials: FavoriteMaterial[];
-    id: number;
-
-    constructor(data?: IAccount) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.externalId = data["externalId"];
-            this.name = data["name"];
-            if (data["materials"] && data["materials"].constructor === Array) {
-                this.materials = [];
-                for (let item of data["materials"])
-                    this.materials.push(Material.fromJS(item));
-            }
-            if (data["settings"] && data["settings"].constructor === Array) {
-                this.settings = [];
-                for (let item of data["settings"])
-                    this.settings.push(WatchWordSetting.fromJS(item));
-            }
-            if (data["vocabWords"] && data["vocabWords"].constructor === Array) {
-                this.vocabWords = [];
-                for (let item of data["vocabWords"])
-                    this.vocabWords.push(VocabWord.fromJS(item));
-            }
-            if (data["favoriteMaterials"] && data["favoriteMaterials"].constructor === Array) {
-                this.favoriteMaterials = [];
-                for (let item of data["favoriteMaterials"])
-                    this.favoriteMaterials.push(FavoriteMaterial.fromJS(item));
-            }
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): Account {
-        data = typeof data === 'object' ? data : {};
-        let result = new Account();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["externalId"] = this.externalId;
-        data["name"] = this.name;
-        if (this.materials && this.materials.constructor === Array) {
-            data["materials"] = [];
-            for (let item of this.materials)
-                data["materials"].push(item.toJSON());
-        }
-        if (this.settings && this.settings.constructor === Array) {
-            data["settings"] = [];
-            for (let item of this.settings)
-                data["settings"].push(item.toJSON());
-        }
-        if (this.vocabWords && this.vocabWords.constructor === Array) {
-            data["vocabWords"] = [];
-            for (let item of this.vocabWords)
-                data["vocabWords"].push(item.toJSON());
-        }
-        if (this.favoriteMaterials && this.favoriteMaterials.constructor === Array) {
-            data["favoriteMaterials"] = [];
-            for (let item of this.favoriteMaterials)
-                data["favoriteMaterials"].push(item.toJSON());
-        }
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new Account();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IAccount {
-    externalId: number;
-    name: string;
-    materials: Material[];
-    settings: WatchWordSetting[];
-    vocabWords: VocabWord[];
-    favoriteMaterials: FavoriteMaterial[];
-    id: number;
-}
-
-export class Material implements IMaterial {
-    type: MaterialType;
-    name: string;
-    description: string;
-    image: string;
-    owner: Account;
-    words: Word[];
-    subtitleFiles: SubtitleFile[];
-    favoriteMaterials: FavoriteMaterial[];
-    id: number;
-
-    constructor(data?: IMaterial) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.type = data["type"];
-            this.name = data["name"];
-            this.description = data["description"];
-            this.image = data["image"];
-            this.owner = data["owner"] ? Account.fromJS(data["owner"]) : <any>undefined;
-            if (data["words"] && data["words"].constructor === Array) {
-                this.words = [];
-                for (let item of data["words"])
-                    this.words.push(Word.fromJS(item));
-            }
-            if (data["subtitleFiles"] && data["subtitleFiles"].constructor === Array) {
-                this.subtitleFiles = [];
-                for (let item of data["subtitleFiles"])
-                    this.subtitleFiles.push(SubtitleFile.fromJS(item));
-            }
-            if (data["favoriteMaterials"] && data["favoriteMaterials"].constructor === Array) {
-                this.favoriteMaterials = [];
-                for (let item of data["favoriteMaterials"])
-                    this.favoriteMaterials.push(FavoriteMaterial.fromJS(item));
-            }
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): Material {
-        data = typeof data === 'object' ? data : {};
-        let result = new Material();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["type"] = this.type;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["image"] = this.image;
-        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
-        if (this.words && this.words.constructor === Array) {
-            data["words"] = [];
-            for (let item of this.words)
-                data["words"].push(item.toJSON());
-        }
-        if (this.subtitleFiles && this.subtitleFiles.constructor === Array) {
-            data["subtitleFiles"] = [];
-            for (let item of this.subtitleFiles)
-                data["subtitleFiles"].push(item.toJSON());
-        }
-        if (this.favoriteMaterials && this.favoriteMaterials.constructor === Array) {
-            data["favoriteMaterials"] = [];
-            for (let item of this.favoriteMaterials)
-                data["favoriteMaterials"].push(item.toJSON());
-        }
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new Material();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IMaterial {
-    type: MaterialType;
-    name: string;
-    description: string;
-    image: string;
-    owner: Account;
-    words: Word[];
-    subtitleFiles: SubtitleFile[];
-    favoriteMaterials: FavoriteMaterial[];
-    id: number;
-}
-
-export class WatchWordSetting implements IWatchWordSetting {
-    key: WatchWordSettingKey;
-    type: WatchWordSettingType;
-    owner: Account;
-    int: number;
-    string: string;
-    boolean: boolean;
-    date: moment.Moment;
-    id: number;
-
-    constructor(data?: IWatchWordSetting) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.key = data["key"];
-            this.type = data["type"];
-            this.owner = data["owner"] ? Account.fromJS(data["owner"]) : <any>undefined;
-            this.int = data["int"];
-            this.string = data["string"];
-            this.boolean = data["boolean"];
-            this.date = data["date"] ? moment(data["date"].toString()) : <any>undefined;
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): WatchWordSetting {
-        data = typeof data === 'object' ? data : {};
-        let result = new WatchWordSetting();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["key"] = this.key;
-        data["type"] = this.type;
-        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
-        data["int"] = this.int;
-        data["string"] = this.string;
-        data["boolean"] = this.boolean;
-        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new WatchWordSetting();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IWatchWordSetting {
-    key: WatchWordSettingKey;
-    type: WatchWordSettingType;
-    owner: Account;
-    int: number;
-    string: string;
-    boolean: boolean;
-    date: moment.Moment;
-    id: number;
-}
-
-export class VocabWord implements IVocabWord {
-    word: string;
-    translation: string;
-    owner: Account;
-    type: VocabWordType;
-    id: number;
-
-    constructor(data?: IVocabWord) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.word = data["word"];
-            this.translation = data["translation"];
-            this.owner = data["owner"] ? Account.fromJS(data["owner"]) : <any>undefined;
-            this.type = data["type"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): VocabWord {
-        data = typeof data === 'object' ? data : {};
-        let result = new VocabWord();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["word"] = this.word;
-        data["translation"] = this.translation;
-        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
-        data["type"] = this.type;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new VocabWord();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IVocabWord {
-    word: string;
-    translation: string;
-    owner: Account;
-    type: VocabWordType;
-    id: number;
-}
-
-export class FavoriteMaterial implements IFavoriteMaterial {
-    material: Material;
-    account: Account;
-    id: number;
-
-    constructor(data?: IFavoriteMaterial) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
-            this.account = data["account"] ? Account.fromJS(data["account"]) : <any>undefined;
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): FavoriteMaterial {
-        data = typeof data === 'object' ? data : {};
-        let result = new FavoriteMaterial();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
-        data["account"] = this.account ? this.account.toJSON() : <any>undefined;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new FavoriteMaterial();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IFavoriteMaterial {
-    material: Material;
-    account: Account;
-    id: number;
-}
-
-export class Word implements IWord {
-    material: Material;
-    theWord: string;
-    count: number;
-    compositions: Composition[];
-    id: number;
-
-    constructor(data?: IWord) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
-            this.theWord = data["theWord"];
-            this.count = data["count"];
-            if (data["compositions"] && data["compositions"].constructor === Array) {
-                this.compositions = [];
-                for (let item of data["compositions"])
-                    this.compositions.push(Composition.fromJS(item));
-            }
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): Word {
-        data = typeof data === 'object' ? data : {};
-        let result = new Word();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
-        data["theWord"] = this.theWord;
-        data["count"] = this.count;
-        if (this.compositions && this.compositions.constructor === Array) {
-            data["compositions"] = [];
-            for (let item of this.compositions)
-                data["compositions"].push(item.toJSON());
-        }
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new Word();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IWord {
-    material: Material;
-    theWord: string;
-    count: number;
-    compositions: Composition[];
-    id: number;
-}
-
-export class SubtitleFile implements ISubtitleFile {
-    material: Material;
-    subtitleText: string;
-    id: number;
-
-    constructor(data?: ISubtitleFile) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
-            this.subtitleText = data["subtitleText"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): SubtitleFile {
-        data = typeof data === 'object' ? data : {};
-        let result = new SubtitleFile();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
-        data["subtitleText"] = this.subtitleText;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new SubtitleFile();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ISubtitleFile {
-    material: Material;
-    subtitleText: string;
-    id: number;
-}
-
-export class Composition implements IComposition {
-    word: Word;
-    line: number;
-    column: number;
-    id: number;
-
-    constructor(data?: IComposition) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.word = data["word"] ? Word.fromJS(data["word"]) : <any>undefined;
-            this.line = data["line"];
-            this.column = data["column"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): Composition {
-        data = typeof data === 'object' ? data : {};
-        let result = new Composition();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["word"] = this.word ? this.word.toJSON() : <any>undefined;
-        data["line"] = this.line;
-        data["column"] = this.column;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new Composition();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IComposition {
-    word: Word;
-    line: number;
-    column: number;
-    id: number;
-}
-
 export class ChangeUiThemeInput implements IChangeUiThemeInput {
     theme: string;
 
@@ -3161,6 +2606,1029 @@ export class MaterialResponseDto implements IMaterialResponseDto {
 export interface IMaterialResponseDto {
     material: Material;
     vocabWords: VocabWord[];
+}
+
+export class Material implements IMaterial {
+    type: MaterialType;
+    name: string;
+    description: string;
+    image: string;
+    owner: User;
+    words: Word[];
+    subtitleFiles: SubtitleFile[];
+    favoriteMaterials: FavoriteMaterial[];
+    id: number;
+
+    constructor(data?: IMaterial) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.type = data["type"];
+            this.name = data["name"];
+            this.description = data["description"];
+            this.image = data["image"];
+            this.owner = data["owner"] ? User.fromJS(data["owner"]) : <any>undefined;
+            if (data["words"] && data["words"].constructor === Array) {
+                this.words = [];
+                for (let item of data["words"])
+                    this.words.push(Word.fromJS(item));
+            }
+            if (data["subtitleFiles"] && data["subtitleFiles"].constructor === Array) {
+                this.subtitleFiles = [];
+                for (let item of data["subtitleFiles"])
+                    this.subtitleFiles.push(SubtitleFile.fromJS(item));
+            }
+            if (data["favoriteMaterials"] && data["favoriteMaterials"].constructor === Array) {
+                this.favoriteMaterials = [];
+                for (let item of data["favoriteMaterials"])
+                    this.favoriteMaterials.push(FavoriteMaterial.fromJS(item));
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): Material {
+        data = typeof data === 'object' ? data : {};
+        let result = new Material();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["type"] = this.type;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["image"] = this.image;
+        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
+        if (this.words && this.words.constructor === Array) {
+            data["words"] = [];
+            for (let item of this.words)
+                data["words"].push(item.toJSON());
+        }
+        if (this.subtitleFiles && this.subtitleFiles.constructor === Array) {
+            data["subtitleFiles"] = [];
+            for (let item of this.subtitleFiles)
+                data["subtitleFiles"].push(item.toJSON());
+        }
+        if (this.favoriteMaterials && this.favoriteMaterials.constructor === Array) {
+            data["favoriteMaterials"] = [];
+            for (let item of this.favoriteMaterials)
+                data["favoriteMaterials"].push(item.toJSON());
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new Material();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IMaterial {
+    type: MaterialType;
+    name: string;
+    description: string;
+    image: string;
+    owner: User;
+    words: Word[];
+    subtitleFiles: SubtitleFile[];
+    favoriteMaterials: FavoriteMaterial[];
+    id: number;
+}
+
+export class VocabWord implements IVocabWord {
+    word: string;
+    translation: string;
+    owner: User;
+    type: VocabWordType;
+    id: number;
+
+    constructor(data?: IVocabWord) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.word = data["word"];
+            this.translation = data["translation"];
+            this.owner = data["owner"] ? User.fromJS(data["owner"]) : <any>undefined;
+            this.type = data["type"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): VocabWord {
+        data = typeof data === 'object' ? data : {};
+        let result = new VocabWord();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["word"] = this.word;
+        data["translation"] = this.translation;
+        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
+        data["type"] = this.type;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new VocabWord();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IVocabWord {
+    word: string;
+    translation: string;
+    owner: User;
+    type: VocabWordType;
+    id: number;
+}
+
+export class User implements IUser {
+    normalizedUserName: string;
+    normalizedEmailAddress: string;
+    concurrencyStamp: string;
+    tokens: UserToken[];
+    deleterUser: User;
+    creatorUser: User;
+    lastModifierUser: User;
+    authenticationSource: string;
+    userName: string;
+    tenantId: number;
+    emailAddress: string;
+    name: string;
+    surname: string;
+    fullName: string;
+    password: string;
+    emailConfirmationCode: string;
+    passwordResetCode: string;
+    lockoutEndDateUtc: moment.Moment;
+    accessFailedCount: number;
+    isLockoutEnabled: boolean;
+    phoneNumber: string;
+    isPhoneNumberConfirmed: boolean;
+    securityStamp: string;
+    isTwoFactorEnabled: boolean;
+    logins: UserLogin[];
+    roles: UserRole[];
+    claims: UserClaim[];
+    permissions: UserPermissionSetting[];
+    settings: Setting[];
+    isEmailConfirmed: boolean;
+    isActive: boolean;
+    lastLoginTime: moment.Moment;
+    isDeleted: boolean;
+    deleterUserId: number;
+    deletionTime: moment.Moment;
+    lastModificationTime: moment.Moment;
+    lastModifierUserId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+
+    constructor(data?: IUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.normalizedUserName = data["normalizedUserName"];
+            this.normalizedEmailAddress = data["normalizedEmailAddress"];
+            this.concurrencyStamp = data["concurrencyStamp"];
+            if (data["tokens"] && data["tokens"].constructor === Array) {
+                this.tokens = [];
+                for (let item of data["tokens"])
+                    this.tokens.push(UserToken.fromJS(item));
+            }
+            this.deleterUser = data["deleterUser"] ? User.fromJS(data["deleterUser"]) : <any>undefined;
+            this.creatorUser = data["creatorUser"] ? User.fromJS(data["creatorUser"]) : <any>undefined;
+            this.lastModifierUser = data["lastModifierUser"] ? User.fromJS(data["lastModifierUser"]) : <any>undefined;
+            this.authenticationSource = data["authenticationSource"];
+            this.userName = data["userName"];
+            this.tenantId = data["tenantId"];
+            this.emailAddress = data["emailAddress"];
+            this.name = data["name"];
+            this.surname = data["surname"];
+            this.fullName = data["fullName"];
+            this.password = data["password"];
+            this.emailConfirmationCode = data["emailConfirmationCode"];
+            this.passwordResetCode = data["passwordResetCode"];
+            this.lockoutEndDateUtc = data["lockoutEndDateUtc"] ? moment(data["lockoutEndDateUtc"].toString()) : <any>undefined;
+            this.accessFailedCount = data["accessFailedCount"];
+            this.isLockoutEnabled = data["isLockoutEnabled"];
+            this.phoneNumber = data["phoneNumber"];
+            this.isPhoneNumberConfirmed = data["isPhoneNumberConfirmed"];
+            this.securityStamp = data["securityStamp"];
+            this.isTwoFactorEnabled = data["isTwoFactorEnabled"];
+            if (data["logins"] && data["logins"].constructor === Array) {
+                this.logins = [];
+                for (let item of data["logins"])
+                    this.logins.push(UserLogin.fromJS(item));
+            }
+            if (data["roles"] && data["roles"].constructor === Array) {
+                this.roles = [];
+                for (let item of data["roles"])
+                    this.roles.push(UserRole.fromJS(item));
+            }
+            if (data["claims"] && data["claims"].constructor === Array) {
+                this.claims = [];
+                for (let item of data["claims"])
+                    this.claims.push(UserClaim.fromJS(item));
+            }
+            if (data["permissions"] && data["permissions"].constructor === Array) {
+                this.permissions = [];
+                for (let item of data["permissions"])
+                    this.permissions.push(UserPermissionSetting.fromJS(item));
+            }
+            if (data["settings"] && data["settings"].constructor === Array) {
+                this.settings = [];
+                for (let item of data["settings"])
+                    this.settings.push(Setting.fromJS(item));
+            }
+            this.isEmailConfirmed = data["isEmailConfirmed"];
+            this.isActive = data["isActive"];
+            this.lastLoginTime = data["lastLoginTime"] ? moment(data["lastLoginTime"].toString()) : <any>undefined;
+            this.isDeleted = data["isDeleted"];
+            this.deleterUserId = data["deleterUserId"];
+            this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = data["creatorUserId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): User {
+        data = typeof data === 'object' ? data : {};
+        let result = new User();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["normalizedUserName"] = this.normalizedUserName;
+        data["normalizedEmailAddress"] = this.normalizedEmailAddress;
+        data["concurrencyStamp"] = this.concurrencyStamp;
+        if (this.tokens && this.tokens.constructor === Array) {
+            data["tokens"] = [];
+            for (let item of this.tokens)
+                data["tokens"].push(item.toJSON());
+        }
+        data["deleterUser"] = this.deleterUser ? this.deleterUser.toJSON() : <any>undefined;
+        data["creatorUser"] = this.creatorUser ? this.creatorUser.toJSON() : <any>undefined;
+        data["lastModifierUser"] = this.lastModifierUser ? this.lastModifierUser.toJSON() : <any>undefined;
+        data["authenticationSource"] = this.authenticationSource;
+        data["userName"] = this.userName;
+        data["tenantId"] = this.tenantId;
+        data["emailAddress"] = this.emailAddress;
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["fullName"] = this.fullName;
+        data["password"] = this.password;
+        data["emailConfirmationCode"] = this.emailConfirmationCode;
+        data["passwordResetCode"] = this.passwordResetCode;
+        data["lockoutEndDateUtc"] = this.lockoutEndDateUtc ? this.lockoutEndDateUtc.toISOString() : <any>undefined;
+        data["accessFailedCount"] = this.accessFailedCount;
+        data["isLockoutEnabled"] = this.isLockoutEnabled;
+        data["phoneNumber"] = this.phoneNumber;
+        data["isPhoneNumberConfirmed"] = this.isPhoneNumberConfirmed;
+        data["securityStamp"] = this.securityStamp;
+        data["isTwoFactorEnabled"] = this.isTwoFactorEnabled;
+        if (this.logins && this.logins.constructor === Array) {
+            data["logins"] = [];
+            for (let item of this.logins)
+                data["logins"].push(item.toJSON());
+        }
+        if (this.roles && this.roles.constructor === Array) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        if (this.claims && this.claims.constructor === Array) {
+            data["claims"] = [];
+            for (let item of this.claims)
+                data["claims"].push(item.toJSON());
+        }
+        if (this.permissions && this.permissions.constructor === Array) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item.toJSON());
+        }
+        if (this.settings && this.settings.constructor === Array) {
+            data["settings"] = [];
+            for (let item of this.settings)
+                data["settings"].push(item.toJSON());
+        }
+        data["isEmailConfirmed"] = this.isEmailConfirmed;
+        data["isActive"] = this.isActive;
+        data["lastLoginTime"] = this.lastLoginTime ? this.lastLoginTime.toISOString() : <any>undefined;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new User();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUser {
+    normalizedUserName: string;
+    normalizedEmailAddress: string;
+    concurrencyStamp: string;
+    tokens: UserToken[];
+    deleterUser: User;
+    creatorUser: User;
+    lastModifierUser: User;
+    authenticationSource: string;
+    userName: string;
+    tenantId: number;
+    emailAddress: string;
+    name: string;
+    surname: string;
+    fullName: string;
+    password: string;
+    emailConfirmationCode: string;
+    passwordResetCode: string;
+    lockoutEndDateUtc: moment.Moment;
+    accessFailedCount: number;
+    isLockoutEnabled: boolean;
+    phoneNumber: string;
+    isPhoneNumberConfirmed: boolean;
+    securityStamp: string;
+    isTwoFactorEnabled: boolean;
+    logins: UserLogin[];
+    roles: UserRole[];
+    claims: UserClaim[];
+    permissions: UserPermissionSetting[];
+    settings: Setting[];
+    isEmailConfirmed: boolean;
+    isActive: boolean;
+    lastLoginTime: moment.Moment;
+    isDeleted: boolean;
+    deleterUserId: number;
+    deletionTime: moment.Moment;
+    lastModificationTime: moment.Moment;
+    lastModifierUserId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+}
+
+export class Word implements IWord {
+    material: Material;
+    theWord: string;
+    count: number;
+    compositions: Composition[];
+    id: number;
+
+    constructor(data?: IWord) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.theWord = data["theWord"];
+            this.count = data["count"];
+            if (data["compositions"] && data["compositions"].constructor === Array) {
+                this.compositions = [];
+                for (let item of data["compositions"])
+                    this.compositions.push(Composition.fromJS(item));
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): Word {
+        data = typeof data === 'object' ? data : {};
+        let result = new Word();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
+        data["theWord"] = this.theWord;
+        data["count"] = this.count;
+        if (this.compositions && this.compositions.constructor === Array) {
+            data["compositions"] = [];
+            for (let item of this.compositions)
+                data["compositions"].push(item.toJSON());
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new Word();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IWord {
+    material: Material;
+    theWord: string;
+    count: number;
+    compositions: Composition[];
+    id: number;
+}
+
+export class SubtitleFile implements ISubtitleFile {
+    material: Material;
+    subtitleText: string;
+    id: number;
+
+    constructor(data?: ISubtitleFile) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.subtitleText = data["subtitleText"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): SubtitleFile {
+        data = typeof data === 'object' ? data : {};
+        let result = new SubtitleFile();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
+        data["subtitleText"] = this.subtitleText;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new SubtitleFile();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISubtitleFile {
+    material: Material;
+    subtitleText: string;
+    id: number;
+}
+
+export class FavoriteMaterial implements IFavoriteMaterial {
+    material: Material;
+    account: User;
+    id: number;
+
+    constructor(data?: IFavoriteMaterial) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.account = data["account"] ? User.fromJS(data["account"]) : <any>undefined;
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): FavoriteMaterial {
+        data = typeof data === 'object' ? data : {};
+        let result = new FavoriteMaterial();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
+        data["account"] = this.account ? this.account.toJSON() : <any>undefined;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new FavoriteMaterial();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IFavoriteMaterial {
+    material: Material;
+    account: User;
+    id: number;
+}
+
+export class UserToken implements IUserToken {
+    tenantId: number;
+    userId: number;
+    loginProvider: string;
+    name: string;
+    value: string;
+    id: number;
+
+    constructor(data?: IUserToken) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.tenantId = data["tenantId"];
+            this.userId = data["userId"];
+            this.loginProvider = data["loginProvider"];
+            this.name = data["name"];
+            this.value = data["value"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserToken {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserToken();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["loginProvider"] = this.loginProvider;
+        data["name"] = this.name;
+        data["value"] = this.value;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new UserToken();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserToken {
+    tenantId: number;
+    userId: number;
+    loginProvider: string;
+    name: string;
+    value: string;
+    id: number;
+}
+
+export class UserLogin implements IUserLogin {
+    tenantId: number;
+    userId: number;
+    loginProvider: string;
+    providerKey: string;
+    id: number;
+
+    constructor(data?: IUserLogin) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.tenantId = data["tenantId"];
+            this.userId = data["userId"];
+            this.loginProvider = data["loginProvider"];
+            this.providerKey = data["providerKey"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserLogin {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserLogin();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["loginProvider"] = this.loginProvider;
+        data["providerKey"] = this.providerKey;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new UserLogin();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserLogin {
+    tenantId: number;
+    userId: number;
+    loginProvider: string;
+    providerKey: string;
+    id: number;
+}
+
+export class UserRole implements IUserRole {
+    tenantId: number;
+    userId: number;
+    roleId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+
+    constructor(data?: IUserRole) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.tenantId = data["tenantId"];
+            this.userId = data["userId"];
+            this.roleId = data["roleId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = data["creatorUserId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserRole {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserRole();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["roleId"] = this.roleId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new UserRole();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserRole {
+    tenantId: number;
+    userId: number;
+    roleId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+}
+
+export class UserClaim implements IUserClaim {
+    tenantId: number;
+    userId: number;
+    claimType: string;
+    claimValue: string;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+
+    constructor(data?: IUserClaim) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.tenantId = data["tenantId"];
+            this.userId = data["userId"];
+            this.claimType = data["claimType"];
+            this.claimValue = data["claimValue"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = data["creatorUserId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserClaim {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserClaim();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["claimType"] = this.claimType;
+        data["claimValue"] = this.claimValue;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new UserClaim();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserClaim {
+    tenantId: number;
+    userId: number;
+    claimType: string;
+    claimValue: string;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+}
+
+export class UserPermissionSetting implements IUserPermissionSetting {
+    userId: number;
+    tenantId: number;
+    name: string;
+    isGranted: boolean;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+
+    constructor(data?: IUserPermissionSetting) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.userId = data["userId"];
+            this.tenantId = data["tenantId"];
+            this.name = data["name"];
+            this.isGranted = data["isGranted"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = data["creatorUserId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserPermissionSetting {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserPermissionSetting();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["tenantId"] = this.tenantId;
+        data["name"] = this.name;
+        data["isGranted"] = this.isGranted;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new UserPermissionSetting();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserPermissionSetting {
+    userId: number;
+    tenantId: number;
+    name: string;
+    isGranted: boolean;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+}
+
+export class Setting implements ISetting {
+    tenantId: number;
+    userId: number;
+    name: string;
+    value: string;
+    lastModificationTime: moment.Moment;
+    lastModifierUserId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+
+    constructor(data?: ISetting) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.tenantId = data["tenantId"];
+            this.userId = data["userId"];
+            this.name = data["name"];
+            this.value = data["value"];
+            this.lastModificationTime = data["lastModificationTime"] ? moment(data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = data["lastModifierUserId"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = data["creatorUserId"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): Setting {
+        data = typeof data === 'object' ? data : {};
+        let result = new Setting();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["name"] = this.name;
+        data["value"] = this.value;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new Setting();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISetting {
+    tenantId: number;
+    userId: number;
+    name: string;
+    value: string;
+    lastModificationTime: moment.Moment;
+    lastModifierUserId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number;
+    id: number;
+}
+
+export class Composition implements IComposition {
+    word: Word;
+    line: number;
+    column: number;
+    id: number;
+
+    constructor(data?: IComposition) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.word = data["word"] ? Word.fromJS(data["word"]) : <any>undefined;
+            this.line = data["line"];
+            this.column = data["column"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): Composition {
+        data = typeof data === 'object' ? data : {};
+        let result = new Composition();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["word"] = this.word ? this.word.toJSON() : <any>undefined;
+        data["line"] = this.line;
+        data["column"] = this.column;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new Composition();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IComposition {
+    word: Word;
+    line: number;
+    column: number;
+    id: number;
 }
 
 export class SaveMaterialResponseDto implements ISaveMaterialResponseDto {
@@ -4485,18 +4953,6 @@ export enum IsTenantAvailableOutputState {
 export enum MaterialType {
     _0 = 0, 
     _1 = 1, 
-}
-
-export enum WatchWordSettingKey {
-    _0 = 0, 
-    _1 = 1, 
-}
-
-export enum WatchWordSettingType {
-    _0 = 0, 
-    _1 = 1, 
-    _2 = 2, 
-    _3 = 3, 
 }
 
 export enum VocabWordType {

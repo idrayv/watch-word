@@ -3,9 +3,8 @@ import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {TranslationModalModel} from './translation-modal.models';
 import {TranslationModalResponseModel} from './translation-modal.models';
-import {VocabType, VocabWord} from '../../../material/material.models';
-import {DictionariesService} from '../../../dictionaries/dictionaries.service';
-import {TranslationServiceProxy} from '@shared/service-proxies/service-proxies';
+import {TranslationServiceProxy, VocabularyServiceProxy} from '@shared/service-proxies/service-proxies';
+import {VocabWord, VocabWordType} from '@shared/service-proxies/service-proxies';
 
 @Injectable()
 export class TranslationModalService {
@@ -13,7 +12,7 @@ export class TranslationModalService {
     // TODO: delete TranslationModalResponseModel, use link to original VocabWord instead
     private responseModel: Subject<TranslationModalResponseModel> = new Subject<TranslationModalResponseModel>();
 
-    public constructor(private dictionariesService: DictionariesService,
+    public constructor(private dictionariesService: VocabularyServiceProxy,
                        private translationService: TranslationServiceProxy) {
     }
 
@@ -32,9 +31,14 @@ export class TranslationModalService {
     public pushToModal(vocabWord: VocabWord): void {
         abp.ui.setBusy('body');
 
-        if (vocabWord.type === VocabType.UnsignedWord) {
+        /* LearnWord,
+            KnownWord,
+            UnsignedWord,
+            IgnoredWord */
+
+        if (vocabWord.type === VocabWordType._2) {
             // TODO: check last user choice for unsigned words
-            vocabWord.type = VocabType.LearnWord;
+            vocabWord.type = VocabWordType._0;
         }
 
         this.getTranslation(vocabWord.word).finally(() => abp.ui.clearBusy('body')).subscribe(translations => {
@@ -47,13 +51,9 @@ export class TranslationModalService {
 
     public saveToVocabulary(vocabWord: VocabWord): void {
         abp.ui.setBusy('body');
-        this.dictionariesService.saveToVocabulary(vocabWord).then(response => {
+        this.dictionariesService.post(vocabWord).subscribe(() => {
             abp.ui.clearBusy('body');
-            if (response.success) {
-                this.responseModel.next(this.getTranslationModalResponseModel(true, vocabWord, []));
-            } else {
-                this.responseModel.next(this.getTranslationModalResponseModel(false, null, response.errors));
-            }
+            this.responseModel.next(this.getTranslationModalResponseModel(true, vocabWord, []));
         });
     }
 

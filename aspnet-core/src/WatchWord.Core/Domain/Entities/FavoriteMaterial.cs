@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities;
+using WatchWord.Authorization.Users;
 
 namespace WatchWord.Domain.Entities
 {
@@ -8,6 +9,6 @@ namespace WatchWord.Domain.Entities
         public virtual Material Material { get; set; }
 
         /// <summary>Gets or sets the user account.</summary>
-        public virtual Account Account { get; set; }
+        public virtual User Account { get; set; }
     }
 }

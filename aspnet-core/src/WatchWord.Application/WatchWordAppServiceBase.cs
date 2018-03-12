@@ -10,7 +10,7 @@ using WatchWord.MultiTenancy;
 namespace WatchWord
 {
     /// <summary>
-    /// Derive your application services from this class.
+    /// Derive application services from this class.
     /// </summary>
     public abstract class WatchWordAppServiceBase : ApplicationService
     {

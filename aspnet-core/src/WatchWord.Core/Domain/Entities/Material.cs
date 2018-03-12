@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Abp.Domain.Entities;
+using WatchWord.Authorization.Users;
 
 namespace WatchWord.Domain.Entities
 {
@@ -28,7 +29,7 @@ namespace WatchWord.Domain.Entities
         public string Image { get; set; }
 
         /// <summary>Gets or sets the creator of the material.</summary>
-        public virtual Account Owner { get; set; }
+        public virtual User Owner { get; set; }
 
         /// <summary>Gets or sets the collection of words.</summary>
         public virtual List<Word> Words { get; set; }

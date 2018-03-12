@@ -9,8 +9,6 @@ namespace WatchWord.EntityFrameworkCore
 {
     public class WatchWordDbContext : AbpZeroDbContext<Tenant, Role, User, WatchWordDbContext>
     {
-        /* Define a DbSet for each entity of the application */
-        
         public WatchWordDbContext(DbContextOptions<WatchWordDbContext> options)
             : base(options)
         {
@@ -24,17 +22,11 @@ namespace WatchWord.EntityFrameworkCore
         /// <summary>Gets or sets the compositions.</summary>
         public DbSet<Composition> Compositions { get; set; }
 
-        /// <summary>Gets or sets the accounts.</summary>
-        public DbSet<Account> Accounts { get; set; }
-
         /// <summary>Gets or sets the materials.</summary>
         public DbSet<Material> Materials { get; set; }
 
         /// <summary>Gets or sets the vocabulary words.</summary>
         public DbSet<VocabWord> VocabWords { get; set; }
-
-        /// <summary>Gets or sets user's or site's settings.</summary>
-        public DbSet<WatchWordSetting> WatchWordSettings { get; set; }
 
         /// <summary>Gets or sets translations.</summary>
         public DbSet<Translation> Translations { get; set; }
@@ -66,13 +58,6 @@ namespace WatchWord.EntityFrameworkCore
                 composition.HasOne(c => c.Word).WithMany(w => w.Compositions).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
-            modelBuilder.Entity<Account>(account =>
-            {
-                account.ToTable("Accounts");
-                account.Property(a => a.Id).ValueGeneratedOnAdd();
-                account.HasIndex(a => a.ExternalId);
-            });
-
             modelBuilder.Entity<Material>(material =>
             {
                 material.ToTable("Materials");
@@ -90,15 +75,6 @@ namespace WatchWord.EntityFrameworkCore
             {
                 vocabWord.ToTable("VocabWords");
                 vocabWord.Property(v => v.Id).ValueGeneratedOnAdd();
-                vocabWord.HasOne(v => v.Owner).WithMany(a => a.VocabWords).OnDelete(DeleteBehavior.Cascade).IsRequired();
-            });
-
-            modelBuilder.Entity<WatchWordSetting>(setting =>
-            {
-                setting.ToTable("Settings");
-                setting.Property(s => s.Id).ValueGeneratedOnAdd();
-                setting.HasIndex(s => s.Key);
-                setting.HasOne(s => s.Owner).WithMany(a => a.Settings).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.Entity<Translation>(translation =>
@@ -133,7 +109,6 @@ namespace WatchWord.EntityFrameworkCore
                 favoriteMaterial.ToTable("FavoriteMaterials");
                 favoriteMaterial.Property(f => f.Id).ValueGeneratedOnAdd();
                 favoriteMaterial.HasOne(f => f.Material).WithMany(m => m.FavoriteMaterials).OnDelete(DeleteBehavior.Cascade).IsRequired();
-                favoriteMaterial.HasOne(f => f.Account).WithMany(a => a.FavoriteMaterials).OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.ForSqlServerUseIdentityColumns();

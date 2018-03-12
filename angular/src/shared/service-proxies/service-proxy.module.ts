@@ -12,7 +12,8 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.AccountServiceProxy,
         ApiServiceProxies.ConfigurationServiceProxy,
         ApiServiceProxies.MaterialServiceProxy,
-        ApiServiceProxies.TranslationServiceProxy
+        ApiServiceProxies.TranslationServiceProxy,
+        ApiServiceProxies.VocabularyServiceProxy
     ]
 })
 export class ServiceProxyModule {

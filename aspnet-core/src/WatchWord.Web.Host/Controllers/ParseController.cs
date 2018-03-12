@@ -8,10 +8,10 @@ using Abp.UI;
 using WatchWord.Controllers;
 using WatchWord.Authorization.Users;
 using WatchWord.Vocabulary;
-using WatchWord.Models;
 using WatchWord.Web.Host.Infrastructure;
 using WatchWord.Domain.Entities;
 using WatchWord.ScanWord;
+using WatchWord.Web.Host.Controllers.Dto;
 
 namespace WatchWord.Web.Host.Controllers
 {
@@ -52,7 +52,7 @@ namespace WatchWord.Web.Host.Controllers
 
                         if (words.Count > 0)
                         {
-                            var response = new ParseResponseModel { Words = words, VocabWords = vocabWords };
+                            var response = new ParseResponseDto { Words = words, VocabWords = vocabWords };
 
                             return ApiJsonSerializer.Serialize(response);
                         }
