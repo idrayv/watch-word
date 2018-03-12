@@ -5,7 +5,8 @@ using Abp.Reflection.Extensions;
 using Abp.Dependency;
 using WatchWord.Configuration;
 using WatchWord.Pictures;
-using WatchWord.ScanWordParser;
+using WatchWord.ScanWord;
+using WatchWord.Infrastructure;
 
 namespace WatchWord.Web.Host.Startup
 {
@@ -26,7 +27,8 @@ namespace WatchWord.Web.Host.Startup
         {
             IocManager.RegisterAssemblyByConvention(typeof(WatchWordWebHostModule).GetAssembly());
             IocManager.Register<IPictureService, PictureService>(DependencyLifeStyle.Transient);
-            IocManager.Register<IScanWordParser, ScanWordParser.ScanWordParser>(DependencyLifeStyle.Transient);
+            IocManager.Register<IScanWordParser, ScanWordParser>(DependencyLifeStyle.Transient);
+            IocManager.Register<WatchWordProxy, WatchWordProxy>(DependencyLifeStyle.Transient);
         }
     }
 }

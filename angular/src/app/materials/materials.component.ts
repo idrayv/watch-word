@@ -2,10 +2,8 @@ import {Component, OnInit, OnDestroy, Injector} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {ISubscription} from 'rxjs/Subscription';
 import {MaterialsModel} from './materials.models';
-import {CountResponseModel, PaginationResponseModel} from '../global/components/pagination/pagination.models';
-import {MaterialsPaginationService} from './materials-pagination.service';
-import {Material as MaterialModel} from '../material/material.models';
 import {AppComponentBase} from '@shared/app-component-base';
+import {MaterialServiceProxy, Material} from '@shared/service-proxies/service-proxies';
 
 @Component({
     templateUrl: 'materials.template.html'
@@ -18,8 +16,8 @@ export class MaterialsComponent extends AppComponentBase implements OnInit, OnDe
     private materialsRoute = '/materials/page';
 
     constructor(private router: Router,
+                private materialService: MaterialServiceProxy,
                 private route: ActivatedRoute,
-                private materialsService: MaterialsPaginationService,
                 injector: Injector) {
         super(injector);
     }
@@ -29,7 +27,7 @@ export class MaterialsComponent extends AppComponentBase implements OnInit, OnDe
     }
 
     public onMaterialClick(id: number): void {
-        this.router.navigate(['/material', id]);
+        this.router.navigate(['app/material', id]);
     }
 
     private onRouteChanged(param: string): void {
@@ -45,36 +43,25 @@ export class MaterialsComponent extends AppComponentBase implements OnInit, OnDe
     private changeModel(page: number) {
         this.model.materials = [];
         abp.ui.setBusy('body');
-        this.materialsService.getCount().then(response => this.fillPaginationModel(response, page));
-        this.materialsService.getEntities(page, this.itemsPerPage).then((response) => {
+        this.materialService.getCount().subscribe(count => this.fillPaginationModel(count, page));
+
+        this.materialService.getMaterials(page, this.itemsPerPage).subscribe((response) => {
             abp.ui.clearBusy('body');
             return this.fillMaterials(response);
         });
     }
 
-    private fillPaginationModel(response: CountResponseModel, page: number): void {
-        if (response.success) {
-            this.model.paginationModel = {
-                count: response.count,
-                currentPage: page,
-                itemsPerPage: this.itemsPerPage,
-                route: this.materialsRoute
-            };
-        } else {
-            if (response && response.errors) {
-                response.errors.forEach(err => this.displayError(err));
-            }
-        }
+    private fillPaginationModel(count: number, page: number): void {
+        this.model.paginationModel = {
+            count: count,
+            currentPage: page,
+            itemsPerPage: this.itemsPerPage,
+            route: this.materialsRoute
+        };
     }
 
-    private fillMaterials(response: PaginationResponseModel<MaterialModel>): void {
-        if (response.success) {
-            this.model.materials = response.entities;
-        } else {
-            if (response && response.errors) {
-                response.errors.forEach(err => this.displayError(err));
-            }
-        }
+    private fillMaterials(materials: Material[]): void {
+        this.model.materials = materials;
     }
 
     ngOnDestroy(): void {

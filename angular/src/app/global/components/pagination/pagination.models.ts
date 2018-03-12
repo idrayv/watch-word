@@ -19,7 +19,3 @@ export class PaginationModel {
 export class PaginationResponseModel<TEntity> extends BaseResponseModel {
     public entities: TEntity[];
 }
-
-export class CountResponseModel extends BaseResponseModel {
-    public count: number;
-}

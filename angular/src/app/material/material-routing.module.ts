@@ -4,16 +4,16 @@ import {MaterialComponent} from './material.component';
 
 const routes: Routes = [
     {
-        path: '',
-        redirectTo: 'create',
-        pathMatch: 'full'
-    },
-    {
         path: ':id',
         component: MaterialComponent
     }, {
         path: 'create',
         component: MaterialComponent
+    },
+    {
+        path: '',
+        redirectTo: 'create',
+        pathMatch: 'full'
     }
 ];
 

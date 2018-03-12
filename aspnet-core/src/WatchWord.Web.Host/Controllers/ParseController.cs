@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Abp.UI;
 using WatchWord.Controllers;
-using WatchWord.ScanWordParser;
 using WatchWord.Authorization.Users;
 using WatchWord.Vocabulary;
 using WatchWord.Models;
 using WatchWord.Web.Host.Infrastructure;
 using WatchWord.Domain.Entities;
+using WatchWord.ScanWord;
 
 namespace WatchWord.Web.Host.Controllers
 {

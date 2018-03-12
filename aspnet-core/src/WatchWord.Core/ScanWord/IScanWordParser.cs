@@ -2,7 +2,7 @@
 using System.IO;
 using WatchWord.Domain.Entities;
 
-namespace WatchWord.ScanWordParser
+namespace WatchWord.ScanWord
 {
     /// <summary>Represents logic for parsing words in the files or streams.</summary>
     public interface IScanWordParser

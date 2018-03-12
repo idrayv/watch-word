@@ -5,9 +5,10 @@ import {TranslationModalComponent} from './translation-modal.component';
 import {TranslationModalService} from './translation-modal.service';
 import {DictionariesService} from '../../../dictionaries/dictionaries.service';
 import {GlobalPipes} from '../../../global/pipes/global-pipes.module';
+import {ModalModule} from 'ngx-bootstrap';
 
 @NgModule({
-    imports: [FormsModule, CommonModule, GlobalPipes],
+    imports: [FormsModule, CommonModule, GlobalPipes, ModalModule],
     declarations: [TranslationModalComponent],
     providers: [TranslationModalService, DictionariesService],
     exports: [TranslationModalComponent]

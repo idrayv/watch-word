@@ -1,27 +1,35 @@
-﻿<div>
-    <div>
-        <div class="center modal-word">{{ model.vocabWord.word | capitalize }}</div>
-        <div class="center">
-            <div class="ui slider checkbox">
-                <input type="checkbox" [checked]="model?.vocabWord.type == 0"
-                       (change)="(model?.vocabWord.type === 0) ?
+﻿<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="modal" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content translation-modal-content">
+            <div *ngIf="active">
+                <div>
+                    <div class="center modal-word">{{ model.vocabWord.word | capitalize }}</div>
+                    <div class="center">
+                        <div class="ui slider checkbox">
+                            <input type="checkbox" [checked]="model?.vocabWord.type == 0"
+                                   (change)="(model?.vocabWord.type === 0) ?
                         model?.vocabWord.type = 1 :
                         model?.vocabWord.type = 0">
-                <label>Learn</label>
-            </div>
-            <div class="ui slider checkbox">
-                <input type="checkbox" [checked]="model?.vocabWord.type == 1"
-                       (change)="(model?.vocabWord.type === 1) ?
+                            <label>Learn</label>
+                        </div>
+                        <div class="ui slider checkbox">
+                            <input type="checkbox" [checked]="model?.vocabWord.type == 1"
+                                   (change)="(model?.vocabWord.type === 1) ?
                         model?.vocabWord.type = 0 :
                         model?.vocabWord.type = 1">
-                <label>Know</label>
+                            <label>Know</label>
+                        </div>
+                    </div>
+                    <div class="center modal-translation">Translation:</div>
+                </div>
+                <div class="modal-words">
+                    <div class="word" *ngFor="let translation of model.translations"
+                         (click)="selectTranslation(translation)">
+                        <div class="modal-origin">{{ translation }}</div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="center modal-translation">Translation:</div>
-    </div>
-    <div class="words modal">
-        <div class="word" *ngFor="let translation of model.translations" (click)="selectTranslation(translation)">
-            <div class="modal-origin">{{ translation }}</div>
         </div>
     </div>
 </div>

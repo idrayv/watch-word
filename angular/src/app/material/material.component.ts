@@ -8,10 +8,7 @@ import {TranslationModalService} from '../global/components/translation-modal/tr
 import {ComponentValidation} from '../global/component-validation';
 import {FavoriteMaterialsService} from '../global/favorite-materials/favorite-materils.service';
 import {AppComponentBase} from '@shared/app-component-base';
-
 import {MaterialServiceProxy, Word, Material, VocabWord, VocabWordType} from 'shared/service-proxies/service-proxies';
-
-declare let ga: any;
 
 @Component({
     templateUrl: 'material.template.html'
@@ -22,11 +19,9 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     public vocabWords: VocabWord[] = [];
     public material: Material = new Material();
     public isFavorite = false;
-    // public accountInformation: AccountInformation;
     public formSubmitted = false;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
     private routeSubscription: ISubscription;
-    private accountSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
 
     constructor(private materialService: MaterialServiceProxy,
@@ -39,12 +34,8 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     }
 
     ngOnInit() {
-        /*this.accountSubscription = this.accountInformationService.getAccountInformationObservable().subscribe(accountInformation => {
-            this.accountInformation = accountInformation;
-        });*/
-
         this.routeSubscription = this.route.params.subscribe(params => this.onRouteChanged(params['id']));
-        this.translationModalResponseSubscription = this.translationModalService.translationModalResponseObserverable
+        this.translationModalResponseSubscription = this.translationModalService.translationModalResponseObservable
             .subscribe(response => {
                 if (response.success) {
                     // this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
@@ -163,41 +154,25 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     private initializeMaterial(id: number): void {
         abp.ui.setBusy('body');
 
-        /* this.materialService.getMaterial(id).then(response => {
-             if (response.success) {
-                 this.mode = MaterialMode.Read;
-                 this.material = response.material;
-                 this.vocabWords = response.vocabWords;
-             } else {
-                 this.mode = null;
-                 response.errors.forEach(err => this.displayError(err));
-             }
+        this.materialService.getMaterial(id).subscribe(response => {
+            this.mode = MaterialMode.Read;
+            this.material = response.material;
+            this.vocabWords = response.vocabWords;
 
-             // TODO: Wait accountSubscription
-             /!*if (this.accountInformation.account.name) {
-                 this.favoriteMaterialsService.get(this.material.id).then(res => {
-                     abp.ui.clearBusy('body');
-                     if (res.success) {
-                         this.isFavorite = res.isFavorite;
-                     } else {
-                         this.displayErrors(res.errors);
-                     }
-                 });
-             }*!/
-
-             const accountName = /!*this.accountInformation.account.name;*!/ '';
-             const materialName = this.material.name;
-             ga('send', {
-                 hitType: 'event',
-                 eventCategory: 'Materials',
-                 eventAction: 'Visit',
-                 eventLabel: materialName,
-                 dimension1: accountName,
-                 dimension2: materialName,
-                 hitCallback: function () {
-                 }
-             });
-         });*/
+            if (this.appSession.getShownLoginName()) {
+                /*this.favoriteMaterialsService.get(this.material.id).then(res => {
+                    abp.ui.clearBusy('body');
+                    if (res.success) {
+                        this.isFavorite = res.isFavorite;
+                    } else {
+                        this.displayErrors(res.errors);
+                    }
+                });*/
+                abp.ui.clearBusy('body');
+            } else {
+                abp.ui.clearBusy('body');
+            }
+        });
     }
 
     public removeFromFavorites(): void {
@@ -226,7 +201,6 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
 
     ngOnDestroy() {
         this.routeSubscription.unsubscribe();
-        // this.accountSubscription.unsubscribe();
         this.translationModalResponseSubscription.unsubscribe();
     }
 }

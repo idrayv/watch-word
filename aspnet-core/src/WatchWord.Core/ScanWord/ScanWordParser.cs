@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WatchWord.Domain.Entities;
 
-namespace WatchWord.ScanWordParser
+namespace WatchWord.ScanWord
 {
     /// <summary>Represents logic for parsing words in the files or streams.</summary>
     public class ScanWordParser : IScanWordParser

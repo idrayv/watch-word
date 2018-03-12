@@ -32,7 +32,7 @@ export class DictionariesComponent extends AppComponentBase implements OnInit, O
             abp.ui.clearBusy('body');
         });
 
-        this.modalResponse = this.translationModalService.translationModalResponseObserverable.subscribe(response => {
+        this.modalResponse = this.translationModalService.translationModalResponseObservable.subscribe(response => {
             this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
         });
     }

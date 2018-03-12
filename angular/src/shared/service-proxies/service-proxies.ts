@@ -381,6 +381,213 @@ export class MaterialServiceProxy {
     }
 
     /**
+     * @return Success
+     */
+    getMaterial(id: number): Observable<MaterialResponseDto> {
+        let url_ = this.baseUrl + "/api/services/app/Material/GetMaterial?";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined and cannot be null.");
+        else
+            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processGetMaterial(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetMaterial(<any>response_);
+                } catch (e) {
+                    return <Observable<MaterialResponseDto>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<MaterialResponseDto>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetMaterial(response: Response): Observable<MaterialResponseDto> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? MaterialResponseDto.fromJS(resultData200) : new MaterialResponseDto();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<MaterialResponseDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getMaterials(page: number, count: number): Observable<Material[]> {
+        let url_ = this.baseUrl + "/api/services/app/Material/GetMaterials?";
+        if (page === undefined || page === null)
+            throw new Error("The parameter 'page' must be defined and cannot be null.");
+        else
+            url_ += "page=" + encodeURIComponent("" + page) + "&"; 
+        if (count === undefined || count === null)
+            throw new Error("The parameter 'count' must be defined and cannot be null.");
+        else
+            url_ += "count=" + encodeURIComponent("" + count) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processGetMaterials(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetMaterials(<any>response_);
+                } catch (e) {
+                    return <Observable<Material[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Material[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetMaterials(response: Response): Observable<Material[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(Material.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Material[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getCount(): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Material/GetCount";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processGetCount(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetCount(<any>response_);
+                } catch (e) {
+                    return <Observable<number>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<number>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetCount(response: Response): Observable<number> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<number>(<any>null);
+    }
+
+    /**
+     * @text (optional) 
+     * @return Success
+     */
+    search(text: string): Observable<Material[]> {
+        let url_ = this.baseUrl + "/api/services/app/Material/Search?";
+        if (text !== undefined)
+            url_ += "text=" + encodeURIComponent("" + text) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processSearch(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processSearch(<any>response_);
+                } catch (e) {
+                    return <Observable<Material[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Material[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processSearch(response: Response): Observable<Material[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(Material.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Material[]>(<any>null);
+    }
+
+    /**
      * @material (optional) 
      * @return Success
      */
@@ -474,56 +681,6 @@ export class MaterialServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<void>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getMaterial(id: number): Observable<MaterialResponseDto> {
-        let url_ = this.baseUrl + "/api/services/app/Material/GetMaterial?";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined and cannot be null.");
-        else
-            url_ += "id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processGetMaterial(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGetMaterial(<any>response_);
-                } catch (e) {
-                    return <Observable<MaterialResponseDto>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<MaterialResponseDto>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetMaterial(response: Response): Observable<MaterialResponseDto> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? MaterialResponseDto.fromJS(resultData200) : new MaterialResponseDto();
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<MaterialResponseDto>(<any>null);
     }
 }
 
@@ -1441,6 +1598,71 @@ export class TokenAuthServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<ExternalAuthenticateResultModel>(<any>null);
+    }
+}
+
+@Injectable()
+export class TranslationServiceProxy {
+    private http: Http;
+    private baseUrl: string;
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(@Inject(Http) http: Http, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @word (optional) 
+     * @return Success
+     */
+    translate(word: string): Observable<string[]> {
+        let url_ = this.baseUrl + "/api/services/app/Translation/Translate?";
+        if (word !== undefined)
+            url_ += "word=" + encodeURIComponent("" + word) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processTranslate(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processTranslate(<any>response_);
+                } catch (e) {
+                    return <Observable<string[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<string[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processTranslate(response: Response): Observable<string[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(item);
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<string[]>(<any>null);
     }
 }
 
@@ -2886,49 +3108,6 @@ export interface IIFormFile {
     fileName: string;
 }
 
-export class SaveMaterialResponseDto implements ISaveMaterialResponseDto {
-    id: number;
-
-    constructor(data?: ISaveMaterialResponseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): SaveMaterialResponseDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new SaveMaterialResponseDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new SaveMaterialResponseDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ISaveMaterialResponseDto {
-    id: number;
-}
-
 export class MaterialResponseDto implements IMaterialResponseDto {
     material: Material;
     vocabWords: VocabWord[];
@@ -2982,6 +3161,49 @@ export class MaterialResponseDto implements IMaterialResponseDto {
 export interface IMaterialResponseDto {
     material: Material;
     vocabWords: VocabWord[];
+}
+
+export class SaveMaterialResponseDto implements ISaveMaterialResponseDto {
+    id: number;
+
+    constructor(data?: ISaveMaterialResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): SaveMaterialResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SaveMaterialResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new SaveMaterialResponseDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISaveMaterialResponseDto {
+    id: number;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
