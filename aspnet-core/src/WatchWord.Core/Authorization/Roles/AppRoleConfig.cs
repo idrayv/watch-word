@@ -16,11 +16,25 @@ namespace WatchWord.Authorization.Roles
                 )
             );
 
+            roleManagementConfig.StaticRoles.Add(
+               new StaticRoleDefinition(
+                   StaticRoleNames.Host.Member,
+                   MultiTenancySides.Host
+               )
+           );
+
             // Static tenant roles
 
             roleManagementConfig.StaticRoles.Add(
                 new StaticRoleDefinition(
                     StaticRoleNames.Tenants.Admin,
+                    MultiTenancySides.Tenant
+                )
+            );
+
+            roleManagementConfig.StaticRoles.Add(
+                new StaticRoleDefinition(
+                    StaticRoleNames.Tenants.Member,
                     MultiTenancySides.Tenant
                 )
             );

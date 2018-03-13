@@ -1,9 +1,6 @@
 ﻿import {NgModel} from '@angular/forms';
 
 export class ComponentValidation {
-    private static capitalizeFirstLetter(word: string): string {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-    }
 
     public static validationErrors(state: NgModel): string[] {
         const errors: string[] = [];
@@ -34,5 +31,9 @@ export class ComponentValidation {
             }
         }
         return errors;
+    }
+
+    private static capitalizeFirstLetter(word: string): string {
+        return word.charAt(0).toUpperCase() + word.slice(1);
     }
 }

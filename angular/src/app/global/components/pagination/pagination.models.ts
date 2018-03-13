@@ -1,6 +1,4 @@
-﻿import {BaseResponseModel} from '../../models';
-
-export class PaginationServiceModel {
+﻿export class PaginationServiceModel {
     public currentPage: number;
     public totalPages: number;
     public startPage: number;
@@ -14,8 +12,4 @@ export class PaginationModel {
     public currentPage: number;
     public route: string;
     public itemsPerPage: number;
-}
-
-export class PaginationResponseModel<TEntity> extends BaseResponseModel {
-    public entities: TEntity[];
 }

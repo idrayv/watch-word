@@ -8,6 +8,5 @@ import {NotFoundRoutingModule} from './not-found-routing.module';
     declarations: [NotFoundComponent],
     providers: []
 })
-
 export class NotFoundModule {
 }

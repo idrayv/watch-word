@@ -8,6 +8,5 @@ import {TranslationModalModule} from '../translation-modal/translation-modal.mod
     declarations: [WordComponent],
     exports: [WordComponent]
 })
-
 export class WordModule {
 }

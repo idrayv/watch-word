@@ -72,5 +72,6 @@
     <text name="TenantIdIsNotActive{0}">TenantId {0} is not active</text>
     <text name="UnknownTenantId{0}">Unknown tenantId {0}</text>
     <text name="Member" value="Member" />
+    <text name="Admin" value="Admin" />
   </texts>
 </localizationDictionary>

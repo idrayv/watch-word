@@ -12,6 +12,5 @@ import {ModalModule} from 'ngx-bootstrap';
     providers: [TranslationModalService],
     exports: [TranslationModalComponent]
 })
-
 export class TranslationModalModule {
 }

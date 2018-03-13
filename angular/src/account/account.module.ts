@@ -10,7 +10,6 @@ import {SharedModule} from '@shared/shared.module';
 import {AccountComponent} from './account.component';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
-
 import {LoginService} from './login/login.service';
 
 @NgModule({

@@ -39,6 +39,15 @@ namespace WatchWord.EntityFrameworkCore.Seed.Tenants
                 _context.SaveChanges();
             }
 
+            // Member role
+
+            var memberRole = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == _tenantId && r.Name == StaticRoleNames.Tenants.Member);
+            if (memberRole == null)
+            {
+                memberRole = _context.Roles.Add(new Role(_tenantId, StaticRoleNames.Tenants.Member, StaticRoleNames.Tenants.Member) { IsStatic = true, IsDefault = true }).Entity;
+                _context.SaveChanges();
+            }
+
             // Grant all permissions to admin role
 
             var grantedPermissions = _context.Permissions.IgnoreQueryFilters()
@@ -63,6 +72,27 @@ namespace WatchWord.EntityFrameworkCore.Seed.Tenants
                         IsGranted = true,
                         RoleId = adminRole.Id
                     })
+                );
+                _context.SaveChanges();
+            }
+
+            // Grant member permissions
+
+            var memberPermissionExist = _context.Permissions.IgnoreQueryFilters()
+                .OfType<RolePermissionSetting>()
+                .Where(p => p.TenantId == _tenantId && p.RoleId == memberRole.Id && p.Name == StaticRoleNames.Tenants.Member)
+                .Any();
+
+            if (!memberPermissionExist)
+            {
+                _context.Permissions.Add(
+                    new RolePermissionSetting
+                    {
+                        TenantId = _tenantId,
+                        Name = StaticRoleNames.Tenants.Member,
+                        IsGranted = true,
+                        RoleId = memberRole.Id
+                    }
                 );
                 _context.SaveChanges();
             }

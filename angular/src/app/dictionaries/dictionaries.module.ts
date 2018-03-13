@@ -10,6 +10,5 @@ import {WordModule} from '../global/components/word/word.module';
     declarations: [DictionariesComponent],
     providers: []
 })
-
 export class DictionariesModule {
 }

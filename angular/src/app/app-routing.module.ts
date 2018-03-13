@@ -27,12 +27,19 @@ import {RolesComponent} from '@app/roles/roles.component';
                     {
                         path: 'material',
                         loadChildren: 'app/material/material.module#MaterialModule',
-                        data: {preload: true}
+                        data: {preload: true, permission: 'Member'},
+                        canActivate: [AppRouteGuard]
                     },
                     {
                         path: 'materials',
                         loadChildren: 'app/materials/materials.module#MaterialsModule',
                         data: {preload: true}
+                    },
+                    {
+                        path: 'dictionaries',
+                        loadChildren: 'app/dictionaries/dictionaries.module#DictionariesModule',
+                        data: {preload: true, permission: 'Member'},
+                        canActivate: [AppRouteGuard]
                     }
                 ]
             }

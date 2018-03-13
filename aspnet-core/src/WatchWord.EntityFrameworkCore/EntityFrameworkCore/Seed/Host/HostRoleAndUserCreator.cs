@@ -1,5 +1,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
@@ -7,8 +9,6 @@ using Abp.MultiTenancy;
 using WatchWord.Authorization;
 using WatchWord.Authorization.Roles;
 using WatchWord.Authorization.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
 
 namespace WatchWord.EntityFrameworkCore.Seed.Host
 {
@@ -37,6 +37,15 @@ namespace WatchWord.EntityFrameworkCore.Seed.Host
                 _context.SaveChanges();
             }
 
+            // Member role for host
+
+            var memberRoleForHost = _context.Roles.IgnoreQueryFilters().FirstOrDefault(r => r.TenantId == null && r.Name == StaticRoleNames.Host.Member);
+            if (memberRoleForHost == null)
+            {
+                memberRoleForHost = _context.Roles.Add(new Role(null, StaticRoleNames.Host.Member, StaticRoleNames.Host.Member) { IsStatic = true, IsDefault = true }).Entity;
+                _context.SaveChanges();
+            }
+
             // Grant all permissions to admin role for host
 
             var grantedPermissions = _context.Permissions.IgnoreQueryFilters()
@@ -61,6 +70,27 @@ namespace WatchWord.EntityFrameworkCore.Seed.Host
                         IsGranted = true,
                         RoleId = adminRoleForHost.Id
                     })
+                );
+                _context.SaveChanges();
+            }
+
+            // Grant member permissions
+
+            var memberPermissionExist = _context.Permissions.IgnoreQueryFilters()
+                .OfType<RolePermissionSetting>()
+                .Where(p => p.TenantId == null && p.RoleId == memberRoleForHost.Id && p.Name == StaticRoleNames.Host.Member)
+                .Any();
+
+            if (!memberPermissionExist)
+            {
+                _context.Permissions.Add(
+                    new RolePermissionSetting
+                    {
+                        TenantId = null,
+                        Name = StaticRoleNames.Host.Member,
+                        IsGranted = true,
+                        RoleId = memberRoleForHost.Id
+                    }
                 );
                 _context.SaveChanges();
             }

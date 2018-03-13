@@ -1,35 +1,60 @@
 ﻿@import 'variables.less';
 
 #material-files {
-    width: auto;
+  width: auto;
 }
 
 #material-edit-buttons {
-    padding-top: 0.5em;
+  padding-top: 0.5em;
 }
 
 .ui.secondary.button,
 .ui.secondary.buttons .button {
-    background-color: @blackBackgroundColor;
+  background-color: @blackBackgroundColor;
 
-    &:hover {
-        background-color: @blackBackgroundHoverColor;
-    }
+  &:hover {
+    background-color: @blackBackgroundHoverColor;
+  }
 }
 
 @media only screen and (max-width: 767px) {
-    .ui.items:not(.unstackable) > .item > .image {
-        margin-left: initial;
-    }
+  .ui.items:not(.unstackable) > .item > .image {
+    margin-left: initial;
+  }
 
-    .ui.items:not(.unstackable) > .item > .image,
-    .ui.items:not(.unstackable) > .item > .image > img {
-        max-width: initial !important;
-        width: initial !important;
-        max-height: initial !important;
-    }
+  .ui.items:not(.unstackable) > .item > .image,
+  .ui.items:not(.unstackable) > .item > .image > img {
+    max-width: initial !important;
+    width: initial !important;
+    max-height: initial !important;
+  }
 }
 
 .material-stats {
-    margin-top: 0.5em;
+  margin-top: 0.5em;
+}
+
+.file-input-wrapper {
+  width: 200px;
+  height: 40px;
+  overflow: hidden;
+  position: relative;
+}
+
+.file-input-wrapper > input[type="file"] {
+  font-size: 200px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+}
+
+.file-input-wrapper > .button {
+  display: inline-block;
+  width: 200px;
+  height: 40px;
+}
+
+.file-input-wrapper:hover > .button {
+  background-color: #aaa;
 }
