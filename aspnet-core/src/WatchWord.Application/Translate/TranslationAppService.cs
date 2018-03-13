@@ -1,15 +1,15 @@
-﻿using Abp.Domain.Repositories;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using WatchWord.Infrastructure;
-using WatchWord.Domain.Entities;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
 using System.Net;
 using System.IO;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Abp.Domain.Repositories;
+using WatchWord.Infrastructure;
+using WatchWord.Domain.Entities;
 
 namespace WatchWord.Translate
 {
@@ -33,19 +33,19 @@ namespace WatchWord.Translate
         {
             var translations = new List<string>();
 
-            // cache
+            // Cache
             translations.AddRange(await GetTranslateFromCache(word));
             if (translations.Count != 0)
             {
                 return translations;
             }
 
-            // yandex dictionary
+            // Yandex dictionary
             var source = TranslationSource.YandexDictionary;
             translations.AddRange(await GetYandexDictionaryTranslations(word));
             if (translations.Count == 0)
             {
-                // yandex translate
+                // Yandex translate
                 source = TranslationSource.YandexTranslate;
                 translations.AddRange(await GetYandexTranslateWord(word));
             }
@@ -69,14 +69,14 @@ namespace WatchWord.Translate
         {
             if (translations.Count == 0) return;
 
-            // delete if exist
+            // Delete if exist
             var existing = await _translationsRepository.GetAll().Where(t => t.Word == word).ToListAsync();
             foreach (var translation in existing)
             {
                 _translationsRepository.Delete(translation);
             }
 
-            // save translations
+            // Save translations
             var translationsCaches = translations.Select(translation => new Translation
             {
                 Word = word,

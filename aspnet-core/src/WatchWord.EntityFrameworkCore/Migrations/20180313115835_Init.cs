@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WatchWord.Migrations
 {
@@ -376,20 +376,6 @@ namespace WatchWord.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Accounts",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ExternalId = table.Column<long>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Translations",
                 columns: table => new
                 {
@@ -697,36 +683,11 @@ namespace WatchWord.Migrations
                 {
                     table.PrimaryKey("PK_Materials", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Materials_Accounts_OwnerId",
+                        name: "FK_Materials_AbpUsers_OwnerId",
                         column: x => x.OwnerId,
-                        principalTable: "Accounts",
+                        principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Settings",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Boolean = table.Column<bool>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Int = table.Column<int>(nullable: false),
-                    Key = table.Column<int>(nullable: false),
-                    OwnerId = table.Column<long>(nullable: false),
-                    String = table.Column<string>(nullable: true),
-                    Type = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Settings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Settings_Accounts_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -744,9 +705,9 @@ namespace WatchWord.Migrations
                 {
                     table.PrimaryKey("PK_VocabWords", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VocabWords_Accounts_OwnerId",
+                        name: "FK_VocabWords_AbpUsers_OwnerId",
                         column: x => x.OwnerId,
-                        principalTable: "Accounts",
+                        principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -844,9 +805,9 @@ namespace WatchWord.Migrations
                 {
                     table.PrimaryKey("PK_FavoriteMaterials", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FavoriteMaterials_Accounts_AccountId",
+                        name: "FK_FavoriteMaterials_AbpUsers_AccountId",
                         column: x => x.AccountId,
-                        principalTable: "Accounts",
+                        principalTable: "AbpUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -1220,11 +1181,6 @@ namespace WatchWord.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Accounts_ExternalId",
-                table: "Accounts",
-                column: "ExternalId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Compositions_WordId",
                 table: "Compositions",
                 column: "WordId");
@@ -1248,16 +1204,6 @@ namespace WatchWord.Migrations
                 name: "IX_Materials_Type",
                 table: "Materials",
                 column: "Type");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Settings_Key",
-                table: "Settings",
-                column: "Key");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Settings_OwnerId",
-                table: "Settings",
-                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubtitleFiles_MaterialId",
@@ -1355,9 +1301,6 @@ namespace WatchWord.Migrations
                 name: "FavoriteMaterials");
 
             migrationBuilder.DropTable(
-                name: "Settings");
-
-            migrationBuilder.DropTable(
                 name: "SubtitleFiles");
 
             migrationBuilder.DropTable(
@@ -1385,13 +1328,10 @@ namespace WatchWord.Migrations
                 name: "AbpEntityChangeSets");
 
             migrationBuilder.DropTable(
-                name: "AbpUsers");
-
-            migrationBuilder.DropTable(
                 name: "Materials");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "AbpUsers");
         }
     }
 }

@@ -41,5 +41,4 @@ import {RolesComponent} from '@app/roles/roles.component';
     exports: [RouterModule]
 })
 export class AppRoutingModule {
-
 }

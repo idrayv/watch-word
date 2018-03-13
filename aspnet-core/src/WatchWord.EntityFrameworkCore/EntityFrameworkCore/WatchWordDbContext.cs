@@ -75,6 +75,7 @@ namespace WatchWord.EntityFrameworkCore
             {
                 vocabWord.ToTable("VocabWords");
                 vocabWord.Property(v => v.Id).ValueGeneratedOnAdd();
+                vocabWord.HasOne(v => v.Owner).WithMany().OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.Entity<Translation>(translation =>
@@ -109,6 +110,7 @@ namespace WatchWord.EntityFrameworkCore
                 favoriteMaterial.ToTable("FavoriteMaterials");
                 favoriteMaterial.Property(f => f.Id).ValueGeneratedOnAdd();
                 favoriteMaterial.HasOne(f => f.Material).WithMany(m => m.FavoriteMaterials).OnDelete(DeleteBehavior.Cascade).IsRequired();
+                favoriteMaterial.HasOne(f => f.Account).WithMany().OnDelete(DeleteBehavior.Cascade).IsRequired();
             });
 
             modelBuilder.ForSqlServerUseIdentityColumns();

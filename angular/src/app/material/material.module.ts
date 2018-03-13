@@ -9,13 +9,12 @@ import {SubtitlesInputComponent} from './components/subtitles-input/subtitles-in
 import {TranslationModalModule} from '../global/components/translation-modal/translation-modal.module';
 import {WordModule} from '../global/components/word/word.module';
 import {VocabWordFiltrationPipe} from './pipes/vocab-word-filtration.pipe';
-import {FavoriteMaterialsService} from '../global/favorite-materials/favorite-materils.service';
 import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
     imports: [CommonModule, MaterialRoutingModule, FormsModule, TranslationModalModule, WordModule, HttpClientModule],
     declarations: [MaterialComponent, ImageInputComponent, SubtitlesInputComponent, VocabWordFiltrationPipe],
-    providers: [MaterialService, FavoriteMaterialsService]
+    providers: [MaterialService]
 })
 
 export class MaterialModule {

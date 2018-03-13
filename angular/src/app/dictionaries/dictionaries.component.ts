@@ -24,15 +24,10 @@ export class DictionariesComponent extends AppComponentBase implements OnInit, O
             .finally(() => abp.ui.clearBusy('body'))
             .subscribe((vocabWords) => this.vocabWords = vocabWords);
 
-        this.modalResponse = this.translationModalService.translationModalResponseObservable.subscribe(response => {
-            this.translationModalService.updateVocabWordInCollection(response.vocabWord, this.vocabWords);
+        this.modalResponse = this.translationModalService.translationModalResponseObservable.subscribe(vocabWord => {
+            this.translationModalService.updateVocabWordInCollection(vocabWord, this.vocabWords);
         });
     }
-
-    /* LearnWord,
-    KnownWord,
-    UnsignedWord,
-    IgnoredWord */
 
     public learnWords(): VocabWord[] {
         return this.vocabWords.filter(v => v.type === VocabWordType._0);

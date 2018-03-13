@@ -81,9 +81,9 @@
                         (click)="removeFromFavorites()">
                     Remove from favorites
                 </button>
-                <button *ngIf="mode == 0 && !isFavorite" class="ui secondary mini button" type="button"
+                <button *ngIf="isAddToFavoritesButtonVisible && !isFavorite" class="ui secondary mini button" type="button"
                         (click)="addToFavorites()">
-                    Add to favorites
+                    Add to favorite
                 </button>
             </div>
             <div *ngIf="vocabWords?.length > 0" class="material-stats">

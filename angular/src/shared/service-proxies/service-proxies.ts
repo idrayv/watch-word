@@ -136,7 +136,7 @@ export class AccountServiceProxy {
 }
 
 @Injectable()
-export class ConfigurationServiceProxy {
+export class FavoriteMaterialServiceProxy {
     private http: Http;
     private baseUrl: string;
     protected jsonParseReviver: (key: string, value: any) => any = undefined;
@@ -147,17 +147,17 @@ export class ConfigurationServiceProxy {
     }
 
     /**
-     * @input (optional) 
      * @return Success
      */
-    changeUiTheme(input: ChangeUiThemeInput): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Configuration/ChangeUiTheme";
+    post(materialId: number): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/FavoriteMaterial/Post?";
+        if (materialId === undefined || materialId === null)
+            throw new Error("The parameter 'materialId' must be defined and cannot be null.");
+        else
+            url_ += "materialId=" + encodeURIComponent("" + materialId) + "&"; 
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(input);
-
         let options_ : any = {
-            body: content_,
             method: "post",
             headers: new Headers({
                 "Content-Type": "application/json", 
@@ -165,11 +165,11 @@ export class ConfigurationServiceProxy {
         };
 
         return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processChangeUiTheme(response_);
+            return this.processPost(response_);
         }).catch((response_: any) => {
             if (response_ instanceof Response) {
                 try {
-                    return this.processChangeUiTheme(<any>response_);
+                    return this.processPost(<any>response_);
                 } catch (e) {
                     return <Observable<void>><any>Observable.throw(e);
                 }
@@ -178,7 +178,103 @@ export class ConfigurationServiceProxy {
         });
     }
 
-    protected processChangeUiTheme(response: Response): Observable<void> {
+    protected processPost(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    get(materialId: number): Observable<boolean> {
+        let url_ = this.baseUrl + "/api/services/app/FavoriteMaterial/Get?";
+        if (materialId === undefined || materialId === null)
+            throw new Error("The parameter 'materialId' must be defined and cannot be null.");
+        else
+            url_ += "materialId=" + encodeURIComponent("" + materialId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processGet(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGet(<any>response_);
+                } catch (e) {
+                    return <Observable<boolean>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<boolean>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGet(response: Response): Observable<boolean> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 !== undefined ? resultData200 : <any>null;
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<boolean>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    delete(materialId: number): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/FavoriteMaterial/Delete?";
+        if (materialId === undefined || materialId === null)
+            throw new Error("The parameter 'materialId' must be defined and cannot be null.");
+        else
+            url_ += "materialId=" + encodeURIComponent("" + materialId) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "delete",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processDelete(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processDelete(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processDelete(response: Response): Observable<void> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -1029,298 +1125,6 @@ export class SessionServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<GetCurrentLoginInformationsOutput>(<any>null);
-    }
-}
-
-@Injectable()
-export class TenantServiceProxy {
-    private http: Http;
-    private baseUrl: string;
-    protected jsonParseReviver: (key: string, value: any) => any = undefined;
-
-    constructor(@Inject(Http) http: Http, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * @input (optional) 
-     * @return Success
-     */
-    create(input: CreateTenantDto): Observable<TenantDto> {
-        let url_ = this.baseUrl + "/api/services/app/Tenant/Create";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            method: "post",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processCreate(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processCreate(<any>response_);
-                } catch (e) {
-                    return <Observable<TenantDto>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<TenantDto>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processCreate(response: Response): Observable<TenantDto> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? TenantDto.fromJS(resultData200) : new TenantDto();
-            return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<TenantDto>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    delete(id: number): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Tenant/Delete?";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined and cannot be null.");
-        else
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "delete",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processDelete(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processDelete(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<void>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processDelete(response: Response): Observable<void> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            return Observable.of<void>(<any>null);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<void>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    get(id: number): Observable<TenantDto> {
-        let url_ = this.baseUrl + "/api/services/app/Tenant/Get?";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined and cannot be null.");
-        else
-            url_ += "Id=" + encodeURIComponent("" + id) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processGet(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGet(<any>response_);
-                } catch (e) {
-                    return <Observable<TenantDto>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<TenantDto>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGet(response: Response): Observable<TenantDto> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? TenantDto.fromJS(resultData200) : new TenantDto();
-            return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<TenantDto>(<any>null);
-    }
-
-    /**
-     * @return Success
-     */
-    getAll(skipCount: number, maxResultCount: number): Observable<PagedResultDtoOfTenantDto> {
-        let url_ = this.baseUrl + "/api/services/app/Tenant/GetAll?";
-        if (skipCount === undefined || skipCount === null)
-            throw new Error("The parameter 'skipCount' must be defined and cannot be null.");
-        else
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
-        if (maxResultCount === undefined || maxResultCount === null)
-            throw new Error("The parameter 'maxResultCount' must be defined and cannot be null.");
-        else
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processGetAll(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGetAll(<any>response_);
-                } catch (e) {
-                    return <Observable<PagedResultDtoOfTenantDto>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<PagedResultDtoOfTenantDto>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetAll(response: Response): Observable<PagedResultDtoOfTenantDto> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PagedResultDtoOfTenantDto.fromJS(resultData200) : new PagedResultDtoOfTenantDto();
-            return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<PagedResultDtoOfTenantDto>(<any>null);
-    }
-
-    /**
-     * @input (optional) 
-     * @return Success
-     */
-    update(input: TenantDto): Observable<TenantDto> {
-        let url_ = this.baseUrl + "/api/services/app/Tenant/Update";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(input);
-
-        let options_ : any = {
-            body: content_,
-            method: "put",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processUpdate(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processUpdate(<any>response_);
-                } catch (e) {
-                    return <Observable<TenantDto>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<TenantDto>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processUpdate(response: Response): Observable<TenantDto> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? TenantDto.fromJS(resultData200) : new TenantDto();
-            return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<TenantDto>(<any>null);
     }
 }
 
@@ -2433,49 +2237,6 @@ export class RegisterOutput implements IRegisterOutput {
 
 export interface IRegisterOutput {
     canLogin: boolean;
-}
-
-export class ChangeUiThemeInput implements IChangeUiThemeInput {
-    theme: string;
-
-    constructor(data?: IChangeUiThemeInput) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.theme = data["theme"];
-        }
-    }
-
-    static fromJS(data: any): ChangeUiThemeInput {
-        data = typeof data === 'object' ? data : {};
-        let result = new ChangeUiThemeInput();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["theme"] = this.theme;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new ChangeUiThemeInput();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IChangeUiThemeInput {
-    theme: string;
 }
 
 export class IFormFile implements IIFormFile {
@@ -4203,175 +3964,6 @@ export interface ITenantLoginInfoDto {
     tenancyName: string;
     name: string;
     id: number;
-}
-
-export class CreateTenantDto implements ICreateTenantDto {
-    tenancyName: string;
-    name: string;
-    adminEmailAddress: string;
-    connectionString: string;
-    isActive: boolean;
-
-    constructor(data?: ICreateTenantDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.tenancyName = data["tenancyName"];
-            this.name = data["name"];
-            this.adminEmailAddress = data["adminEmailAddress"];
-            this.connectionString = data["connectionString"];
-            this.isActive = data["isActive"];
-        }
-    }
-
-    static fromJS(data: any): CreateTenantDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateTenantDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["tenancyName"] = this.tenancyName;
-        data["name"] = this.name;
-        data["adminEmailAddress"] = this.adminEmailAddress;
-        data["connectionString"] = this.connectionString;
-        data["isActive"] = this.isActive;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new CreateTenantDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ICreateTenantDto {
-    tenancyName: string;
-    name: string;
-    adminEmailAddress: string;
-    connectionString: string;
-    isActive: boolean;
-}
-
-export class TenantDto implements ITenantDto {
-    tenancyName: string;
-    name: string;
-    isActive: boolean;
-    id: number;
-
-    constructor(data?: ITenantDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.tenancyName = data["tenancyName"];
-            this.name = data["name"];
-            this.isActive = data["isActive"];
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): TenantDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TenantDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["tenancyName"] = this.tenancyName;
-        data["name"] = this.name;
-        data["isActive"] = this.isActive;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new TenantDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ITenantDto {
-    tenancyName: string;
-    name: string;
-    isActive: boolean;
-    id: number;
-}
-
-export class PagedResultDtoOfTenantDto implements IPagedResultDtoOfTenantDto {
-    totalCount: number;
-    items: TenantDto[];
-
-    constructor(data?: IPagedResultDtoOfTenantDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.totalCount = data["totalCount"];
-            if (data["items"] && data["items"].constructor === Array) {
-                this.items = [];
-                for (let item of data["items"])
-                    this.items.push(TenantDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): PagedResultDtoOfTenantDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultDtoOfTenantDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["totalCount"] = this.totalCount;
-        if (this.items && this.items.constructor === Array) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new PagedResultDtoOfTenantDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IPagedResultDtoOfTenantDto {
-    totalCount: number;
-    items: TenantDto[];
 }
 
 export class AuthenticateModel implements IAuthenticateModel {

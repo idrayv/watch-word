@@ -81,8 +81,8 @@ namespace WatchWord.Materials
             material.Owner = await GetCurrentUserAsync();
 
             // TODO: Allow for admin
-            var oldMaterial = await _materialsRepository.GetAll().Where(m => m.Id == material.Id).Include(m => m.Owner).FirstOrDefaultAsync();
-            if (oldMaterial != null && oldMaterial.Owner.Id != material.Owner.Id)
+            var isOtherOwner = _materialsRepository.GetAll().Include(m => m.Owner).Where(m => m.Id == material.Id && m.Owner.Id != material.Owner.Id).Any();
+            if (isOtherOwner)
             {
                 throw new UserFriendlyException("You are not allowed to change other owner's materials!");
             }

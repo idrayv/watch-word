@@ -1,7 +1,6 @@
 ﻿import {Component, Input} from '@angular/core';
-import {Word} from '../../../material/material.models';
 import {TranslationModalService} from '../translation-modal/translation-modal.service';
-import {VocabWord} from '@shared/service-proxies/service-proxies';
+import {VocabWord, Word} from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'ww-word',

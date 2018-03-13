@@ -1,65 +1,19 @@
-﻿import { BaseResponseModel } from '../global/models';
-
-export class ParseResponseModel {
-    public words: Word[];
-    public vocabWords: VocabWord[];
-}
-
-export class ImageResponseModel {
-    public base64: string;
-}
+﻿import {VocabWordType} from '@shared/service-proxies/service-proxies';
 
 export enum MaterialMode {
     Read, Edit, Add
-}
-
-export enum MaterialType {
-    Film, Series
-}
-
-export enum VocabType {
-    LearnWord, KnownWord, UnsignedWord, IgnoredWord
-}
-
-export class Word {
-    public id: number;
-    public theWord: string;
-    public count: number;
 }
 
 export class VocabWord {
     public id: number;
     public word: string;
     public translation: string;
-    public type: VocabType = VocabType.LearnWord;
-}
-
-export class Material {
-    public id: number;
-    public materialType: MaterialType;
-    public name: string;
-    public description: string;
-    public image: string;
-    public words: Word[] = [];
-    public owner: Account;
+    public type: VocabWordType = VocabWordType._0;
 }
 
 export class MaterialStats {
     public name: string;
     public value: string;
-}
-
-export class MaterialResponseModel extends BaseResponseModel {
-    public material: Material;
-    public vocabWords: VocabWord[];
-}
-
-export class MaterialPostResponseModel extends BaseResponseModel {
-    public id: number;
-}
-
-export class VocabWordsResponseModel extends BaseResponseModel {
-    public vocabWords: VocabWord[];
 }
 
 export class VocabWordFiltration {
@@ -71,10 +25,6 @@ export class VocabWordFiltration {
         this._showLearnWords = showLearnWords;
         this._showKnownWords = showKnownWords;
         this._showUnsignedWords = showUnsignedWords;
-    }
-
-    private clone(): VocabWordFiltration {
-        return new VocabWordFiltration(this._showLearnWords, this._showKnownWords, this._showUnsignedWords);
     }
 
     public get showLearnWords(): boolean {
@@ -107,4 +57,7 @@ export class VocabWordFiltration {
         return result;
     }
 
+    private clone(): VocabWordFiltration {
+        return new VocabWordFiltration(this._showLearnWords, this._showKnownWords, this._showUnsignedWords);
+    }
 }

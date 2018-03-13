@@ -1,7 +1,7 @@
 ﻿import {Component, ElementRef, forwardRef, ViewChild, Output, Input, EventEmitter} from '@angular/core';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl} from '@angular/forms';
 import {MaterialService} from '../../material.service';
-import {VocabWord, Word} from '../../material.models';
+import {VocabWord, Word} from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'ww-subtitles-input',
@@ -16,8 +16,8 @@ import {VocabWord, Word} from '../../material.models';
         multi: true
     }]
 })
-
 export class SubtitlesInputComponent implements ControlValueAccessor, Validator {
+
     private onChangeCallback: Function;
     private serverError: string[] = [];
 

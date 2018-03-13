@@ -15,8 +15,8 @@ import {MaterialService} from '../../material.service';
         multi: true
     }]
 })
-
 export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
+
     private onChangeCallback: Function;
     private error: string[] = [];
     private types: string[] = [];
