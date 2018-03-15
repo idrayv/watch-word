@@ -7,8 +7,8 @@ import {VocabularyServiceProxy, VocabWord, VocabWordType} from '@shared/service-
 @Component({
     templateUrl: 'dictionaries.template.html'
 })
-
 export class DictionariesComponent extends AppComponentBase implements OnInit, OnDestroy {
+
     private vocabWords: VocabWord[] = [];
     private modalResponse: ISubscription;
 

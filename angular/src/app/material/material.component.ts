@@ -77,7 +77,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         abp.ui.setBusy('body');
         this.materialService.delete(this.material.id).subscribe(() => {
             abp.ui.clearBusy('body');
-            this.router.navigateByUrl('materials');
+            this.router.navigateByUrl('app/materials');
         });
     }
 
@@ -145,7 +145,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         } else if (+param) {
             this.initializeMaterial(+param);
         } else {
-            this.router.navigate(['/404']);
+            this.router.navigate(['app/404']);
         }
     }
 

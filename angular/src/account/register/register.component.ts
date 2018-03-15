@@ -14,7 +14,6 @@ export class RegisterComponent extends AppComponentBase implements AfterViewInit
     @ViewChild('cardBody') cardBody: ElementRef;
 
     model: RegisterInput = new RegisterInput();
-
     saving = false;
 
     constructor(injector: Injector,
@@ -28,14 +27,12 @@ export class RegisterComponent extends AppComponentBase implements AfterViewInit
         $(this.cardBody.nativeElement).find('input:first').focus();
     }
 
-    back(): void {
-        this._router.navigate(['/login']);
-    }
-
     save(): void {
         this.saving = true;
+        abp.ui.setBusy($('.body'));
         this._accountService.register(this.model)
             .finally(() => {
+                abp.ui.clearBusy($('.body'));
                 this.saving = false;
             })
             .subscribe((result: RegisterOutput) => {
@@ -47,9 +44,11 @@ export class RegisterComponent extends AppComponentBase implements AfterViewInit
 
                 // Authenticate
                 this.saving = true;
+                abp.ui.setBusy($('.body'));
                 this._loginService.authenticateModel.userNameOrEmailAddress = this.model.userName;
                 this._loginService.authenticateModel.password = this.model.password;
                 this._loginService.authenticate(() => {
+                    abp.ui.clearBusy($('.body'));
                     this.saving = false;
                 });
             });

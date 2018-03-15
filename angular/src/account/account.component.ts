@@ -9,6 +9,7 @@ import {AppComponentBase} from '@shared/app-component-base';
     encapsulation: ViewEncapsulation.None
 })
 export class AccountComponent extends AppComponentBase implements OnInit {
+
     versionText: string;
     currentYear: number;
 

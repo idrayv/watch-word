@@ -12,8 +12,6 @@ import {UtilsService} from '@abp/utils/utils.service';
 @Injectable()
 export class LoginService {
 
-    static readonly twoFactorRememberClientTokenName = 'TwoFactorRememberClientToken';
-
     authenticateModel: AuthenticateModel;
     authenticateResult: AuthenticateResultModel;
 
@@ -22,7 +20,6 @@ export class LoginService {
     constructor(private _tokenAuthService: TokenAuthServiceProxy,
                 private _router: Router,
                 private _utilsService: UtilsService,
-                private _messageService: MessageService,
                 private _tokenService: TokenService,
                 private _logService: LogService) {
         this.clear();
