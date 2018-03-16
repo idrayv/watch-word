@@ -9,7 +9,7 @@ using WatchWord.EntityFrameworkCore;
 namespace WatchWord.Migrations
 {
     [DbContext(typeof(WatchWordDbContext))]
-    [Migration("20180313115835_Init")]
+    [Migration("20180316155540_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1028,8 +1028,8 @@ namespace WatchWord.Migrations
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20000);
+                        .HasColumnType("LONGTEXT")
+                        .HasMaxLength(30000);
 
                     b.Property<string>("Name")
                         .IsRequired()

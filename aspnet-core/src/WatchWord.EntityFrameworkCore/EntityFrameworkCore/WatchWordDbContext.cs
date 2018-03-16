@@ -63,7 +63,7 @@ namespace WatchWord.EntityFrameworkCore
                 material.ToTable("Materials");
                 material.Property(m => m.Id).ValueGeneratedOnAdd();
 
-                material.Property(m => m.Image).HasColumnType("TEXT").HasMaxLength(20000);
+                material.Property(m => m.Image).HasColumnType("LONGTEXT").HasMaxLength(30000);
 
                 material.Property(m => m.Name).HasMaxLength(256).IsRequired();
                 material.Property(m => m.Image).IsRequired();

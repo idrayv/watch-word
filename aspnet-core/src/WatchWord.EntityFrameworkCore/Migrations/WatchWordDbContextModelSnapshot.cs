@@ -1026,8 +1026,8 @@ namespace WatchWord.Migrations
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(20000);
+                        .HasColumnType("LONGTEXT")
+                        .HasMaxLength(30000);
 
                     b.Property<string>("Name")
                         .IsRequired()

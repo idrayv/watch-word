@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -674,7 +673,7 @@ namespace WatchWord.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(maxLength: 1024, nullable: false),
-                    Image = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: false),
+                    Image = table.Column<string>(type: "LONGTEXT", maxLength: 30000, nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     OwnerId = table.Column<long>(nullable: true),
                     Type = table.Column<int>(nullable: false)
