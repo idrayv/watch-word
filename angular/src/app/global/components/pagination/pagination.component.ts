@@ -13,8 +13,8 @@ import {PaginationHelperService} from './pagination-helper.service';
     }]
 })
 export class PaginationComponent implements ControlValueAccessor {
-    
-    private model: PaginationServiceModel;
+
+    public model: PaginationServiceModel;
 
     constructor(private pagination: PaginationHelperService) {
     }
