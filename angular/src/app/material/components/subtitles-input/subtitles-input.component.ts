@@ -38,11 +38,11 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
     }
 
     fileChanged() {
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
         const file: File = this.fileInput.nativeElement.files[0];
 
         this.materialService.parseSubtitles(file).then(response => {
-            abp.ui.clearBusy('body');
+            abp.ui.clearBusy();
             if (response.success) {
                 const responseObject = JSON.parse(response.result);
                 this.vocabWordsChange.emit(responseObject.vocabWords);

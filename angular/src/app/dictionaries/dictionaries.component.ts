@@ -19,9 +19,9 @@ export class DictionariesComponent extends AppComponentBase implements OnInit, O
     }
 
     ngOnInit(): void {
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
         this.dictionariesService.get()
-            .finally(() => abp.ui.clearBusy('body'))
+            .finally(() => abp.ui.clearBusy())
             .subscribe((vocabWords) => this.vocabWords = vocabWords);
 
         this.modalResponse = this.translationModalService.translationModalResponseObservable.subscribe(vocabWord => {

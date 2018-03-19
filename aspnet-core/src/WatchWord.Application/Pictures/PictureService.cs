@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ImageProcessorCore;
+using Abp.Authorization;
 
 namespace WatchWord.Pictures
 {
     public class PictureService : IPictureService
     {
+        [AbpAuthorize("Member")]
         public string ParseImageFile(IFormFile file)
         {
             string base64;

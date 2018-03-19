@@ -34,8 +34,13 @@ export class TranslationModalComponent extends AppComponentBase implements OnIni
     }
 
     public selectTranslation(translation: string): void {
-        this.model.vocabWord.translation = translation;
-        this.translationModalService.saveToVocabulary(this.model.vocabWord);
+        if (!this.appSession.userId) {
+          abp.message.info('Please authorize in order to populate your vocabulary');
+        } else {
+          this.model.vocabWord.translation = translation;
+          this.translationModalService.saveToVocabulary(this.model.vocabWord);
+        }
+
         this.close();
     }
 

@@ -44,9 +44,9 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
 
     callService(file: File): void {
         let base64 = '';
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
         this.materialService.parseImage(file).then(response => {
-            abp.ui.clearBusy('body');
+            abp.ui.clearBusy();
             if (response.success) {
                 base64 = response.base64;
                 this.error = [];

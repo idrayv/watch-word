@@ -42,11 +42,11 @@ export class MaterialsComponent extends AppComponentBase implements OnInit, OnDe
 
     private changeModel(page: number) {
         this.model.materials = [];
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
         this.materialService.getCount().subscribe(count => this.fillPaginationModel(count, page));
 
         this.materialService.getMaterials(page, this.itemsPerPage).subscribe((response) => {
-            abp.ui.clearBusy('body');
+            abp.ui.clearBusy();
             return this.fillMaterials(response);
         });
     }

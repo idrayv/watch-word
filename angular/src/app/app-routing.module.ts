@@ -27,8 +27,7 @@ import {RolesComponent} from '@app/roles/roles.component';
                     {
                         path: 'material',
                         loadChildren: 'app/material/material.module#MaterialModule',
-                        data: {preload: true, permission: 'Member'},
-                        canActivate: [AppRouteGuard]
+                        data: {preload: true}
                     },
                     {
                         path: 'materials',

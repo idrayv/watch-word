@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Abp.Authorization;
 using Abp.UI;
 using WatchWord.Domain.Entities;
 
@@ -14,6 +15,7 @@ namespace WatchWord.Vocabulary
             _vocabularyService = vocabularyService;
         }
 
+        [AbpAuthorize("Member")]
         public async Task<long> Post(VocabWord vocabWord)
         {
             var userId = AbpSession.UserId ?? 0;
@@ -27,6 +29,7 @@ namespace WatchWord.Vocabulary
             return result;
         }
 
+        [AbpAuthorize("Member")]
         public async Task<List<VocabWord>> Get()
         {
             var userId = AbpSession.UserId ?? 0;
