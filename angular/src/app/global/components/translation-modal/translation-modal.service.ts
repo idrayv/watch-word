@@ -1,4 +1,4 @@
-﻿import {Injectable} from '@angular/core';
+﻿import {ElementRef, Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {TranslationModalModel} from './translation-modal.models';
@@ -29,8 +29,9 @@ export class TranslationModalService {
         return this.translationService.translate(word);
     }
 
-    public pushToModal(vocabWord: VocabWord): void {
-        abp.ui.setBusy('body');
+    public pushToModal(vocabWord: VocabWord, elementRef: ElementRef): void {
+        // abp.ui.setBusy('body');
+        abp.ui.setBusy(elementRef.nativeElement);
 
         // TODO: Do something with VocabWordType
         if (vocabWord.type === VocabWordType._2) {
@@ -39,7 +40,7 @@ export class TranslationModalService {
         }
 
         this.getTranslation(vocabWord.word)
-            .finally(() => abp.ui.clearBusy('body'))
+            .finally(() => /*abp.ui.clearBusy('body')*/ abp.ui.clearBusy(elementRef.nativeElement))
             .subscribe(translations => {
                 this.translationModel.next({
                     vocabWord: vocabWord,

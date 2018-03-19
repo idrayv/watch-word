@@ -14,12 +14,14 @@ import {MaterialServiceProxy, FavoriteMaterialServiceProxy} from 'shared/service
     templateUrl: 'material.template.html'
 })
 export class MaterialComponent extends AppComponentBase implements OnInit, OnDestroy {
+
     public mode: MaterialMode = null;
     public vocabWords: VocabWord[] = [];
     public material: Material = new Material();
     public isFavorite = false;
     public formSubmitted = false;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
+
     private routeSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
 
@@ -43,7 +45,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     public saveMaterial(form: NgForm): void {
         this.formSubmitted = true;
         if (form.valid) {
-            abp.ui.setBusy('body');
+            abp.ui.setBusy();
 
             this.material.words = this.vocabWords.map((vocabWord) => {
                 const word = new Word();
@@ -56,7 +58,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
 
             this.materialService.save(this.material)
                 .finally(() => {
-                    abp.ui.clearBusy('body');
+                    abp.ui.clearBusy();
                     this.formSubmitted = false;
                 })
                 .subscribe((response) => {
@@ -74,9 +76,9 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     }
 
     public deleteMaterial(): void {
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
         this.materialService.delete(this.material.id).subscribe(() => {
-            abp.ui.clearBusy('body');
+            abp.ui.clearBusy();
             this.router.navigateByUrl('app/materials');
         });
     }
@@ -113,23 +115,24 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     }
 
     get isAddToFavoritesButtonVisible(): boolean {
-        if (!this.appSession.userId || this.mode === MaterialMode.Add) {
+        if (!this.material.id || !this.appSession.userId || this.mode === MaterialMode.Add) {
             return false;
         }
+
         return true;
     }
 
     public addToFavorites(): void {
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
         this.favoriteMaterialsService.post(this.material.id)
-            .finally(() => abp.ui.clearBusy('body'))
+            .finally(() => abp.ui.clearBusy())
             .subscribe(() => this.isFavorite = !this.isFavorite);
     }
 
     public removeFromFavorites(): void {
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
         this.favoriteMaterialsService.delete(this.material.id)
-            .finally(() => abp.ui.clearBusy('body'))
+            .finally(() => abp.ui.clearBusy())
             .subscribe(resp => this.isFavorite = !this.isFavorite);
     }
 
@@ -150,7 +153,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     }
 
     private initializeMaterial(id: number): void {
-        abp.ui.setBusy('body');
+        abp.ui.setBusy();
 
         this.materialService.getMaterial(id).subscribe(response => {
             this.mode = MaterialMode.Read;
@@ -159,10 +162,10 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
 
             if (this.appSession.getShownLoginName()) {
                 this.favoriteMaterialsService.get(this.material.id)
-                    ._finally(() => abp.ui.clearBusy('body'))
+                    ._finally(() => abp.ui.clearBusy())
                     .subscribe(isFavorite => this.isFavorite = isFavorite);
             } else {
-                abp.ui.clearBusy('body');
+                abp.ui.clearBusy();
             }
         });
     }

@@ -77,11 +77,13 @@
                         (click)="deleteMaterial()">
                     Delete
                 </button>
-                <button *ngIf="mode == 0 && isFavorite" class="ui secondary mini button" type="button"
+                <button *ngIf="isAddToFavoritesButtonVisible && isFavorite" class="ui secondary mini button"
+                        type="button"
                         (click)="removeFromFavorites()">
                     Remove from favorites
                 </button>
-                <button *ngIf="isAddToFavoritesButtonVisible && !isFavorite" class="ui secondary mini button" type="button"
+                <button *ngIf="isAddToFavoritesButtonVisible && !isFavorite" class="ui secondary mini button"
+                        type="button"
                         (click)="addToFavorites()">
                     Add to favorite
                 </button>
@@ -96,16 +98,18 @@
     </div>
 </div>
 
-<div>
-    <label for="learnWords">Display learn words</label>
+<div *ngIf="material.words">
     <input id="learnWords" type="checkbox" [checked]="filtration.showLearnWords"
            (change)="filtration = filtration.invertLearnWord()">
-    <label for="knownWords">Display known words</label>
+    <label for="learnWords" class="filter-label">Display learn words</label>
+
     <input id="knownWords" type="checkbox" [checked]="filtration.showKnownWords"
            (change)="filtration = filtration.invertKnownWord()">
-    <label for="unsignedWords">Display unsigned words</label>
+    <label for="knownWords" class="filter-label">Display known words</label>
+
     <input id="unsignedWords" type="checkbox" [checked]="filtration.showUnsignedWords"
            (change)="filtration = filtration.invertUnsignedWord()">
+    <label for="unsignedWords" class="filter-label">Display unsigned words</label>
 </div>
 
 <div *ngIf="vocabWords?.length !== 0" class="words">

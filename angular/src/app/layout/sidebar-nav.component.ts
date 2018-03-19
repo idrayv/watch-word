@@ -10,11 +10,11 @@ import {MenuItem} from '@shared/layout/menu-item';
 export class SideBarNavComponent extends AppComponentBase {
 
     menuItems: MenuItem[] = [
-        new MenuItem(this.l('Create material'), 'Member', 'local_offer', '/app/material'),
-        new MenuItem(this.l('Materials'), '', 'local_offer', '/app/materials'),
-        new MenuItem(this.l('Dictionaries'), 'Member', 'local_offer', '/app/dictionaries'),
-        new MenuItem(this.l('Users'), 'Pages.Users', 'people', '/app/users'),
-        new MenuItem(this.l('Roles'), 'Pages.Roles', 'local_offer', '/app/roles')
+        new MenuItem(this.l('Create material'), 'Member', 'add', '/app/material'),
+        new MenuItem(this.l('Materials'), '', 'local_movies', '/app/materials'),
+        new MenuItem(this.l('Dictionaries'), 'Member', 'school', '/app/dictionaries'),
+        new MenuItem(this.l('Users'), 'Pages.Users', 'person', '/app/users'),
+        new MenuItem(this.l('Roles'), 'Pages.Roles', 'group', '/app/roles')
     ];
 
     constructor(injector: Injector) {

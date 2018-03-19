@@ -6,20 +6,19 @@
                 <div>
                     <div class="center modal-word">{{ model.vocabWord.word | capitalize }}</div>
                     <div class="center">
-                        <div class="ui slider checkbox">
-                            <input type="checkbox" [checked]="model?.vocabWord.type == 0"
-                                   (change)="(model?.vocabWord.type === 0) ?
+
+                        <input id="learn-word" type="checkbox" [checked]="model?.vocabWord.type == 0"
+                               (change)="(model?.vocabWord.type === 0) ?
                                         model?.vocabWord.type = 1 :
                                         model?.vocabWord.type = 0">
-                            <label>Learn</label>
-                        </div>
-                        <div class="ui slider checkbox">
-                            <input type="checkbox" [checked]="model?.vocabWord.type == 1"
-                                   (change)="(model?.vocabWord.type === 1) ?
+                        <label for="learn-word" class="filter-label">Learn</label>
+
+                        <input id="know-word" type="checkbox" [checked]="model?.vocabWord.type == 1"
+                               (change)="(model?.vocabWord.type === 1) ?
                                         model?.vocabWord.type = 0 :
                                         model?.vocabWord.type = 1">
-                            <label>Know</label>
-                        </div>
+                        <label for="know-word" class="filter-label">Know</label>
+
                     </div>
                     <div class="center modal-translation">Translation:</div>
                 </div>
