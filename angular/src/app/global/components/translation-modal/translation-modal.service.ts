@@ -8,6 +8,7 @@ import {VocabWord, VocabWordType} from '@shared/service-proxies/service-proxies'
 @Injectable()
 export class TranslationModalService {
 
+    private originElementRef: any;
     private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
 
     // TODO: delete TranslationModalResponseModel, use link to original VocabWord instead
@@ -30,8 +31,8 @@ export class TranslationModalService {
     }
 
     public pushToModal(vocabWord: VocabWord, elementRef: ElementRef): void {
-        // abp.ui.setBusy('body');
-        abp.ui.setBusy(elementRef.nativeElement);
+        this.originElementRef = elementRef.nativeElement.children[0].children[1];
+        abp.ui.setBusy(this.originElementRef);
 
         // TODO: Do something with VocabWordType
         if (vocabWord.type === VocabWordType._2) {
@@ -40,7 +41,7 @@ export class TranslationModalService {
         }
 
         this.getTranslation(vocabWord.word)
-            .finally(() => /*abp.ui.clearBusy('body')*/ abp.ui.clearBusy(elementRef.nativeElement))
+            .finally(() => abp.ui.clearBusy(this.originElementRef))
             .subscribe(translations => {
                 this.translationModel.next({
                     vocabWord: vocabWord,
@@ -50,9 +51,9 @@ export class TranslationModalService {
     }
 
     public saveToVocabulary(vocabWord: VocabWord): void {
-        abp.ui.setBusy('body');
+        abp.ui.setBusy(this.originElementRef);
         this.dictionariesService.post(vocabWord)
-            .finally(() => abp.ui.clearBusy('body'))
+            .finally(() => abp.ui.clearBusy(this.originElementRef))
             .subscribe(() => this.responseModel.next(vocabWord));
     }
 
