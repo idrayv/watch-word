@@ -1,28 +1,28 @@
 # WatchWord
 
-AngularJS project: \WatchWord\WatchWord\src
-.Net core web project: \WatchWord\WatchWord\WatchWord.csproj
+:zap: AngularJS project: /angular  
+:cloud: .Net core web project: /aspnet-core
 
-# Setup
+# .Net Setup
 
-01. cd \WatchWord\WatchWord\src
-02. npm install (restore packages)
-03. npm install --global webpack  (install webpack globally, do it once)
+01. Setup ConnectionStrings in /aspnet-core/src/WatchWord.Migrator/appsettings.json
+02. Build and Run WatchWord.Migrator in order to migrate database
+03. Build and Run WatchWord.Web.Host in order to run local API server
 
-# Development
+# Angular Setup
 
-04. Setup api route in \WatchWord\src\environments\environment.ts as 'http://watchword.azurewebsites.net/api' (cloud back-end API)
-05. npm run start (run on localhost)
+04. cd ./angular
+05. npm install (restore packages)
+06. Setup remoteServiceBaseUrl in /angular/src/assets/appconfig.json (optional)
+07. npm run hmr (run on localhost with hot module reload)
 
 # Deploy
 
-06. npm run build
-07. Publish WatchWord.csproj to Azure
+08. cd ./angular
+09. npm run deploy
+10. cd ./angular
+11. Publish /aspnet-core/src/WatchWord.Web.Host/ to Azure
 
-# Back-end development
+# Use
 
-01. Setup connection string in \WatchWord\appsettings.json
-02. Configure auto picking of CS in WatchWord\WatchWord.DataAccess\DatabaseSettings.cs (optional)
-03. Run WatchWord web project
-04. Setup api route in \WatchWord\src\environments\environment.ts as 'http://localhost:54093/api' (local beck-end API)
-05. npm run start (run on localhost)
+12. have fun with https://watchword.herokuapp.com/
