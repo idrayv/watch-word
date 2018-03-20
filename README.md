@@ -25,4 +25,4 @@
 
 # Use
 
-12. have fun with https://watchword.herokuapp.com/
+12. :octopus: Have fun with https://watchword.herokuapp.com/
