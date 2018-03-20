@@ -1,0 +1,1 @@
+dotnet ../node_modules/nswag/bin/binaries/NetCore20/dotnet-nswag.dll run -config ./service.config.nswag

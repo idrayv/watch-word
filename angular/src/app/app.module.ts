@@ -19,6 +19,8 @@ import {TopBarComponent} from '@app/layout/topbar.component';
 import {SideBarNavComponent} from '@app/layout/sidebar-nav.component';
 import {SideBarFooterComponent} from '@app/layout/sidebar-footer.component';
 import {TopBarUserComponent} from '@app/layout/topbar-user/topbar-user.component';
+import {ChangePasswordComponent} from '@app/layout/profile/change-password/change-password.component';
+import {ChangePasswordService} from '@app/layout/profile/change-password/change-password.service';
 
 @NgModule({
     declarations: [
@@ -32,7 +34,8 @@ import {TopBarUserComponent} from '@app/layout/topbar-user/topbar-user.component
         TopBarComponent,
         SideBarNavComponent,
         SideBarFooterComponent,
-        TopBarUserComponent
+        TopBarUserComponent,
+        ChangePasswordComponent
     ],
     imports: [
         CommonModule,
@@ -46,7 +49,7 @@ import {TopBarUserComponent} from '@app/layout/topbar-user/topbar-user.component
         SharedModule,
         NgxPaginationModule
     ],
-    providers: []
+    providers: [ChangePasswordService]
 })
 export class AppModule {
 }

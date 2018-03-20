@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Abp.UI;
+using Abp.Authorization;
 using WatchWord.Controllers;
 using WatchWord.Pictures;
 
 namespace WatchWord.Web.Host.Controllers
 {
-    // TODO: Move to app services with authorization
+    [AbpAuthorize("Member")]
     [Route("api/[controller]")]
     public class ImageController : WatchWordControllerBase
     {

@@ -4,9 +4,23 @@
         {{shownLoginName}}
         <i class="dropdown icon"></i>
         <div class="menu">
-            <a class="item">&nbsp;<i class="pencil alternate icon"></i>Reset password</a>
-            <a *ngIf="shownLoginName" id="sign-out" class="item" (click)="logout()">&nbsp;<i class="sign out icon"></i>Sign out</a>
+            <a class="item"
+               (click)="changePassword()">
+                &nbsp;
+                <i class="pencil alternate icon"></i>
+                Change password
+            </a>
+            <a *ngIf="shownLoginName" id="sign-out" class="item"
+               (click)="logout()">
+                &nbsp;
+                <i class="sign out icon"></i>
+                Sign out
+            </a>
         </div>
     </div>
-    <a *ngIf="!shownLoginName" class="item top-item" (click)="login()">&nbsp;<i class="sign in icon"></i>Sign in</a>
+    <a *ngIf="!shownLoginName" class="item top-item" (click)="login()">
+        &nbsp;
+        <i class="sign in icon"></i>
+        Sign in
+    </a>
 </div>

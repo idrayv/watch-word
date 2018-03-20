@@ -1,5 +1,7 @@
-﻿import {Component, ViewContainerRef, Injector, OnInit, AfterViewInit} from '@angular/core';
+﻿import {Component, Injector, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 import {AppComponentBase} from '@shared/app-component-base';
+import {ChangePasswordComponent} from '@app/layout/profile/change-password/change-password.component';
+import {ChangePasswordService} from '@app/layout/profile/change-password/change-password.service';
 // import {SignalRHelper} from '@shared/helpers/SignalRHelper';
 // import {SignalRAspNetCoreHelper} from '@shared/helpers/SignalRAspNetCoreHelper';
 
@@ -8,9 +10,10 @@ import {AppComponentBase} from '@shared/app-component-base';
 })
 export class AppComponent extends AppComponentBase implements OnInit, AfterViewInit {
 
-    private viewContainerRef: ViewContainerRef;
+    @ViewChild('changePasswordModal') changePasswordModal: ChangePasswordComponent;
 
-    constructor(injector: Injector) {
+    constructor(injector: Injector,
+                private changePasswordService: ChangePasswordService) {
         super(injector);
     }
 
@@ -40,6 +43,8 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
     }
 
     ngAfterViewInit(): void {
+        this.changePasswordService.setPasswordComponent(this.changePasswordModal);
+
         ($ as any).AdminBSB.activateAll();
         ($ as any).AdminBSB.activateDemo();
     }

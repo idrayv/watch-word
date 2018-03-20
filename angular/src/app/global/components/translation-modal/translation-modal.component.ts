@@ -12,7 +12,6 @@ import {ModalDirective} from 'ngx-bootstrap';
 export class TranslationModalComponent extends AppComponentBase implements OnInit, OnDestroy {
 
     @ViewChild('modal') modal: ModalDirective;
-    @Input() modalId: string;
     active = false;
 
     private model: TranslationModalModel = new TranslationModalModel();

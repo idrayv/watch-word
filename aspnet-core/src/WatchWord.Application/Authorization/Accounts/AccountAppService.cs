@@ -10,8 +10,7 @@ namespace WatchWord.Authorization.Accounts
     {
         private readonly UserRegistrationManager _userRegistrationManager;
 
-        public AccountAppService(
-            UserRegistrationManager userRegistrationManager)
+        public AccountAppService(UserRegistrationManager userRegistrationManager)
         {
             _userRegistrationManager = userRegistrationManager;
         }
@@ -49,6 +48,14 @@ namespace WatchWord.Authorization.Accounts
             {
                 CanLogin = user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin)
             };
+        }
+
+        public async Task ChangePassword(ChangePasswordInput input)
+        {
+            await UserManager.InitializeOptionsAsync(AbpSession.TenantId);
+
+            var user = await GetCurrentUserAsync();
+            CheckErrors(await UserManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword));
         }
     }
 }
