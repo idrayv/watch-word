@@ -20,9 +20,4 @@
 
 08. cd ./angular
 09. npm run deploy
-10. cd ./angular
-11. Publish ./aspnet-core/src/WatchWord.Web.Host/ to Azure
-
-# Use
-
-12. :octopus: Have fun with https://watchword.herokuapp.com/
+10. Publish ./aspnet-core/src/WatchWord.Web.Host/ to Azure
