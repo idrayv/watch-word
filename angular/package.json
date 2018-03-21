@@ -7,6 +7,7 @@
         "ng": "ng",
         "start": "node server.js",
         "hmr": "ng serve --host 0.0.0.0 --port 4201 4202 --hmr -e=hmr",
+        "hmr-cloud-api": "ng serve --host 0.0.0.0 --port 4201 4202 --hmr -e=cloud",
         "test": "ng test",
         "pree2e": "webdriver-manager update --standalone false --gecko false",
         "e2e": "protractor",

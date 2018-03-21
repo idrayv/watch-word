@@ -1,8 +1,8 @@
 ﻿export class MenuItem {
-    name: string = '';
-    permissionName: string = '';
-    icon: string = '';
-    route: string = '';
+    name = '';
+    permissionName = '';
+    icon = '';
+    route = '';
     items: MenuItem[];
 
     constructor(name: string, permissionName: string, icon: string, route: string, childItems: MenuItem[] = null) {

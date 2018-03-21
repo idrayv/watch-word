@@ -53,12 +53,4 @@ export abstract class AppComponentBase {
     isGranted(permissionName: string): boolean {
         return this.permission.isGranted(permissionName);
     }
-
-    displayError(message: string): void {
-        abp.notify.error(message);
-    }
-
-    displayErrors(errors: string[]): void {
-        errors.forEach((error) => abp.notify.error(error));
-    }
 }

@@ -1,4 +1,4 @@
-﻿import { Directive, ElementRef, Injectable, AfterViewInit } from '@angular/core';
+﻿import {Directive, ElementRef, Injectable, AfterViewInit} from '@angular/core';
 
 @Directive({
     selector: '[materialInput]'

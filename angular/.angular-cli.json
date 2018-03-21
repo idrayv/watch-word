@@ -82,7 +82,8 @@
             "environments": {
                 "dev": "environments/environment.ts",
                 "prod": "environments/environment.prod.ts",
-                "hmr": "environments/environment.hmr.ts"
+                "hmr": "environments/environment.hmr.ts",
+                "cloud": "environments/environment.cloud.ts"
             }
         }
     ],

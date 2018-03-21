@@ -2,5 +2,7 @@
 
 export const environment = {
     production: false,
-    hmr: true
+    hmr: true,
+    remoteServiceBaseUrl: 'http://localhost:21022',
+    appBaseUrl: 'http://localhost:4201'
 };
