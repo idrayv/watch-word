@@ -13,11 +13,10 @@
 
 03. `cd ./angular`
 04. `npm install` (Restore packages)
-05. Setup remoteServiceBaseUrl in ./angular/src/assets/appconfig.json (Local or cloud API server)
-06. `npm run hmr` (Run with hot module reload)
+05. `npm run hmr` (Run with hot module reload)
 
 # Deploy
 
-07. `cd ./angular`
-08. `npm run deploy`
-09. Publish ./aspnet-core/src/WatchWord.Web.Host/ to Azure
+06. `cd ./angular`
+07. `npm run deploy`
+08. Publish ./aspnet-core/src/WatchWord.Web.Host/ to Azure
