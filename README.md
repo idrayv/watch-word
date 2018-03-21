@@ -1,4 +1,4 @@
-# WatchWord :movie_camera:
+# :movie_camera: WatchWord
 
 :zap: Angular project: ./angular  
 :cloud: .Net core project: ./aspnet-core
