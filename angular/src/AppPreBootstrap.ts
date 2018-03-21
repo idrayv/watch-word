@@ -1,7 +1,7 @@
 ﻿import * as moment from 'moment';
-import { AppConsts } from '@shared/AppConsts';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Type, CompilerOptions, NgModuleRef } from '@angular/core';
+import {AppConsts} from '@shared/AppConsts';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {Type, CompilerOptions, NgModuleRef} from '@angular/core';
 
 export class AppPreBootstrap {
 
@@ -25,17 +25,17 @@ export class AppPreBootstrap {
         }).done(result => {
             AppConsts.appBaseUrl = result.appBaseUrl;
             AppConsts.remoteServiceBaseUrl = result.remoteServiceBaseUrl;
-            
+
             callback();
         });
     }
 
     private static getCurrentClockProvider(currentProviderName: string): abp.timing.IClockProvider {
-        if (currentProviderName === "unspecifiedClockProvider") {
+        if (currentProviderName === 'unspecifiedClockProvider') {
             return abp.timing.unspecifiedClockProvider;
         }
 
-        if (currentProviderName === "utcClockProvider") {
+        if (currentProviderName === 'utcClockProvider') {
             return abp.timing.utcClockProvider;
         }
 
@@ -48,7 +48,7 @@ export class AppPreBootstrap {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + abp.auth.getToken(),
-                '.AspNetCore.Culture': abp.utils.getCookieValue("Abp.Localization.CultureName"),
+                '.AspNetCore.Culture': abp.utils.getCookieValue('Abp.Localization.CultureName'),
                 'Abp.TenantId': abp.multiTenancy.getTenantIdCookie()
             }
         }).done(result => {
