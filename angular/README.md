@@ -1,4 +1,4 @@
-# WatchWord Angular project
+# :movie_camera: WatchWord Angular project
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli)
 
