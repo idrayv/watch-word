@@ -1,4 +1,4 @@
-# WatchWord .NET Core API project
+# :movie_camera: WatchWord .NET Core API project
 
 This project was generated with [ASP.NET Boilerplate](https://aspnetboilerplate.com/Pages/Documents)
 
