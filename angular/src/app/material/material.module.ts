@@ -16,6 +16,5 @@ import {HttpClientModule} from '@angular/common/http';
     declarations: [MaterialComponent, ImageInputComponent, SubtitlesInputComponent, VocabWordFiltrationPipe],
     providers: [MaterialService]
 })
-
 export class MaterialModule {
 }

@@ -34,5 +34,4 @@ import {LoginService} from './login/login.service';
     ]
 })
 export class AccountModule {
-
 }

@@ -1,14 +1,5 @@
-﻿import {VocabWordType} from '@shared/service-proxies/service-proxies';
-
-export enum MaterialMode {
+﻿export enum MaterialMode {
     Read, Edit, Add
-}
-
-export class VocabWord {
-    public id: number;
-    public word: string;
-    public translation: string;
-    public type: VocabWordType = VocabWordType._0;
 }
 
 export class MaterialStats {

@@ -4,7 +4,6 @@ import {TokenAuthServiceProxy, AuthenticateModel} from '@shared/service-proxies/
 import {AuthenticateResultModel} from '@shared/service-proxies/service-proxies';
 import {UrlHelper} from '@shared/helpers/UrlHelper';
 import {AppConsts} from '@shared/AppConsts';
-import {MessageService} from '@abp/message/message.service';
 import {LogService} from '@abp/log/log.service';
 import {TokenService} from '@abp/auth/token.service';
 import {UtilsService} from '@abp/utils/utils.service';

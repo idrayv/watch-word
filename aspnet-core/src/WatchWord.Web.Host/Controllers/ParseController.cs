@@ -5,7 +5,6 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Abp.UI;
-using Abp.Authorization;
 using WatchWord.Controllers;
 using WatchWord.Authorization.Users;
 using WatchWord.Vocabulary;
@@ -16,7 +15,7 @@ using WatchWord.Web.Host.Controllers.Dto;
 
 namespace WatchWord.Web.Host.Controllers
 {
-    [AbpAuthorize("Member")]
+    // TODO: Move to app service + add authorisation
     [Route("api/[controller]")]
     public class ParseController : WatchWordControllerBase
     {

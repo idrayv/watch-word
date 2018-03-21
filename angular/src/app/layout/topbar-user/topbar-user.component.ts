@@ -14,7 +14,6 @@ import {ChangePasswordService} from '@app/layout/profile/change-password/change-
 export class TopBarUserComponent extends AppComponentBase implements OnInit {
 
     changePasswordModal: ChangePasswordComponent;
-
     public shownLoginName = '';
 
     constructor(injector: Injector,

@@ -8,8 +8,8 @@ import {MaterialServiceProxy, Material} from '@shared/service-proxies/service-pr
 @Component({
     templateUrl: 'materials.template.html'
 })
-
 export class MaterialsComponent extends AppComponentBase implements OnInit, OnDestroy {
+
     public model: MaterialsModel = new MaterialsModel();
     private routeSubscription: ISubscription;
     private itemsPerPage = 24;

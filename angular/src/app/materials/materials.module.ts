@@ -11,6 +11,5 @@ import {PaginationHelperService} from '../global/components/pagination/paginatio
     declarations: [MaterialsComponent, PaginationComponent],
     providers: [PaginationHelperService]
 })
-
 export class MaterialsModule {
 }
