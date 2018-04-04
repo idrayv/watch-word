@@ -40,6 +40,8 @@ namespace WatchWord.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddResponseCompression();
+
             // MVC
             services.AddMvc(
                 options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))
@@ -98,6 +100,8 @@ namespace WatchWord.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseResponseCompression();
+
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
