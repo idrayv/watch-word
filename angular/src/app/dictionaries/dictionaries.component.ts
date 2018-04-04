@@ -2,12 +2,16 @@ import {Component, OnInit, OnDestroy, Injector} from '@angular/core';
 import {ISubscription} from 'rxjs/Subscription';
 import {TranslationModalService} from '../global/components/translation-modal/translation-modal.service';
 import {AppComponentBase} from '@shared/app-component-base';
-import {VocabularyServiceProxy, VocabWord, VocabWordType} from '@shared/service-proxies/service-proxies';
+import {VocabularyServiceProxy, VocabWord} from '@shared/service-proxies/service-proxies';
+import {AppEnums} from '@shared/AppEnums';
 
 @Component({
     templateUrl: 'dictionaries.template.html'
 })
 export class DictionariesComponent extends AppComponentBase implements OnInit, OnDestroy {
+
+    public learnWordsCount = 0;
+    public knownWordsCount = 0;
 
     private vocabWords: VocabWord[] = [];
     private modalResponse: ISubscription;
@@ -22,7 +26,11 @@ export class DictionariesComponent extends AppComponentBase implements OnInit, O
         abp.ui.setBusy();
         this.dictionariesService.get()
             .finally(() => abp.ui.clearBusy())
-            .subscribe((vocabWords) => this.vocabWords = vocabWords);
+            .subscribe((vocabWords) => {
+                this.vocabWords = vocabWords;
+                this.learnWordsCount = this.vocabWords.filter(v => v.type === AppEnums.VocabType.LearnWord).length;
+                this.knownWordsCount = this.vocabWords.filter(v => v.type === AppEnums.VocabType.KnownWord).length;
+            });
 
         this.modalResponse = this.translationModalService.translationModalResponseObservable.subscribe(vocabWord => {
             this.translationModalService.updateVocabWordInCollection(vocabWord, this.vocabWords);
@@ -30,11 +38,11 @@ export class DictionariesComponent extends AppComponentBase implements OnInit, O
     }
 
     public learnWords(): VocabWord[] {
-        return this.vocabWords.filter(v => v.type === VocabWordType._0);
+        return this.vocabWords.filter(v => v.type === AppEnums.VocabType.LearnWord);
     }
 
     public knownWords(): VocabWord[] {
-        return this.vocabWords.filter(v => v.type === VocabWordType._1);
+        return this.vocabWords.filter(v => v.type === AppEnums.VocabType.KnownWord);
     }
 
     ngOnDestroy(): void {

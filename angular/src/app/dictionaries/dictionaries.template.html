@@ -1,9 +1,15 @@
-﻿<div *ngIf="learnWords()?.length > 0 || knownWords()?.length > 0">
-    Learn words:
+﻿<div class="dictionary" *ngIf="learnWords()?.length > 0 || knownWords()?.length > 0">
+
+    <div class="header">
+        Learn words ({{learnWordsCount}}) :
+    </div>
     <div class="words">
         <ww-word [vocabWord]="learnWord" *ngFor="let learnWord of learnWords()"></ww-word>
     </div>
-    Known words:
+
+    <div class="header">
+        Known words ({{knownWordsCount}}) :
+    </div>
     <div class="words">
         <ww-word [vocabWord]="knownWord" *ngFor="let knownWord of knownWords()"></ww-word>
     </div>

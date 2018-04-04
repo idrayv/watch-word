@@ -1,4 +1,4 @@
-﻿import {Component, OnInit, OnDestroy, Input, Injector, ViewChild} from '@angular/core';
+﻿import {Component, OnInit, OnDestroy, Injector, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {TranslationModalService} from './translation-modal.service';
 import {TranslationModalModel} from './translation-modal.models';

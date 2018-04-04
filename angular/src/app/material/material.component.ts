@@ -7,8 +7,9 @@ import {VocabWordFiltration} from './material.models';
 import {TranslationModalService} from '../global/components/translation-modal/translation-modal.service';
 import {ComponentValidation} from '../global/component-validation';
 import {AppComponentBase} from '@shared/app-component-base';
-import {Word, Material, VocabWord, VocabWordType} from 'shared/service-proxies/service-proxies';
+import {Word, Material, VocabWord} from 'shared/service-proxies/service-proxies';
 import {MaterialServiceProxy, FavoriteMaterialServiceProxy} from 'shared/service-proxies/service-proxies';
+import {AppEnums} from '@shared/AppEnums';
 
 @Component({
     templateUrl: 'material.template.html'
@@ -94,8 +95,8 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
 
         if (this.appSession.user && this.appSession.user.id) {
-            const learnCount = this.vocabWords.filter(v => v.type === VocabWordType._0).length;
-            const knownCount = this.vocabWords.filter(v => v.type === VocabWordType._1).length;
+            const learnCount = this.vocabWords.filter(v => v.type === AppEnums.VocabType.LearnWord).length;
+            const knownCount = this.vocabWords.filter(v => v.type === AppEnums.VocabType.KnownWord).length;
 
             this.pushStatToStats(stats, 'Learn words', learnCount.toString());
             this.pushStatToStats(stats, 'Known words', knownCount.toString());
