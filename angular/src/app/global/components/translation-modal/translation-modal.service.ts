@@ -1,4 +1,4 @@
-﻿import {ElementRef, Injectable, Injector} from '@angular/core';
+﻿import {ElementRef, Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {TranslationModalModel} from './translation-modal.models';
@@ -35,14 +35,15 @@ export class TranslationModalService {
 
     public pushToModal(vocabWord: VocabWord, elementRef: ElementRef): void {
         this._originElementRef = elementRef.nativeElement.children[0].children[1];
-        abp.ui.setBusy(this._originElementRef);
+        const originElementRef = this._originElementRef;
+        abp.ui.setBusy(originElementRef);
 
         if (vocabWord.type === AppEnums.VocabType.UnsignedWord) {
             vocabWord.type = this._appSessionService.lastPickedVocabType;
         }
 
         this.getTranslation(vocabWord.word)
-            .finally(() => abp.ui.clearBusy(this._originElementRef))
+            .finally(() => abp.ui.clearBusy(originElementRef))
             .subscribe(translations => {
                 this._translationModel.next({
                     vocabWord: vocabWord,
@@ -52,10 +53,11 @@ export class TranslationModalService {
     }
 
     public saveToVocabulary(vocabWord: VocabWord): void {
-        abp.ui.setBusy(this._originElementRef);
+        const originElementRef = this._originElementRef;
+        abp.ui.setBusy(originElementRef);
         this._appSessionService.lastPickedVocabType = vocabWord.type;
         this.dictionariesService.post(vocabWord)
-            .finally(() => abp.ui.clearBusy(this._originElementRef))
+            .finally(() => abp.ui.clearBusy(originElementRef))
             .subscribe(() => this.responseModel.next(vocabWord));
     }
 
