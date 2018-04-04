@@ -1,21 +1,24 @@
-﻿import {ElementRef, Injectable} from '@angular/core';
+﻿import {ElementRef, Injectable, Injector} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {TranslationModalModel} from './translation-modal.models';
 import {TranslationServiceProxy, VocabularyServiceProxy} from '@shared/service-proxies/service-proxies';
-import {VocabWord, VocabWordType} from '@shared/service-proxies/service-proxies';
+import {VocabWord} from '@shared/service-proxies/service-proxies';
+import {AppEnums} from '@shared/AppEnums';
+import {AppSessionService} from '@shared/session/app-session.service';
 
 @Injectable()
 export class TranslationModalService {
 
-    private originElementRef: any;
-    private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
+    private _originElementRef: any;
+    private _translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
 
     // TODO: delete TranslationModalResponseModel, use link to original VocabWord instead
     private responseModel: Subject<VocabWord> = new Subject<VocabWord>();
 
     public constructor(private dictionariesService: VocabularyServiceProxy,
-                       private translationService: TranslationServiceProxy) {
+                       private translationService: TranslationServiceProxy,
+                       private readonly _appSessionService: AppSessionService) {
     }
 
     public get translationModalResponseObservable(): Observable<VocabWord> {
@@ -23,7 +26,7 @@ export class TranslationModalService {
     }
 
     public get translationModalObservable(): Observable<TranslationModalModel> {
-        return this.translationModel.asObservable();
+        return this._translationModel.asObservable();
     }
 
     public getTranslation(word: string): Observable<string[]> {
@@ -31,19 +34,17 @@ export class TranslationModalService {
     }
 
     public pushToModal(vocabWord: VocabWord, elementRef: ElementRef): void {
-        this.originElementRef = elementRef.nativeElement.children[0].children[1];
-        abp.ui.setBusy(this.originElementRef);
+        this._originElementRef = elementRef.nativeElement.children[0].children[1];
+        abp.ui.setBusy(this._originElementRef);
 
-        // TODO: Do something with VocabWordType
-        if (vocabWord.type === VocabWordType._2) {
-            // TODO: check last user choice for unsigned words
-            vocabWord.type = VocabWordType._0;
+        if (vocabWord.type === AppEnums.VocabType.UnsignedWord) {
+            vocabWord.type = this._appSessionService.lastPickedVocabType;
         }
 
         this.getTranslation(vocabWord.word)
-            .finally(() => abp.ui.clearBusy(this.originElementRef))
+            .finally(() => abp.ui.clearBusy(this._originElementRef))
             .subscribe(translations => {
-                this.translationModel.next({
+                this._translationModel.next({
                     vocabWord: vocabWord,
                     translations: translations
                 });
@@ -51,9 +52,10 @@ export class TranslationModalService {
     }
 
     public saveToVocabulary(vocabWord: VocabWord): void {
-        abp.ui.setBusy(this.originElementRef);
+        abp.ui.setBusy(this._originElementRef);
+        this._appSessionService.lastPickedVocabType = vocabWord.type;
         this.dictionariesService.post(vocabWord)
-            .finally(() => abp.ui.clearBusy(this.originElementRef))
+            .finally(() => abp.ui.clearBusy(this._originElementRef))
             .subscribe(() => this.responseModel.next(vocabWord));
     }
 

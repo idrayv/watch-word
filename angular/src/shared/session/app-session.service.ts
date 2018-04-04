@@ -1,7 +1,9 @@
 ﻿import {Injectable} from '@angular/core';
 import {SessionServiceProxy, UserLoginInfoDto, TenantLoginInfoDto} from '@shared/service-proxies/service-proxies'
+import {VocabWordType} from '@shared/service-proxies/service-proxies'
 import {ApplicationInfoDto, GetCurrentLoginInformationsOutput} from '@shared/service-proxies/service-proxies'
 import {AbpMultiTenancyService} from '@abp/multi-tenancy/abp-multi-tenancy.service'
+import {AppEnums} from '@shared/AppEnums';
 
 @Injectable()
 export class AppSessionService {
@@ -9,6 +11,7 @@ export class AppSessionService {
     private _user: UserLoginInfoDto;
     private _tenant: TenantLoginInfoDto;
     private _application: ApplicationInfoDto;
+    private _lastPickedVocabType: VocabWordType;
 
     constructor(private _sessionService: SessionServiceProxy,
                 private _abpMultiTenancyService: AbpMultiTenancyService) {
@@ -30,8 +33,12 @@ export class AppSessionService {
         return this._tenant;
     }
 
-    get tenantId(): number {
-        return this.tenant ? this.tenant.id : null;
+    get lastPickedVocabType(): VocabWordType {
+        return this._lastPickedVocabType;
+    }
+
+    set lastPickedVocabType(vocabType: VocabWordType) {
+        this._lastPickedVocabType = vocabType;
     }
 
     getShownLoginName(): string {
@@ -53,31 +60,12 @@ export class AppSessionService {
                 this._application = result.application;
                 this._user = result.user;
                 this._tenant = result.tenant;
+                this._lastPickedVocabType = AppEnums.VocabType.LearnWord;
 
                 resolve(true);
             }, (err) => {
                 reject(err);
             });
         });
-    }
-
-    changeTenantIfNeeded(tenantId?: number): boolean {
-        if (this.isCurrentTenant(tenantId)) {
-            return false;
-        }
-
-        abp.multiTenancy.setTenantIdCookie(tenantId);
-        location.reload();
-        return true;
-    }
-
-    private isCurrentTenant(tenantId?: number) {
-        if (!tenantId && this.tenant) {
-            return false;
-        } else if (tenantId && (!this.tenant || this.tenant.id !== tenantId)) {
-            return false;
-        }
-
-        return true;
     }
 }
