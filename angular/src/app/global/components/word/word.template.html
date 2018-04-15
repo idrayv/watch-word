@@ -1,8 +1,11 @@
-﻿<div (click)="getTranslation()"
-     [ngClass]="{ 'word': true,
+﻿<div (click)="wordClick()"
+     [ngClass]="{
+        'batch': batchSelect,
+        'word': true,
         'learn-word': vocabWord?.type == 0,
         'known-word': vocabWord?.type == 1,
-        'unsigned-word': vocabWord?.type == 2 }">
+        'unsigned-word': vocabWord?.type == 2
+        }">
     <div class="translation">{{vocabWord?.translation}}</div>
     <div class="origin">{{vocabWord?.word}}</div>
 </div>

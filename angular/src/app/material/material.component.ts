@@ -20,8 +20,9 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     public vocabWords: VocabWord[] = [];
     public material: Material = new Material();
     public isFavorite = false;
-    public formSubmitted = false;
+    public formSubmitted: boolean;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
+    public batchSelect: boolean;
 
     private routeSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
@@ -82,6 +83,14 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
             abp.ui.clearBusy();
             this.router.navigateByUrl('app/materials');
         });
+    }
+
+    public markMultiplyAsKnown(): void {
+        this.batchSelect = true;
+    }
+
+    public cancelMultiply(): void {
+        this.batchSelect = false;
     }
 
     get materialStats(): MaterialStats[] {

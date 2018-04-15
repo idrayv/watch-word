@@ -16,8 +16,8 @@ export class TranslationModalService {
     // TODO: delete TranslationModalResponseModel, use link to original VocabWord instead
     private responseModel: Subject<VocabWord> = new Subject<VocabWord>();
 
-    public constructor(private dictionariesService: VocabularyServiceProxy,
-                       private translationService: TranslationServiceProxy,
+    public constructor(private _vocabularyService: VocabularyServiceProxy,
+                       private _translationService: TranslationServiceProxy,
                        private readonly _appSessionService: AppSessionService) {
     }
 
@@ -30,7 +30,7 @@ export class TranslationModalService {
     }
 
     public getTranslation(word: string): Observable<string[]> {
-        return this.translationService.translate(word);
+        return this._translationService.translate(word);
     }
 
     public pushToModal(vocabWord: VocabWord, elementRef: ElementRef): void {
@@ -56,7 +56,7 @@ export class TranslationModalService {
         const originElementRef = this._originElementRef;
         abp.ui.setBusy(originElementRef);
         this._appSessionService.lastPickedVocabType = vocabWord.type;
-        this.dictionariesService.post(vocabWord)
+        this._vocabularyService.post(vocabWord)
             .finally(() => abp.ui.clearBusy(originElementRef))
             .subscribe(() => this.responseModel.next(vocabWord));
     }

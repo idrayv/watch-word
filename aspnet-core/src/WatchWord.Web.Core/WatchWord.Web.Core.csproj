@@ -31,4 +31,8 @@
     <PackageReference Include="Abp.ZeroCore" Version="3.4.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\Dto\" />
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
 </Project>

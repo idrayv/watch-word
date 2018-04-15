@@ -18,8 +18,8 @@ namespace WatchWord.Vocabulary
         [AbpAuthorize("Member")]
         public async Task<long> Post(VocabWord vocabWord)
         {
-            var userId = AbpSession.UserId ?? 0;
-            var result = await _vocabularyService.InsertVocabWordAsync(vocabWord, userId);
+            var account = await GetCurrentUserOrNullAsync();
+            var result = await _vocabularyService.InsertVocabWordAsync(vocabWord, account);
 
             if (result <= 0)
             {
@@ -32,8 +32,8 @@ namespace WatchWord.Vocabulary
         [AbpAuthorize("Member")]
         public async Task<List<VocabWord>> Get()
         {
-            var userId = AbpSession.UserId ?? 0;
-            return await _vocabularyService.GetVocabWordsAsync(userId);
+            var account = await GetCurrentUserOrNullAsync();
+            return await _vocabularyService.GetVocabWordsAsync(account);
         }
     }
 }

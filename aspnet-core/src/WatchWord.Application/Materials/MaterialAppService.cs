@@ -1,10 +1,10 @@
-﻿
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Abp.Domain.Repositories;
 using Abp.UI;
+using Abp.Authorization;
 using WatchWord.Authorization.Users;
 using WatchWord.Domain.Entities;
 using WatchWord.Materials.Dto;
@@ -14,18 +14,15 @@ namespace WatchWord.Materials
 {
     public class MaterialAppService : WatchWordAppServiceBase, IMaterialAppService
     {
-        private readonly UserManager _userManager;
         private readonly IRepository<Material, long> _materialsRepository;
         private readonly IVocabularyService _vocabularyService;
 
         public MaterialAppService(
             IRepository<Material, long> materialsRepository,
-            IVocabularyService vocabularyService,
-            UserManager userManager)
+            IVocabularyService vocabularyService)
         {
             _materialsRepository = materialsRepository;
             _vocabularyService = vocabularyService;
-            _userManager = userManager;
         }
 
         public async Task<MaterialResponseDto> GetMaterial(long id)
@@ -50,11 +47,9 @@ namespace WatchWord.Materials
             {
                 throw new UserFriendlyException("Material with key " + id + " does not exist!");
             }
-            else
-            {
-                var userId = AbpSession.UserId ?? 0;
-                response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, userId);
-            }
+
+            var account = await GetCurrentUserOrNullAsync();
+            response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, account);
 
             return response;
         }
@@ -75,13 +70,17 @@ namespace WatchWord.Materials
             return await _materialsRepository.GetAll().Where(m => m.Name.Contains(text)).ToListAsync();
         }
 
+        [AbpAuthorize("Member")]
         public async Task<SaveMaterialResponseDto> Save(Material material)
         {
             var response = new SaveMaterialResponseDto { };
             material.Owner = await GetCurrentUserAsync();
 
             // TODO: Allow for admin
-            var isOtherOwner = _materialsRepository.GetAll().Include(m => m.Owner).Where(m => m.Id == material.Id && m.Owner.Id != material.Owner.Id).Any();
+            var isOtherOwner = _materialsRepository
+                .GetAll()
+                .Include(m => m.Owner)
+                .Where(m => m.Id == material.Id && m.Owner.Id != material.Owner.Id).Any();
             if (isOtherOwner)
             {
                 throw new UserFriendlyException("You are not allowed to change other owner's materials!");
@@ -101,8 +100,10 @@ namespace WatchWord.Materials
             return response;
         }
 
+        [AbpAuthorize("Member")]
         public async Task Delete(long id)
         {
+            // TODO: Allow to only author and admin
             await _materialsRepository.DeleteAsync(id);
             await CurrentUnitOfWork.SaveChangesAsync();
         }

@@ -34,6 +34,18 @@ namespace WatchWord
             return user;
         }
 
+        protected virtual async Task<User> GetCurrentUserOrNullAsync()
+        {
+            try
+            {
+                return await UserManager.FindByIdAsync(AbpSession.GetUserId().ToString());
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         protected virtual Task<Tenant> GetCurrentTenantAsync()
         {
             return TenantManager.GetByIdAsync(AbpSession.GetTenantId());

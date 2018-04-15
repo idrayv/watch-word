@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using WatchWord.Domain.Entities;
 
-namespace WatchWord.Web.Host.Controllers.Dto
+namespace WatchWord.Web.Core.Controllers.Dto
 {
     public class ParseResponseDto
     {

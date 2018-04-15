@@ -5,19 +5,19 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Abp.UI;
-using WatchWord.Controllers;
+using Abp.Authorization;
 using WatchWord.Authorization.Users;
 using WatchWord.Vocabulary;
-using WatchWord.Web.Host.Infrastructure;
 using WatchWord.Domain.Entities;
 using WatchWord.ScanWord;
-using WatchWord.Web.Host.Controllers.Dto;
+using WatchWord.Web.Core.Controllers.Dto;
+using WatchWord.Web.Core.Infrastructure;
 
-namespace WatchWord.Web.Host.Controllers
+namespace WatchWord.Web.Core.Controllers
 {
-    // TODO: Move to app service + add authorisation
+    [AbpAuthorize("Member")]
     [Route("api/[controller]")]
-    public class ParseController : WatchWordControllerBase
+    public class ParseController : WatchWordAppServiceBase
     {
         private readonly IScanWordParser _parser;
         private readonly IVocabularyService _vocabularyService;
@@ -47,8 +47,8 @@ namespace WatchWord.Web.Host.Controllers
                     {
                         var stream = file.OpenReadStream();
                         var words = _parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
-                        var userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id ?? 0;
-                        var vocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(words, userId);
+                        var account = await GetCurrentUserOrNullAsync();
+                        var vocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(words, account);
 
                         if (words.Count > 0)
                         {

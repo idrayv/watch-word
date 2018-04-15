@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace WatchWord.Web.Host.Infrastructure
+namespace WatchWord.Web.Core.Infrastructure
 {
     public static class JsonHelper
     {

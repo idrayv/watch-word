@@ -3,9 +3,9 @@
 
         <div>
             <label>Name:</label>
-            <input name="name" type="text" placeholder="Name" required [(ngModel)]="material.name" #name="ngModel">
+            <input name="name" placeholder="Name" required [(ngModel)]="material.name" #name="ngModel">
 
-            <div *ngIf="(formSubmited || name.dirty) && name.invalid">
+            <div *ngIf="(formSubmitted || name.dirty) && name.invalid">
                 <ul *ngFor="let error of validationErrors(name)">
                     <li>{{error}}</li>
                 </ul>
@@ -14,10 +14,10 @@
 
         <div>
             <label>Description:</label>
-            <input name="description" type="text" placeholder="Description" required
+            <input name="description" placeholder="Description" required
                    [(ngModel)]="material.description" #description="ngModel"/>
 
-            <div *ngIf="(formSubmited || description.dirty) && description.invalid">
+            <div *ngIf="(formSubmitted || description.dirty) && description.invalid">
                 <ul *ngFor="let error of validationErrors(description)">
                     <li>{{error}}</li>
                 </ul>
@@ -30,7 +30,7 @@
                 <ww-subtitles-input name="subtitles" required [(ngModel)]="vocabWords" [(words)]="material.words"
                                     [(vocabWords)]="vocabWords" #subtitles="ngModel"></ww-subtitles-input>
 
-                <div *ngIf="(formSubmited || subtitles.dirty) && subtitles.invalid">
+                <div *ngIf="(formSubmitted || subtitles.dirty) && subtitles.invalid">
                     <ul *ngFor="let error of validationErrors(subtitles)">
                         <li>{{error}}</li>
                     </ul>
@@ -42,7 +42,7 @@
                 <ww-image-input name="image" mimeTypes="image/jpeg;image/png" required
                                 [(ngModel)]="material.image" #image="ngModel"></ww-image-input>
 
-                <div *ngIf="(formSubmited || image.dirty) && image.invalid">
+                <div *ngIf="(formSubmitted || image.dirty) && image.invalid">
                     <ul *ngFor="let error of validationErrors(image)">
                         <li>{{error}}</li>
                     </ul>
@@ -68,7 +68,8 @@
         <div class="content">
             <div id="material-name" class="header">{{material.name}}</div>
             <div id="material-description">{{material.description}}</div>
-            <div id="material-edit-buttons">
+
+            <div class="material-buttons">
                 <button *ngIf="isEditButtonsVisible" class="ui secondary mini button" type="button"
                         (click)="editMaterial()">
                     Edit
@@ -88,11 +89,30 @@
                     Add to favorite
                 </button>
             </div>
+
             <div *ngIf="vocabWords?.length > 0" class="material-stats">
                 <div *ngFor="let stat of materialStats">
                     <div class="inline">{{stat.name}}:</div>
                     <div class="inline">{{stat.value}}</div>
                 </div>
+            </div>
+
+            <div *ngIf="false && material.words && isGranted('Member')" class="material-buttons">
+                <button *ngIf="!batchSelect" class="ui secondary mini button"
+                        type="button"
+                        (click)="markMultiplyAsKnown()">
+                    Mark multiply as known
+                </button>
+                <button *ngIf="batchSelect" class="ui secondary mini button"
+                        type="button"
+                        (click)="cancelMultiply()">
+                    Save as known
+                </button>
+                <button *ngIf="batchSelect" class="ui secondary mini button"
+                        type="button"
+                        (click)="cancelMultiply()">
+                    Cancel
+                </button>
             </div>
         </div>
     </div>
@@ -112,8 +132,12 @@
     <label for="unsignedWords" class="filter-label">Display unsigned words</label>
 </div>
 
+
 <div *ngIf="vocabWords?.length !== 0" class="words">
-    <ww-word *ngFor="let vocabWord of vocabWords | vocabWordFilter:filtration" [vocabWord]="vocabWord"></ww-word>
+    <ww-word *ngFor="let vocabWord of vocabWords | vocabWordFilter:filtration"
+             [vocabWord]="vocabWord"
+             [batchSelect]="batchSelect">
+    </ww-word>
 </div>
 
 <br/>
