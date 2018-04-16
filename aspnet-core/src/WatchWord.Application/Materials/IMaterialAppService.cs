@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Abp.Application.Services;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 using WatchWord.Materials.Dto;
 using System.Collections.Generic;
 

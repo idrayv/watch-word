@@ -406,6 +406,12 @@ export class ImageServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -675,6 +681,12 @@ export class MaterialServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = resultData200 ? SaveMaterialResponseDto.fromJS(resultData200) : new SaveMaterialResponseDto();
             return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -721,6 +733,12 @@ export class MaterialServiceProxy {
         if (status === 200) {
             const _responseText = response.text();
             return Observable.of<void>(<any>null);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -782,6 +800,12 @@ export class ParseServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1931,232 +1955,6 @@ export class VocabularyServiceProxy {
         } else if (status === 403) {
             const _responseText = response.text();
             return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<VocabWord[]>(<any>null);
-    }
-}
-
-@Injectable()
-export class VocabularyServiceServiceProxy {
-    private http: Http;
-    private baseUrl: string;
-    protected jsonParseReviver: (key: string, value: any) => any = undefined;
-
-    constructor(@Inject(Http) http: Http, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        this.http = http;
-        this.baseUrl = baseUrl ? baseUrl : "";
-    }
-
-    /**
-     * @return Success
-     */
-    getVocabWordsAsync(userId: number): Observable<VocabWord[]> {
-        let url_ = this.baseUrl + "/api/services/app/VocabularyService/GetVocabWordsAsync?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processGetVocabWordsAsync(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGetVocabWordsAsync(<any>response_);
-                } catch (e) {
-                    return <Observable<VocabWord[]>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<VocabWord[]>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetVocabWordsAsync(response: Response): Observable<VocabWord[]> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(VocabWord.fromJS(item));
-            }
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<VocabWord[]>(<any>null);
-    }
-
-    /**
-     * @vocabWord (optional) 
-     * @return Success
-     */
-    insertVocabWordAsync(vocabWord: VocabWord, userId: number): Observable<number> {
-        let url_ = this.baseUrl + "/api/services/app/VocabularyService/InsertVocabWordAsync?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(vocabWord);
-
-        let options_ : any = {
-            body: content_,
-            method: "post",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processInsertVocabWordAsync(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processInsertVocabWordAsync(<any>response_);
-                } catch (e) {
-                    return <Observable<number>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<number>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processInsertVocabWordAsync(response: Response): Observable<number> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
-            return Observable.of(result200);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<number>(<any>null);
-    }
-
-    /**
-     * @vocabWords (optional) 
-     * @return Success
-     */
-    insertVocabWordsAsync(vocabWords: VocabWord[]): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/VocabularyService/InsertVocabWordsAsync";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(vocabWords);
-
-        let options_ : any = {
-            body: content_,
-            method: "post",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processInsertVocabWordsAsync(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processInsertVocabWordsAsync(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<void>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processInsertVocabWordsAsync(response: Response): Observable<void> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            return Observable.of<void>(<any>null);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<void>(<any>null);
-    }
-
-    /**
-     * @materialWords (optional) 
-     * @return Success
-     */
-    getSpecifiedVocabWordsAsync(materialWords: any[], userId: number): Observable<VocabWord[]> {
-        let url_ = this.baseUrl + "/api/services/app/VocabularyService/GetSpecifiedVocabWordsAsync?";
-        if (materialWords !== undefined)
-            materialWords && materialWords.forEach((item, index) => { 
-                for (let attr in item)
-                    url_ += "materialWords[" + index + "]." + attr + "=" + encodeURIComponent("" + item[attr]) + "&";
-            });
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined and cannot be null.");
-        else
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&"; 
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processGetSpecifiedVocabWordsAsync(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGetSpecifiedVocabWordsAsync(<any>response_);
-                } catch (e) {
-                    return <Observable<VocabWord[]>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<VocabWord[]>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetSpecifiedVocabWordsAsync(response: Response): Observable<VocabWord[]> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData200 && resultData200.constructor === Array) {
-                result200 = [];
-                for (let item of resultData200)
-                    result200.push(VocabWord.fromJS(item));
-            }
-            return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);

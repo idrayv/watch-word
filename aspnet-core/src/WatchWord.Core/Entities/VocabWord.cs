@@ -1,7 +1,7 @@
 ﻿using Abp.Domain.Entities;
 using WatchWord.Authorization.Users;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>The word from vocabulary of words.</summary>
     public class VocabWord : Entity<long>

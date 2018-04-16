@@ -978,7 +978,7 @@ namespace WatchWord.Migrations
                     b.ToTable("AbpUsers");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.Composition", b =>
+            modelBuilder.Entity("WatchWord.Entities.Composition", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -997,7 +997,7 @@ namespace WatchWord.Migrations
                     b.ToTable("Compositions");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.FavoriteMaterial", b =>
+            modelBuilder.Entity("WatchWord.Entities.FavoriteMaterial", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -1017,7 +1017,7 @@ namespace WatchWord.Migrations
                     b.ToTable("FavoriteMaterials");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.Material", b =>
+            modelBuilder.Entity("WatchWord.Entities.Material", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -1048,7 +1048,7 @@ namespace WatchWord.Migrations
                     b.ToTable("Materials");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.SubtitleFile", b =>
+            modelBuilder.Entity("WatchWord.Entities.SubtitleFile", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -1066,7 +1066,7 @@ namespace WatchWord.Migrations
                     b.ToTable("SubtitleFiles");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.Translation", b =>
+            modelBuilder.Entity("WatchWord.Entities.Translation", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -1090,7 +1090,7 @@ namespace WatchWord.Migrations
                     b.ToTable("Translations");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.VocabWord", b =>
+            modelBuilder.Entity("WatchWord.Entities.VocabWord", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -1111,7 +1111,7 @@ namespace WatchWord.Migrations
                     b.ToTable("VocabWords");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.Word", b =>
+            modelBuilder.Entity("WatchWord.Entities.Word", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -1130,7 +1130,7 @@ namespace WatchWord.Migrations
                     b.ToTable("Words");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.WordStatistic", b =>
+            modelBuilder.Entity("WatchWord.Entities.WordStatistic", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
@@ -1349,43 +1349,43 @@ namespace WatchWord.Migrations
                         .HasForeignKey("LastModifierUserId");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.Composition", b =>
+            modelBuilder.Entity("WatchWord.Entities.Composition", b =>
                 {
-                    b.HasOne("WatchWord.Domain.Entities.Word", "Word")
+                    b.HasOne("WatchWord.Entities.Word", "Word")
                         .WithMany("Compositions")
                         .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.FavoriteMaterial", b =>
+            modelBuilder.Entity("WatchWord.Entities.FavoriteMaterial", b =>
                 {
                     b.HasOne("WatchWord.Authorization.Users.User", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WatchWord.Domain.Entities.Material", "Material")
+                    b.HasOne("WatchWord.Entities.Material", "Material")
                         .WithMany("FavoriteMaterials")
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.Material", b =>
+            modelBuilder.Entity("WatchWord.Entities.Material", b =>
                 {
                     b.HasOne("WatchWord.Authorization.Users.User", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.SubtitleFile", b =>
+            modelBuilder.Entity("WatchWord.Entities.SubtitleFile", b =>
                 {
-                    b.HasOne("WatchWord.Domain.Entities.Material", "Material")
+                    b.HasOne("WatchWord.Entities.Material", "Material")
                         .WithMany("SubtitleFiles")
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.VocabWord", b =>
+            modelBuilder.Entity("WatchWord.Entities.VocabWord", b =>
                 {
                     b.HasOne("WatchWord.Authorization.Users.User", "Owner")
                         .WithMany()
@@ -1393,9 +1393,9 @@ namespace WatchWord.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WatchWord.Domain.Entities.Word", b =>
+            modelBuilder.Entity("WatchWord.Entities.Word", b =>
                 {
-                    b.HasOne("WatchWord.Domain.Entities.Material", "Material")
+                    b.HasOne("WatchWord.Entities.Material", "Material")
                         .WithMany("Words")
                         .HasForeignKey("MaterialId")
                         .OnDelete(DeleteBehavior.Cascade);

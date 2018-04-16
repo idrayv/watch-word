@@ -1,6 +1,6 @@
 ﻿using Abp.Domain.Entities;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>A pointer to a specific word in the file.</summary>
     public class Composition : Entity<long>

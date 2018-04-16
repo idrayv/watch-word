@@ -6,7 +6,7 @@ using Abp.Domain.Repositories;
 using Abp.UI;
 using Abp.Authorization;
 using WatchWord.Authorization.Users;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 using WatchWord.Materials.Dto;
 using WatchWord.Vocabulary;
 

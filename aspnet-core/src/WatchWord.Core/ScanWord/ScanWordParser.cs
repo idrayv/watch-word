@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 
 namespace WatchWord.ScanWord
 {

@@ -27,6 +27,17 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     private routeSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
 
+    private static pushStatToStats(stats: MaterialStats[], name: string, value: string) {
+        stats.push({
+            name: name,
+            value: value
+        });
+    }
+
+    public static validationErrors(state: NgModel): string[] {
+        return ComponentValidation.validationErrors(state);
+    }
+
     constructor(private materialService: MaterialServiceProxy,
                 private route: ActivatedRoute,
                 private router: Router,
@@ -65,7 +76,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
                 })
                 .subscribe((response) => {
                     if (this.mode === MaterialMode.Add) {
-                        this.router.navigateByUrl('app/material/' + response.id);
+                        this.router.navigateByUrl('app/material/' + response.id).then();
                     } else {
                         this.mode = MaterialMode.Read;
                     }
@@ -81,7 +92,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         abp.ui.setBusy();
         this.materialService.delete(this.material.id).subscribe(() => {
             abp.ui.clearBusy();
-            this.router.navigateByUrl('app/materials');
+            this.router.navigateByUrl('app/materials').then();
         });
     }
 
@@ -100,16 +111,16 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
             .map(w => w.count).reduce((pre, curr) => pre + curr, 0);
 
         const uniqueCount = this.vocabWords.length;
-        this.pushStatToStats(stats, 'Total words', totalCount.toString());
-        this.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
+        MaterialComponent.pushStatToStats(stats, 'Total words', totalCount.toString());
+        MaterialComponent.pushStatToStats(stats, 'Unique words', uniqueCount.toString());
 
         if (this.appSession.user && this.appSession.user.id) {
             const learnCount = this.vocabWords.filter(v => v.type === AppEnums.VocabType.LearnWord).length;
             const knownCount = this.vocabWords.filter(v => v.type === AppEnums.VocabType.KnownWord).length;
 
-            this.pushStatToStats(stats, 'Learn words', learnCount.toString());
-            this.pushStatToStats(stats, 'Known words', knownCount.toString());
-            this.pushStatToStats(stats, 'Unsigned words', (uniqueCount - (learnCount + knownCount)).toString());
+            MaterialComponent.pushStatToStats(stats, 'Learn words', learnCount.toString());
+            MaterialComponent.pushStatToStats(stats, 'Known words', knownCount.toString());
+            MaterialComponent.pushStatToStats(stats, 'Unsigned words', (uniqueCount - (learnCount + knownCount)).toString());
         }
 
         return stats;
@@ -125,11 +136,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     }
 
     get isAddToFavoritesButtonVisible(): boolean {
-        if (!this.material.id || !this.appSession.userId || this.mode === MaterialMode.Add) {
-            return false;
-        }
-
-        return true;
+        return !(!this.material.id || !this.appSession.userId || this.mode === MaterialMode.Add);
     }
 
     public addToFavorites(): void {
@@ -146,10 +153,6 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
             .subscribe(resp => this.isFavorite = !this.isFavorite);
     }
 
-    public validationErrors(state: NgModel): string[] {
-        return ComponentValidation.validationErrors(state);
-    }
-
     private onRouteChanged(param: string): void {
         if (param === 'create') {
             this.mode = MaterialMode.Add;
@@ -158,7 +161,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         } else if (+param) {
             this.initializeMaterial(+param);
         } else {
-            this.router.navigate(['app/404']);
+            this.router.navigate(['app/404']).then();
         }
     }
 
@@ -177,13 +180,6 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
             } else {
                 abp.ui.clearBusy();
             }
-        });
-    }
-
-    private pushStatToStats(stats: MaterialStats[], name: string, value: string) {
-        stats.push({
-            name: name,
-            value: value
         });
     }
 

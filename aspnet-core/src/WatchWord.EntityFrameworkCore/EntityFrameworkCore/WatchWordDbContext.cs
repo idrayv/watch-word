@@ -3,7 +3,7 @@ using Abp.Zero.EntityFrameworkCore;
 using WatchWord.Authorization.Roles;
 using WatchWord.Authorization.Users;
 using WatchWord.MultiTenancy;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 
 namespace WatchWord.EntityFrameworkCore
 {

@@ -1,7 +1,7 @@
 ﻿using Abp.Domain.Entities;
 using WatchWord.Authorization.Users;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     public class FavoriteMaterial : Entity<long>
     {

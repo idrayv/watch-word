@@ -2,7 +2,7 @@
 using Abp.Domain.Entities;
 using WatchWord.Authorization.Users;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>Material type, film or series.</summary>
     public enum MaterialType

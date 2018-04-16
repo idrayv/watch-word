@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 
 namespace WatchWord.FavoriteMaterials
 {

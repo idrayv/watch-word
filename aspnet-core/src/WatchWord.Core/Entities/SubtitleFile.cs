@@ -1,6 +1,6 @@
 ﻿using Abp.Domain.Entities;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>Stores full text of subtitle file.</summary>
     public class SubtitleFile : Entity<long>

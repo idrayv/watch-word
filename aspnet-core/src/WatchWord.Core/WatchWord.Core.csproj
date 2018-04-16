@@ -22,4 +22,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Vocabulary\" />
+    <Folder Include="Entities\" />
+  </ItemGroup>
 </Project>

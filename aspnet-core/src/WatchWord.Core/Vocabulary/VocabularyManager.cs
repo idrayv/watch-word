@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Abp;
 using Abp.Domain.Repositories;
 using Abp.Dependency;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 using WatchWord.Authorization.Users;
 
 namespace WatchWord.Vocabulary

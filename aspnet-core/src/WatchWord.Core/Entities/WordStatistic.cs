@@ -1,6 +1,6 @@
 ﻿using Abp.Domain.Entities;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>Word statistic.</summary>
     public class WordStatistic : Entity<long>

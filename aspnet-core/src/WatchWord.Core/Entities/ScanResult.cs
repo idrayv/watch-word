@@ -1,7 +1,7 @@
 ﻿using Abp.Domain.Entities;
 using System.Collections.Generic;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>Nested type of scan result.</summary>
     public class ScanResult : Entity<long>

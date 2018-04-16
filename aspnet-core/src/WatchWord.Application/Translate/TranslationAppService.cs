@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Abp.Domain.Repositories;
 using WatchWord.Infrastructure;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 
 namespace WatchWord.Translate
 {

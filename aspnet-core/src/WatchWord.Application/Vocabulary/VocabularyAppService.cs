@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Authorization;
 using Abp.UI;
-using WatchWord.Domain.Entities;
+using Abp.Authorization;
+using WatchWord.Entities;
 
 namespace WatchWord.Vocabulary
 {

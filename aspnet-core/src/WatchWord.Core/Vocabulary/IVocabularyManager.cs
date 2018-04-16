@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WatchWord.Authorization.Users;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 
 namespace WatchWord.Vocabulary
 {

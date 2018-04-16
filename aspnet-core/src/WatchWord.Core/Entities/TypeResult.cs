@@ -1,4 +1,4 @@
-﻿namespace WatchWord.Domain.Entities
+﻿namespace WatchWord.Entities
 {
     public enum TypeResult
     {

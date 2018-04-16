@@ -8,7 +8,7 @@ using Abp.UI;
 using Abp.Authorization;
 using WatchWord.Authorization.Users;
 using WatchWord.Vocabulary;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 using WatchWord.ScanWord;
 using WatchWord.Web.Core.Controllers.Dto;
 using WatchWord.Web.Core.Infrastructure;

@@ -1,7 +1,7 @@
 ﻿using System;
 using Abp.Domain.Entities;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>Word translation cache.</summary>
     public class Translation : Entity<long>

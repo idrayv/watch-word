@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Abp.Domain.Entities;
 
-namespace WatchWord.Domain.Entities
+namespace WatchWord.Entities
 {
     /// <summary>Word in the material Entity.</summary>
     public class Word : Entity<long>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 
 namespace WatchWord.ScanWord
 {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WatchWord.Domain.Entities;
+using WatchWord.Entities;
 
 namespace WatchWord.Materials.Dto
 {
