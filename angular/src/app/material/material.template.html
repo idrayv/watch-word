@@ -39,8 +39,8 @@
 
             <div class="field">
                 <label>Image:</label>
-                <ww-image-input mimeTypes="image/jpeg;image/png" required
-                                [(ngModel)]="material.image" #image="ngModel"></ww-image-input>
+                <ww-image-input mimeTypes="image/jpeg;image/png" required [(ngModel)]="material.image"
+                                [(image)]="material.image" #image="ngModel"></ww-image-input>
 
                 <div *ngIf="(formSubmitted || image.dirty) && image.invalid">
                     <ul *ngFor="let error of validationErrors(image)">
@@ -131,7 +131,6 @@
            (change)="filtration = filtration.invertUnsignedWord()">
     <label for="unsignedWords" class="filter-label">Display unsigned words</label>
 </div>
-
 
 <div *ngIf="vocabWords?.length !== 0" class="words">
     <ww-word *ngFor="let vocabWord of vocabWords | vocabWordFilter:filtration"

@@ -6,19 +6,8 @@ import {VocabWord, Word} from '@shared/service-proxies/service-proxies';
 @Component({
     selector: 'ww-subtitles-input',
     templateUrl: 'subtitles-input.template.html',
-    providers: [{
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => SubtitlesInputComponent),
-        multi: true
-    }, {
-        provide: NG_VALIDATORS,
-        useExisting: forwardRef(() => SubtitlesInputComponent),
-        multi: true
-    }]
 })
-export class SubtitlesInputComponent implements ControlValueAccessor, Validator {
-
-    private onChangeCallback: Function;
+export class SubtitlesInputComponent implements Validator {
     private serverError: string[] = [];
 
     @ViewChild('file')
@@ -52,10 +41,6 @@ export class SubtitlesInputComponent implements ControlValueAccessor, Validator 
                 this.serverError = response.error;
             }
         });
-    }
-
-    registerOnChange(fn: any): void {
-        this.onChangeCallback = fn;
     }
 
     validate(c: AbstractControl): { [key: string]: any; } {

@@ -33,6 +33,7 @@ namespace WatchWord.Vocabulary
         public async Task<List<VocabWord>> Get()
         {
             var account = await GetCurrentUserOrNullAsync();
+            // TODO: DO NOT INCLUDE OWNER TO WORD ENTITY
             return await _vocabularyService.GetVocabWordsAsync(account);
         }
     }

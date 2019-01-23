@@ -21,9 +21,12 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.0" />
+    <PackageReference Include="Ngonzalez.ImageProcessorCore" Version="0.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Vocabulary\" />
     <Folder Include="Entities\" />
+    <Folder Include="Pictures\" />
+    <Folder Include="ScanWord\" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿import {Component, ElementRef, forwardRef, ViewChild, OnInit} from '@angular/core';
+﻿import {Component, ElementRef, forwardRef, ViewChild, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl} from '@angular/forms';
 import {MaterialService} from '../../material.service';
 
@@ -16,12 +16,15 @@ import {MaterialService} from '../../material.service';
     }]
 })
 export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
-
-    private onChangeCallback: Function;
     private error: string[] = [];
     private types: string[] = [];
 
     @ViewChild('file') fileInput: ElementRef;
+
+    @Input()
+    image: string;
+    @Output()
+    imageChange: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(private materialService: MaterialService, private el: ElementRef) {
     }
@@ -38,7 +41,8 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
         } else {
             this.addErrorsAndCleanInput(
                 [`Content type of this attachment is not allowed. Supported types: ${this.types.join(', ')}`]);
-            this.onChangeCallback('');
+
+            this.imageChange.emit('');
         }
     }
 
@@ -56,7 +60,8 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
             } else {
                 this.addErrorsAndCleanInput(['Server unavailable.']);
             }
-            this.onChangeCallback(response.result);
+
+            this.imageChange.emit(response.result);
         });
     }
 
@@ -65,26 +70,10 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
         this.fileInput.nativeElement.value = null;
     }
 
-    registerOnChange(fn: any): void {
-        this.onChangeCallback = fn;
-    }
-
     validate(c: AbstractControl): { [key: string]: any; } {
         if (c.value && this.error.length === 0) {
             return null;
         }
         return {'imageInput': this.error};
-    }
-
-    writeValue(image: string): void {
-    }
-
-    registerOnTouched(fn: any): void {
-    }
-
-    registerOnValidatorChange(fn: () => void): void {
-    }
-
-    setDisabledState(isDisabled: boolean): void {
     }
 }

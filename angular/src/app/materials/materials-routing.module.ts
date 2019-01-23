@@ -7,7 +7,8 @@ const routes: Routes = [{
     component: MaterialsComponent
 }, {
     path: '',
-    component: MaterialsComponent
+    component: MaterialsComponent,
+    pathMatch: 'full'
 }];
 
 @NgModule({

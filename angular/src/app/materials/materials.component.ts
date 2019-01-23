@@ -13,7 +13,7 @@ export class MaterialsComponent extends AppComponentBase implements OnInit, OnDe
     public model: MaterialsModel = new MaterialsModel();
     private routeSubscription: ISubscription;
     private itemsPerPage = 24;
-    private materialsRoute = '/materials/page';
+    private materialsRoute = '/app/materials/page';
 
     constructor(private router: Router,
                 private materialService: MaterialServiceProxy,
@@ -27,7 +27,7 @@ export class MaterialsComponent extends AppComponentBase implements OnInit, OnDe
     }
 
     public onMaterialClick(id: number): void {
-        this.router.navigate(['app/material', id]);
+        this.router.navigate(['app/material', id]).then();
     }
 
     private onRouteChanged(param: string): void {

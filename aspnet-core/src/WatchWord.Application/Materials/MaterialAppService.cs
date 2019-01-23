@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Abp.Domain.Repositories;
 using Abp.UI;
 using Abp.Authorization;
-using WatchWord.Authorization.Users;
 using WatchWord.Entities;
 using WatchWord.Materials.Dto;
 using WatchWord.Vocabulary;
@@ -14,8 +13,8 @@ namespace WatchWord.Materials
 {
     public class MaterialAppService : WatchWordAppServiceBase, IMaterialAppService
     {
-        private readonly IRepository<Material, long> _materialsRepository;
-        private readonly IVocabularyService _vocabularyService;
+        readonly IRepository<Material, long> _materialsRepository;
+        readonly IVocabularyService _vocabularyService;
 
         public MaterialAppService(
             IRepository<Material, long> materialsRepository,
@@ -49,6 +48,7 @@ namespace WatchWord.Materials
             }
 
             var account = await GetCurrentUserOrNullAsync();
+            // TODO: DO NOT INCLUDE OWNER TO VOCAB WORDS
             response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, account);
 
             return response;

@@ -14,9 +14,6 @@
     <DefineConstants>FEATURE_SIGNALR_ASPNETCORE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ngonzalez.ImageProcessorCore" Version="0.0.1" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\WatchWord.Core\WatchWord.Core.csproj" />
   </ItemGroup>
 </Project>
