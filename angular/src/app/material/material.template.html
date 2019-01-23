@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <div *ngIf="false && material.words && isGranted('Member')" class="material-buttons">
+            <div *ngIf="material.words && isGranted('Member')" class="material-buttons">
                 <button *ngIf="!batchSelect" class="ui secondary mini button"
                         type="button"
                         (click)="markMultiplyAsKnown()">
@@ -105,7 +105,7 @@
                 </button>
                 <button *ngIf="batchSelect" class="ui secondary mini button"
                         type="button"
-                        (click)="cancelMultiply()">
+                        (click)="saveMultiply()">
                     Save as known
                 </button>
                 <button *ngIf="batchSelect" class="ui secondary mini button"
@@ -135,6 +135,7 @@
 <div *ngIf="vocabWords?.length !== 0" class="words">
     <ww-word *ngFor="let vocabWord of vocabWords | vocabWordFilter:filtration"
              [vocabWord]="vocabWord"
+             [markedAsKnownBatch]="markedAsKnownBatch"
              [batchSelect]="batchSelect">
     </ww-word>
 </div>

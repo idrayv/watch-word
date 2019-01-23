@@ -8,18 +8,26 @@ import {AppEnums} from '@shared/AppEnums';
     templateUrl: 'word.template.html'
 })
 export class WordComponent {
-
     @Input() public vocabWord: VocabWord;
     @Input() public word: Word;
     @Input() public batchSelect: boolean;
+    @Input() public markedAsKnownBatch: string[];
 
-    constructor(private translationModalService: TranslationModalService,
-                private elementRef: ElementRef) {
+    constructor(
+        private translationModalService: TranslationModalService,
+        private elementRef: ElementRef) {
     }
 
     wordClick(): void {
         if (this.batchSelect) {
-            this.vocabWord.type = AppEnums.VocabType.KnownWord;
+            if (this.vocabWord.type === AppEnums.VocabType.UnsignedWord) {
+                const position = this.markedAsKnownBatch.indexOf(this.vocabWord.word);
+                if (position === -1) {
+                    this.markedAsKnownBatch.push(this.vocabWord.word);
+                } else {
+                    this.markedAsKnownBatch.splice(position, 1);
+                }
+            }
         } else {
             this.getTranslation();
         }

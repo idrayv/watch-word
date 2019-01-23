@@ -7,7 +7,7 @@ import {VocabWordFiltration} from './material.models';
 import {TranslationModalService} from '../global/components/translation-modal/translation-modal.service';
 import {ComponentValidation} from '../global/component-validation';
 import {AppComponentBase} from '@shared/app-component-base';
-import {Word, Material, VocabWord} from 'shared/service-proxies/service-proxies';
+import {Word, Material, VocabWord, MaterialDto, VocabularyServiceProxy, VocabWordType} from 'shared/service-proxies/service-proxies';
 import {MaterialServiceProxy, FavoriteMaterialServiceProxy} from 'shared/service-proxies/service-proxies';
 import {AppEnums} from '@shared/AppEnums';
 
@@ -18,11 +18,12 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
 
     public mode: MaterialMode = null;
     public vocabWords: VocabWord[] = [];
-    public material: Material = new Material();
+    public material: MaterialDto = new MaterialDto();
     public isFavorite = false;
     public formSubmitted: boolean;
     public filtration: VocabWordFiltration = new VocabWordFiltration();
     public batchSelect: boolean;
+    public markedAsKnownBatch: string[] = [];
 
     private routeSubscription: ISubscription;
     private translationModalResponseSubscription: ISubscription;
@@ -43,6 +44,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
                 private router: Router,
                 private favoriteMaterialsService: FavoriteMaterialServiceProxy,
                 private translationModalService: TranslationModalService,
+                private vocabularyService: VocabularyServiceProxy,
                 injector: Injector) {
         super(injector);
     }
@@ -69,7 +71,9 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
                 return word;
             });
 
-            this.materialService.save(this.material)
+            const materialToSave = this.material.clone();
+            materialToSave.owner = null;
+            this.materialService.save(materialToSave)
                 .finally(() => {
                     abp.ui.clearBusy();
                     this.formSubmitted = false;
@@ -100,7 +104,27 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
         this.batchSelect = true;
     }
 
+    public saveMultiply(): void {
+        abp.ui.setBusy();
+
+        this.vocabularyService.markAsKnown(this.markedAsKnownBatch)
+        .finally(() => {
+            abp.ui.clearBusy();
+        })
+        .subscribe(() => {
+            this.vocabWords.forEach(v => {
+                if (this.markedAsKnownBatch.indexOf(v.word) !== -1) {
+                    v.type = AppEnums.VocabType.KnownWord;
+                }
+            });
+
+            this.markedAsKnownBatch = [];
+            this.batchSelect = false;
+        });
+    }
+
     public cancelMultiply(): void {
+        this.markedAsKnownBatch = [];
         this.batchSelect = false;
     }
 
@@ -156,7 +180,7 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     private onRouteChanged(param: string): void {
         if (param === 'create') {
             this.mode = MaterialMode.Add;
-            this.material = new Material();
+            this.material = new MaterialDto();
             this.vocabWords = [];
         } else if (+param) {
             this.initializeMaterial(+param);

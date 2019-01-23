@@ -30,6 +30,13 @@ namespace WatchWord.Vocabulary
         }
 
         [AbpAuthorize("Member")]
+        public async Task MarkAsKnown(List<string> words)
+        {
+            var account = await GetCurrentUserOrNullAsync();
+            await _vocabularyService.MarkWordsAsKnownAsync(words, account);
+        }
+
+        [AbpAuthorize("Member")]
         public async Task<List<VocabWord>> Get()
         {
             var account = await GetCurrentUserOrNullAsync();

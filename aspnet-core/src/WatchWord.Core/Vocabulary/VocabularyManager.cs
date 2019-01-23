@@ -7,6 +7,7 @@ using Abp.Domain.Repositories;
 using Abp.Dependency;
 using WatchWord.Entities;
 using WatchWord.Authorization.Users;
+using Abp.UI;
 
 namespace WatchWord.Vocabulary
 {
@@ -63,6 +64,43 @@ namespace WatchWord.Vocabulary
             }
 
             return 0;
+        }
+
+        public async Task MarkWordsAsKnownAsync(List<string> words, User account)
+        {
+            if (account == null)
+            {
+                throw new UserFriendlyException("Please log in to the application!");
+            }
+
+            try
+            {
+                var existingVocabWords = await _vocabWordsRepository.GetAll()
+                    .Where(v => words.Contains(v.Word) && v.Owner.Id == account.Id)
+                    .Include(v => v.Owner).ToListAsync();
+
+                foreach (var existingVocabWord in existingVocabWords)
+                {
+                    await _vocabWordsRepository.DeleteAsync(existingVocabWord);
+                }
+
+                foreach (var word in words)
+                {
+                    await _vocabWordsRepository.InsertAsync(new VocabWord
+                    {
+                        Owner = account,
+                        Type = VocabType.KnownWord,
+                        Translation = "",
+                        Word = word
+                    });
+                }
+
+                await CurrentUnitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new UserFriendlyException("Words wasn't inserted into vocabulary!");
+            }
         }
 
         public async Task InsertVocabWordsAsync(List<VocabWord> vocabWords, User account)

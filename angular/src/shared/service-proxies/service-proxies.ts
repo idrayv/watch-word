@@ -406,12 +406,6 @@ export class ImageServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -484,7 +478,7 @@ export class MaterialServiceProxy {
     /**
      * @return Success
      */
-    getMaterials(page: number, count: number): Observable<Material[]> {
+    getMaterials(page: number, count: number): Observable<MaterialDto[]> {
         let url_ = this.baseUrl + "/api/services/app/Material/GetMaterials?";
         if (page === undefined || page === null)
             throw new Error("The parameter 'page' must be defined and cannot be null.");
@@ -511,14 +505,14 @@ export class MaterialServiceProxy {
                 try {
                     return this.processGetMaterials(<any>response_);
                 } catch (e) {
-                    return <Observable<Material[]>><any>Observable.throw(e);
+                    return <Observable<MaterialDto[]>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<Material[]>><any>Observable.throw(response_);
+                return <Observable<MaterialDto[]>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetMaterials(response: Response): Observable<Material[]> {
+    protected processGetMaterials(response: Response): Observable<MaterialDto[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -529,14 +523,14 @@ export class MaterialServiceProxy {
             if (resultData200 && resultData200.constructor === Array) {
                 result200 = [];
                 for (let item of resultData200)
-                    result200.push(Material.fromJS(item));
+                    result200.push(MaterialDto.fromJS(item));
             }
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<Material[]>(<any>null);
+        return Observable.of<MaterialDto[]>(<any>null);
     }
 
     /**
@@ -589,7 +583,7 @@ export class MaterialServiceProxy {
      * @text (optional) 
      * @return Success
      */
-    search(text: string): Observable<Material[]> {
+    search(text: string): Observable<MaterialDto[]> {
         let url_ = this.baseUrl + "/api/services/app/Material/Search?";
         if (text !== undefined)
             url_ += "text=" + encodeURIComponent("" + text) + "&"; 
@@ -610,14 +604,14 @@ export class MaterialServiceProxy {
                 try {
                     return this.processSearch(<any>response_);
                 } catch (e) {
-                    return <Observable<Material[]>><any>Observable.throw(e);
+                    return <Observable<MaterialDto[]>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<Material[]>><any>Observable.throw(response_);
+                return <Observable<MaterialDto[]>><any>Observable.throw(response_);
         });
     }
 
-    protected processSearch(response: Response): Observable<Material[]> {
+    protected processSearch(response: Response): Observable<MaterialDto[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -628,25 +622,25 @@ export class MaterialServiceProxy {
             if (resultData200 && resultData200.constructor === Array) {
                 result200 = [];
                 for (let item of resultData200)
-                    result200.push(Material.fromJS(item));
+                    result200.push(MaterialDto.fromJS(item));
             }
             return Observable.of(result200);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<Material[]>(<any>null);
+        return Observable.of<MaterialDto[]>(<any>null);
     }
 
     /**
-     * @material (optional) 
+     * @materialDto (optional) 
      * @return Success
      */
-    save(material: Material): Observable<SaveMaterialResponseDto> {
+    save(materialDto: MaterialDto): Observable<SaveMaterialResponseDto> {
         let url_ = this.baseUrl + "/api/services/app/Material/Save";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(material);
+        const content_ = JSON.stringify(materialDto);
 
         let options_ : any = {
             body: content_,
@@ -800,12 +794,6 @@ export class ParseServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -1907,6 +1895,58 @@ export class VocabularyServiceProxy {
     }
 
     /**
+     * @words (optional) 
+     * @return Success
+     */
+    markAsKnown(words: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/MarkAsKnown";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(words);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processMarkAsKnown(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processMarkAsKnown(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processMarkAsKnown(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
      * @return Success
      */
     get(): Observable<VocabWord[]> {
@@ -2282,7 +2322,7 @@ export interface IIFormFile {
 }
 
 export class MaterialResponseDto implements IMaterialResponseDto {
-    material: Material;
+    material: MaterialDto;
     vocabWords: VocabWord[];
 
     constructor(data?: IMaterialResponseDto) {
@@ -2296,7 +2336,7 @@ export class MaterialResponseDto implements IMaterialResponseDto {
 
     init(data?: any) {
         if (data) {
-            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.material = data["material"] ? MaterialDto.fromJS(data["material"]) : <any>undefined;
             if (data["vocabWords"] && data["vocabWords"].constructor === Array) {
                 this.vocabWords = [];
                 for (let item of data["vocabWords"])
@@ -2332,22 +2372,20 @@ export class MaterialResponseDto implements IMaterialResponseDto {
 }
 
 export interface IMaterialResponseDto {
-    material: Material;
+    material: MaterialDto;
     vocabWords: VocabWord[];
 }
 
-export class Material implements IMaterial {
-    type: MaterialType;
+export class MaterialDto implements IMaterialDto {
+    type: MaterialDtoType;
     name: string;
     description: string;
     image: string;
-    owner: User;
+    owner: UserDto;
     words: Word[];
-    subtitleFiles: SubtitleFile[];
-    favoriteMaterials: FavoriteMaterial[];
     id: number;
 
-    constructor(data?: IMaterial) {
+    constructor(data?: IMaterialDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2362,29 +2400,19 @@ export class Material implements IMaterial {
             this.name = data["name"];
             this.description = data["description"];
             this.image = data["image"];
-            this.owner = data["owner"] ? User.fromJS(data["owner"]) : <any>undefined;
+            this.owner = data["owner"] ? UserDto.fromJS(data["owner"]) : <any>undefined;
             if (data["words"] && data["words"].constructor === Array) {
                 this.words = [];
                 for (let item of data["words"])
                     this.words.push(Word.fromJS(item));
             }
-            if (data["subtitleFiles"] && data["subtitleFiles"].constructor === Array) {
-                this.subtitleFiles = [];
-                for (let item of data["subtitleFiles"])
-                    this.subtitleFiles.push(SubtitleFile.fromJS(item));
-            }
-            if (data["favoriteMaterials"] && data["favoriteMaterials"].constructor === Array) {
-                this.favoriteMaterials = [];
-                for (let item of data["favoriteMaterials"])
-                    this.favoriteMaterials.push(FavoriteMaterial.fromJS(item));
-            }
             this.id = data["id"];
         }
     }
 
-    static fromJS(data: any): Material {
+    static fromJS(data: any): MaterialDto {
         data = typeof data === 'object' ? data : {};
-        let result = new Material();
+        let result = new MaterialDto();
         result.init(data);
         return result;
     }
@@ -2401,37 +2429,25 @@ export class Material implements IMaterial {
             for (let item of this.words)
                 data["words"].push(item.toJSON());
         }
-        if (this.subtitleFiles && this.subtitleFiles.constructor === Array) {
-            data["subtitleFiles"] = [];
-            for (let item of this.subtitleFiles)
-                data["subtitleFiles"].push(item.toJSON());
-        }
-        if (this.favoriteMaterials && this.favoriteMaterials.constructor === Array) {
-            data["favoriteMaterials"] = [];
-            for (let item of this.favoriteMaterials)
-                data["favoriteMaterials"].push(item.toJSON());
-        }
         data["id"] = this.id;
         return data; 
     }
 
     clone() {
         const json = this.toJSON();
-        let result = new Material();
+        let result = new MaterialDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IMaterial {
-    type: MaterialType;
+export interface IMaterialDto {
+    type: MaterialDtoType;
     name: string;
     description: string;
     image: string;
-    owner: User;
+    owner: UserDto;
     words: Word[];
-    subtitleFiles: SubtitleFile[];
-    favoriteMaterials: FavoriteMaterial[];
     id: number;
 }
 
@@ -2491,6 +2507,160 @@ export interface IVocabWord {
     translation: string;
     owner: User;
     type: VocabWordType;
+    id: number;
+}
+
+export class UserDto implements IUserDto {
+    userName: string;
+    name: string;
+    surname: string;
+    emailAddress: string;
+    isActive: boolean;
+    fullName: string;
+    lastLoginTime: moment.Moment;
+    creationTime: moment.Moment;
+    roleNames: string[];
+    id: number;
+
+    constructor(data?: IUserDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.userName = data["userName"];
+            this.name = data["name"];
+            this.surname = data["surname"];
+            this.emailAddress = data["emailAddress"];
+            this.isActive = data["isActive"];
+            this.fullName = data["fullName"];
+            this.lastLoginTime = data["lastLoginTime"] ? moment(data["lastLoginTime"].toString()) : <any>undefined;
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            if (data["roleNames"] && data["roleNames"].constructor === Array) {
+                this.roleNames = [];
+                for (let item of data["roleNames"])
+                    this.roleNames.push(item);
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userName"] = this.userName;
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["emailAddress"] = this.emailAddress;
+        data["isActive"] = this.isActive;
+        data["fullName"] = this.fullName;
+        data["lastLoginTime"] = this.lastLoginTime ? this.lastLoginTime.toISOString() : <any>undefined;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        if (this.roleNames && this.roleNames.constructor === Array) {
+            data["roleNames"] = [];
+            for (let item of this.roleNames)
+                data["roleNames"].push(item);
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new UserDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserDto {
+    userName: string;
+    name: string;
+    surname: string;
+    emailAddress: string;
+    isActive: boolean;
+    fullName: string;
+    lastLoginTime: moment.Moment;
+    creationTime: moment.Moment;
+    roleNames: string[];
+    id: number;
+}
+
+export class Word implements IWord {
+    material: Material;
+    theWord: string;
+    count: number;
+    compositions: Composition[];
+    id: number;
+
+    constructor(data?: IWord) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.theWord = data["theWord"];
+            this.count = data["count"];
+            if (data["compositions"] && data["compositions"].constructor === Array) {
+                this.compositions = [];
+                for (let item of data["compositions"])
+                    this.compositions.push(Composition.fromJS(item));
+            }
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): Word {
+        data = typeof data === 'object' ? data : {};
+        let result = new Word();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
+        data["theWord"] = this.theWord;
+        data["count"] = this.count;
+        if (this.compositions && this.compositions.constructor === Array) {
+            data["compositions"] = [];
+            for (let item of this.compositions)
+                data["compositions"].push(item.toJSON());
+        }
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new Word();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IWord {
+    material: Material;
+    theWord: string;
+    count: number;
+    compositions: Composition[];
     id: number;
 }
 
@@ -2741,14 +2911,18 @@ export interface IUser {
     id: number;
 }
 
-export class Word implements IWord {
-    material: Material;
-    theWord: string;
-    count: number;
-    compositions: Composition[];
+export class Material implements IMaterial {
+    type: MaterialType;
+    name: string;
+    description: string;
+    image: string;
+    owner: User;
+    words: Word[];
+    subtitleFiles: SubtitleFile[];
+    favoriteMaterials: FavoriteMaterial[];
     id: number;
 
-    constructor(data?: IWord) {
+    constructor(data?: IMaterial) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2759,34 +2933,58 @@ export class Word implements IWord {
 
     init(data?: any) {
         if (data) {
-            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
-            this.theWord = data["theWord"];
-            this.count = data["count"];
-            if (data["compositions"] && data["compositions"].constructor === Array) {
-                this.compositions = [];
-                for (let item of data["compositions"])
-                    this.compositions.push(Composition.fromJS(item));
+            this.type = data["type"];
+            this.name = data["name"];
+            this.description = data["description"];
+            this.image = data["image"];
+            this.owner = data["owner"] ? User.fromJS(data["owner"]) : <any>undefined;
+            if (data["words"] && data["words"].constructor === Array) {
+                this.words = [];
+                for (let item of data["words"])
+                    this.words.push(Word.fromJS(item));
+            }
+            if (data["subtitleFiles"] && data["subtitleFiles"].constructor === Array) {
+                this.subtitleFiles = [];
+                for (let item of data["subtitleFiles"])
+                    this.subtitleFiles.push(SubtitleFile.fromJS(item));
+            }
+            if (data["favoriteMaterials"] && data["favoriteMaterials"].constructor === Array) {
+                this.favoriteMaterials = [];
+                for (let item of data["favoriteMaterials"])
+                    this.favoriteMaterials.push(FavoriteMaterial.fromJS(item));
             }
             this.id = data["id"];
         }
     }
 
-    static fromJS(data: any): Word {
+    static fromJS(data: any): Material {
         data = typeof data === 'object' ? data : {};
-        let result = new Word();
+        let result = new Material();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
-        data["theWord"] = this.theWord;
-        data["count"] = this.count;
-        if (this.compositions && this.compositions.constructor === Array) {
-            data["compositions"] = [];
-            for (let item of this.compositions)
-                data["compositions"].push(item.toJSON());
+        data["type"] = this.type;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["image"] = this.image;
+        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
+        if (this.words && this.words.constructor === Array) {
+            data["words"] = [];
+            for (let item of this.words)
+                data["words"].push(item.toJSON());
+        }
+        if (this.subtitleFiles && this.subtitleFiles.constructor === Array) {
+            data["subtitleFiles"] = [];
+            for (let item of this.subtitleFiles)
+                data["subtitleFiles"].push(item.toJSON());
+        }
+        if (this.favoriteMaterials && this.favoriteMaterials.constructor === Array) {
+            data["favoriteMaterials"] = [];
+            for (let item of this.favoriteMaterials)
+                data["favoriteMaterials"].push(item.toJSON());
         }
         data["id"] = this.id;
         return data; 
@@ -2794,26 +2992,31 @@ export class Word implements IWord {
 
     clone() {
         const json = this.toJSON();
-        let result = new Word();
+        let result = new Material();
         result.init(json);
         return result;
     }
 }
 
-export interface IWord {
-    material: Material;
-    theWord: string;
-    count: number;
-    compositions: Composition[];
+export interface IMaterial {
+    type: MaterialType;
+    name: string;
+    description: string;
+    image: string;
+    owner: User;
+    words: Word[];
+    subtitleFiles: SubtitleFile[];
+    favoriteMaterials: FavoriteMaterial[];
     id: number;
 }
 
-export class SubtitleFile implements ISubtitleFile {
-    material: Material;
-    subtitleText: string;
+export class Composition implements IComposition {
+    word: Word;
+    line: number;
+    column: number;
     id: number;
 
-    constructor(data?: ISubtitleFile) {
+    constructor(data?: IComposition) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2824,89 +3027,41 @@ export class SubtitleFile implements ISubtitleFile {
 
     init(data?: any) {
         if (data) {
-            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
-            this.subtitleText = data["subtitleText"];
+            this.word = data["word"] ? Word.fromJS(data["word"]) : <any>undefined;
+            this.line = data["line"];
+            this.column = data["column"];
             this.id = data["id"];
         }
     }
 
-    static fromJS(data: any): SubtitleFile {
+    static fromJS(data: any): Composition {
         data = typeof data === 'object' ? data : {};
-        let result = new SubtitleFile();
+        let result = new Composition();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
-        data["subtitleText"] = this.subtitleText;
+        data["word"] = this.word ? this.word.toJSON() : <any>undefined;
+        data["line"] = this.line;
+        data["column"] = this.column;
         data["id"] = this.id;
         return data; 
     }
 
     clone() {
         const json = this.toJSON();
-        let result = new SubtitleFile();
+        let result = new Composition();
         result.init(json);
         return result;
     }
 }
 
-export interface ISubtitleFile {
-    material: Material;
-    subtitleText: string;
-    id: number;
-}
-
-export class FavoriteMaterial implements IFavoriteMaterial {
-    material: Material;
-    account: User;
-    id: number;
-
-    constructor(data?: IFavoriteMaterial) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
-            this.account = data["account"] ? User.fromJS(data["account"]) : <any>undefined;
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): FavoriteMaterial {
-        data = typeof data === 'object' ? data : {};
-        let result = new FavoriteMaterial();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
-        data["account"] = this.account ? this.account.toJSON() : <any>undefined;
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new FavoriteMaterial();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IFavoriteMaterial {
-    material: Material;
-    account: User;
+export interface IComposition {
+    word: Word;
+    line: number;
+    column: number;
     id: number;
 }
 
@@ -3304,13 +3459,12 @@ export interface ISetting {
     id: number;
 }
 
-export class Composition implements IComposition {
-    word: Word;
-    line: number;
-    column: number;
+export class SubtitleFile implements ISubtitleFile {
+    material: Material;
+    subtitleText: string;
     id: number;
 
-    constructor(data?: IComposition) {
+    constructor(data?: ISubtitleFile) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3321,41 +3475,89 @@ export class Composition implements IComposition {
 
     init(data?: any) {
         if (data) {
-            this.word = data["word"] ? Word.fromJS(data["word"]) : <any>undefined;
-            this.line = data["line"];
-            this.column = data["column"];
+            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.subtitleText = data["subtitleText"];
             this.id = data["id"];
         }
     }
 
-    static fromJS(data: any): Composition {
+    static fromJS(data: any): SubtitleFile {
         data = typeof data === 'object' ? data : {};
-        let result = new Composition();
+        let result = new SubtitleFile();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["word"] = this.word ? this.word.toJSON() : <any>undefined;
-        data["line"] = this.line;
-        data["column"] = this.column;
+        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
+        data["subtitleText"] = this.subtitleText;
         data["id"] = this.id;
         return data; 
     }
 
     clone() {
         const json = this.toJSON();
-        let result = new Composition();
+        let result = new SubtitleFile();
         result.init(json);
         return result;
     }
 }
 
-export interface IComposition {
-    word: Word;
-    line: number;
-    column: number;
+export interface ISubtitleFile {
+    material: Material;
+    subtitleText: string;
+    id: number;
+}
+
+export class FavoriteMaterial implements IFavoriteMaterial {
+    material: Material;
+    account: User;
+    id: number;
+
+    constructor(data?: IFavoriteMaterial) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.account = data["account"] ? User.fromJS(data["account"]) : <any>undefined;
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): FavoriteMaterial {
+        data = typeof data === 'object' ? data : {};
+        let result = new FavoriteMaterial();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["material"] = this.material ? this.material.toJSON() : <any>undefined;
+        data["account"] = this.account ? this.account.toJSON() : <any>undefined;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new FavoriteMaterial();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IFavoriteMaterial {
+    material: Material;
+    account: User;
     id: number;
 }
 
@@ -4267,93 +4469,6 @@ export interface ICreateUserDto {
     password: string;
 }
 
-export class UserDto implements IUserDto {
-    userName: string;
-    name: string;
-    surname: string;
-    emailAddress: string;
-    isActive: boolean;
-    fullName: string;
-    lastLoginTime: moment.Moment;
-    creationTime: moment.Moment;
-    roleNames: string[];
-    id: number;
-
-    constructor(data?: IUserDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.userName = data["userName"];
-            this.name = data["name"];
-            this.surname = data["surname"];
-            this.emailAddress = data["emailAddress"];
-            this.isActive = data["isActive"];
-            this.fullName = data["fullName"];
-            this.lastLoginTime = data["lastLoginTime"] ? moment(data["lastLoginTime"].toString()) : <any>undefined;
-            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
-            if (data["roleNames"] && data["roleNames"].constructor === Array) {
-                this.roleNames = [];
-                for (let item of data["roleNames"])
-                    this.roleNames.push(item);
-            }
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): UserDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userName"] = this.userName;
-        data["name"] = this.name;
-        data["surname"] = this.surname;
-        data["emailAddress"] = this.emailAddress;
-        data["isActive"] = this.isActive;
-        data["fullName"] = this.fullName;
-        data["lastLoginTime"] = this.lastLoginTime ? this.lastLoginTime.toISOString() : <any>undefined;
-        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
-        if (this.roleNames && this.roleNames.constructor === Array) {
-            data["roleNames"] = [];
-            for (let item of this.roleNames)
-                data["roleNames"].push(item);
-        }
-        data["id"] = this.id;
-        return data; 
-    }
-
-    clone() {
-        const json = this.toJSON();
-        let result = new UserDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUserDto {
-    userName: string;
-    name: string;
-    surname: string;
-    emailAddress: string;
-    isActive: boolean;
-    fullName: string;
-    lastLoginTime: moment.Moment;
-    creationTime: moment.Moment;
-    roleNames: string[];
-    id: number;
-}
-
 export class ListResultDtoOfRoleDto implements IListResultDtoOfRoleDto {
     items: RoleDto[];
 
@@ -4509,7 +4624,7 @@ export enum IsTenantAvailableOutputState {
     _3 = 3, 
 }
 
-export enum MaterialType {
+export enum MaterialDtoType {
     _0 = 0, 
     _1 = 1, 
 }
@@ -4519,6 +4634,11 @@ export enum VocabWordType {
     _1 = 1, 
     _2 = 2, 
     _3 = 3, 
+}
+
+export enum MaterialType {
+    _0 = 0, 
+    _1 = 1, 
 }
 
 export class SwaggerException extends Error {

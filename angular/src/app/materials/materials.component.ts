@@ -3,7 +3,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {ISubscription} from 'rxjs/Subscription';
 import {MaterialsModel} from './materials.models';
 import {AppComponentBase} from '@shared/app-component-base';
-import {MaterialServiceProxy, Material} from '@shared/service-proxies/service-proxies';
+import {MaterialServiceProxy, MaterialDto} from '@shared/service-proxies/service-proxies';
 
 @Component({
     templateUrl: 'materials.template.html'
@@ -60,7 +60,7 @@ export class MaterialsComponent extends AppComponentBase implements OnInit, OnDe
         };
     }
 
-    private fillMaterials(materials: Material[]): void {
+    private fillMaterials(materials: MaterialDto[]): void {
         this.model.materials = materials;
     }
 

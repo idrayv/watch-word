@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using Abp.Application.Services;
-using WatchWord.Entities;
 using WatchWord.Materials.Dto;
 
 namespace WatchWord.Materials
@@ -16,7 +15,7 @@ namespace WatchWord.Materials
 
         Task<List<MaterialDto>> Search(string text);
 
-        Task<SaveMaterialResponseDto> Save(Material material);
+        Task<SaveMaterialResponseDto> Save(MaterialDto material);
 
         Task Delete(long id);
     }

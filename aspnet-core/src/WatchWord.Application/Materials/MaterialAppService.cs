@@ -85,9 +85,13 @@ namespace WatchWord.Materials
         }
 
         [AbpAuthorize("Member")]
-        public async Task<SaveMaterialResponseDto> Save(Material material)
+        public async Task<SaveMaterialResponseDto> Save(MaterialDto materialDto)
         {
+            var material = ObjectMapper.Map<Material>(materialDto);
+
             var response = new SaveMaterialResponseDto { };
+
+            // TODO: Leave as is if current user is admin
             material.Owner = await GetCurrentUserAsync();
 
             // TODO: Allow for admin
@@ -100,6 +104,7 @@ namespace WatchWord.Materials
                 throw new UserFriendlyException("You are not allowed to change other owner's materials!");
             }
 
+            // TODO: Separate Insert and Update
             await _materialsRepository.InsertOrUpdateAsync(material);
             await CurrentUnitOfWork.SaveChangesAsync();
 
