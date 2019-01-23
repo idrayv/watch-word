@@ -15,7 +15,8 @@ using WatchWord.Web.Core.Infrastructure;
 
 namespace WatchWord.Web.Core.Controllers
 {
-    [AbpAuthorize("Member")]
+    // TODO: Implement auth for file controllers
+    // [AbpAuthorize("Member")]
     [Route("api/[controller]")]
     public class ParseController : WatchWordAppServiceBase
     {

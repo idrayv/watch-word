@@ -8,6 +8,7 @@ using Abp.Authorization;
 using WatchWord.Entities;
 using WatchWord.Materials.Dto;
 using WatchWord.Vocabulary;
+using WatchWord.Users.Dto;
 
 namespace WatchWord.Materials
 {
@@ -28,8 +29,7 @@ namespace WatchWord.Materials
         {
             var response = new MaterialResponseDto
             {
-                // TODO: change to non-recursive Include()
-                Material = await _materialsRepository.GetAll().Where(m => m.Id == id).Select(m => new Material
+                Material = await _materialsRepository.GetAll().Where(m => m.Id == id).Select(m => new MaterialDto
                 {
                     Description = m.Description,
                     Id = m.Id,
@@ -37,7 +37,7 @@ namespace WatchWord.Materials
                     Words = m.Words.Select(w => new Word { Id = w.Id, Count = w.Count, TheWord = w.TheWord }).ToList(),
                     Name = m.Name,
                     Type = m.Type,
-                    Owner = m.Owner
+                    Owner = new UserDto { UserName = m.Owner.UserName, Id = m.Owner.Id }
 
                 }).FirstOrDefaultAsync()
             };
@@ -48,16 +48,22 @@ namespace WatchWord.Materials
             }
 
             var account = await GetCurrentUserOrNullAsync();
-            // TODO: DO NOT INCLUDE OWNER TO VOCAB WORDS
             response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, account);
 
             return response;
         }
 
-        public async Task<List<Material>> GetMaterials(int page, int count)
+        public async Task<List<MaterialDto>> GetMaterials(int page, int count)
         {
             page = page < 1 ? 1 : page;
-            return await _materialsRepository.GetAll().Skip((page - 1) * count).Take(count).ToListAsync();
+            return await _materialsRepository.GetAll()
+            .Skip((page - 1) * count).Take(count)
+            .Select(m => new MaterialDto {
+                Name = m.Name,
+                Image = m.Image,
+                Id = m.Id
+            })
+            .ToListAsync();
         }
 
         public async Task<long> GetCount()
@@ -65,9 +71,17 @@ namespace WatchWord.Materials
             return await _materialsRepository.LongCountAsync();
         }
 
-        public async Task<List<Material>> Search(string text)
+        public async Task<List<MaterialDto>> Search(string text)
         {
-            return await _materialsRepository.GetAll().Where(m => m.Name.Contains(text)).ToListAsync();
+            return await _materialsRepository.GetAll()
+            .Where(m => m.Name.Contains(text))
+            .Select(m => new MaterialDto
+            {
+                Name = m.Name,
+                Image = m.Image,
+                Id = m.Id
+            })
+            .ToListAsync();
         }
 
         [AbpAuthorize("Member")]
@@ -85,16 +99,14 @@ namespace WatchWord.Materials
             {
                 throw new UserFriendlyException("You are not allowed to change other owner's materials!");
             }
-            else
-            {
-                await _materialsRepository.InsertOrUpdateAsync(material);
-                await CurrentUnitOfWork.SaveChangesAsync();
 
-                response.Id = material.Id;
-                if (response.Id <= 0)
-                {
-                    throw new UserFriendlyException("Material wasn't saved to the database!");
-                }
+            await _materialsRepository.InsertOrUpdateAsync(material);
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            response.Id = material.Id;
+            if (response.Id <= 0)
+            {
+                throw new UserFriendlyException("Material wasn't saved to the database!");
             }
 
             return response;

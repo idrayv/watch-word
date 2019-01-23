@@ -23,7 +23,15 @@ namespace WatchWord.Vocabulary
 
         public async Task<List<VocabWord>> GetVocabWordsAsync(User account)
         {
-            var vocabWords = await _vocabWordsRepository.GetAll().Where(v => v.Owner.Id == account.Id).ToListAsync();
+            var vocabWords = await _vocabWordsRepository.GetAll()
+            .Where(v => v.Owner.Id == account.Id)
+            .Select(v => new VocabWord {
+                Id = v.Id,
+                Translation = v.Translation,
+                Type = v.Type,
+                Word = v.Word
+            }).ToListAsync();
+
             return vocabWords;
         }
 
@@ -98,7 +106,13 @@ namespace WatchWord.Vocabulary
             var ownerId = account?.Id ?? 0;
             var vocabWords = await _vocabWordsRepository
                 .GetAll()
-                .Where(v => v.Owner.Id == ownerId && arrayOfWords.Contains(v.Word)).ToListAsync();
+                .Where(v => v.Owner.Id == ownerId && arrayOfWords.Contains(v.Word))
+                .Select(v => new VocabWord {
+                    Translation = v.Translation,
+                    Word = v.Word,
+                    Type = v.Type,
+                    Id = v.Id
+                }).ToListAsync();
 
             vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
                 .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));

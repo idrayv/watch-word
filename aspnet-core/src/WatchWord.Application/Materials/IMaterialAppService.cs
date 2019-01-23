@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using Abp.Application.Services;
 using WatchWord.Entities;
 using WatchWord.Materials.Dto;
-using System.Collections.Generic;
 
 namespace WatchWord.Materials
 {
@@ -10,11 +10,11 @@ namespace WatchWord.Materials
     {
         Task<MaterialResponseDto> GetMaterial(long id);
 
-        Task<List<Material>> GetMaterials(int page, int count);
+        Task<List<MaterialDto>> GetMaterials(int page, int count);
 
         Task<long> GetCount();
 
-        Task<List<Material>> Search(string text);
+        Task<List<MaterialDto>> Search(string text);
 
         Task<SaveMaterialResponseDto> Save(Material material);
 
