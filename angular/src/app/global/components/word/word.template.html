@@ -3,7 +3,7 @@
         'batch': batchSelect,
         'word': true,
         'learn-word': vocabWord?.type == 0,
-        'known-word': vocabWord?.type == 1 || (batchSelect && markedAsKnownBatch.includes(vocabWord.word)),
+        'known-word': vocabWord?.type == 1 || (batchSelect && markedAsKnownBatch.indexOf(vocabWord.word) !== -1),
         'unsigned-word': vocabWord?.type == 2
         }">
     <div class="translation">{{vocabWord?.translation}}</div>
