@@ -1,5 +1,5 @@
-﻿import {Component, ElementRef, forwardRef, ViewChild, Output, Input, EventEmitter} from '@angular/core';
-import {NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl} from '@angular/forms';
+﻿import {Component, ElementRef, ViewChild, Output, Input, EventEmitter} from '@angular/core';
+import {Validator, AbstractControl} from '@angular/forms';
 import {MaterialService} from '../../material.service';
 import {VocabWord, Word} from '@shared/service-proxies/service-proxies';
 
@@ -48,17 +48,5 @@ export class SubtitlesInputComponent implements Validator {
             return null;
         }
         return {'subtitlesInput': this.serverError};
-    }
-
-    writeValue(vocabWord: VocabWord[]): void {
-    }
-
-    registerOnValidatorChange(fn: () => void): void {
-    }
-
-    registerOnTouched(fn: any): void {
-    }
-
-    setDisabledState(isDisabled: boolean): void {
     }
 }

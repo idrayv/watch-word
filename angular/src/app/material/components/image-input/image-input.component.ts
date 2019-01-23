@@ -1,21 +1,12 @@
-﻿import {Component, ElementRef, forwardRef, ViewChild, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, NG_VALIDATORS, AbstractControl} from '@angular/forms';
+﻿import {Component, ElementRef, ViewChild, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Validator, AbstractControl} from '@angular/forms';
 import {MaterialService} from '../../material.service';
 
 @Component({
     selector: 'ww-image-input[mimeTypes]',
-    templateUrl: 'image-input.template.html',
-    providers: [{
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => ImageInputComponent),
-        multi: true
-    }, {
-        provide: NG_VALIDATORS,
-        useExisting: forwardRef(() => ImageInputComponent),
-        multi: true
-    }]
+    templateUrl: 'image-input.template.html'
 })
-export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
+export class ImageInputComponent implements Validator, OnInit {
     private error: string[] = [];
     private types: string[] = [];
 
@@ -47,12 +38,10 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
     }
 
     callService(file: File): void {
-        let base64 = '';
         abp.ui.setBusy();
         this.materialService.parseImage(file).then(response => {
             abp.ui.clearBusy();
             if (response.success) {
-                base64 = response.base64;
                 this.error = [];
 
             } else if (this.error) {
@@ -70,6 +59,7 @@ export class ImageInputComponent implements ControlValueAccessor, Validator, OnI
         this.fileInput.nativeElement.value = null;
     }
 
+    // TODO: Fix validation
     validate(c: AbstractControl): { [key: string]: any; } {
         if (c.value && this.error.length === 0) {
             return null;
