@@ -1,12 +1,21 @@
-﻿import {Component, ElementRef, ViewChild, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Validator, AbstractControl} from '@angular/forms';
+﻿import {Component, ElementRef, ViewChild, OnInit, Input, Output, EventEmitter, forwardRef} from '@angular/core';
+import {Validator, AbstractControl, NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor} from '@angular/forms';
 import {MaterialService} from '../../material.service';
 
 @Component({
     selector: 'ww-image-input[mimeTypes]',
-    templateUrl: 'image-input.template.html'
+    templateUrl: 'image-input.template.html',
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => ImageInputComponent),
+        multi: true
+    }, {
+        provide: NG_VALIDATORS,
+        useExisting: forwardRef(() => ImageInputComponent),
+        multi: true
+    }]
 })
-export class ImageInputComponent implements Validator, OnInit {
+export class ImageInputComponent implements ControlValueAccessor, Validator, OnInit {
     private error: string[] = [];
     private types: string[] = [];
 
@@ -65,5 +74,14 @@ export class ImageInputComponent implements Validator, OnInit {
             return null;
         }
         return {'imageInput': this.error};
+    }
+
+    writeValue(obj: any): void {
+    }
+    registerOnChange(fn: any): void {
+    }
+    registerOnTouched(fn: any): void {
+    }
+    setDisabledState?(isDisabled: boolean): void {
     }
 }

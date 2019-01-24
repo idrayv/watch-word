@@ -37,7 +37,7 @@ namespace WatchWord.Materials
                     Words = m.Words.Select(w => new Word { Id = w.Id, Count = w.Count, TheWord = w.TheWord }).ToList(),
                     Name = m.Name,
                     Type = m.Type,
-                    Owner = new UserDto { UserName = m.Owner.UserName, Id = m.Owner.Id }
+                    Owner = new UserDto { UserName = m.Owner.UserName, Id = m.OwnerId }
 
                 }).FirstOrDefaultAsync()
             };
@@ -97,8 +97,7 @@ namespace WatchWord.Materials
             // TODO: Allow for admin
             var isOtherOwner = _materialsRepository
                 .GetAll()
-                .Include(m => m.Owner)
-                .Where(m => m.Id == material.Id && m.Owner.Id != material.Owner.Id).Any();
+                .Where(m => m.Id == material.Id && m.OwnerId != material.Owner.Id).Any();
             if (isOtherOwner)
             {
                 throw new UserFriendlyException("You are not allowed to change other owner's materials!");

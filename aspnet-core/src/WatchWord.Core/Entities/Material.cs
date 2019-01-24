@@ -29,6 +29,7 @@ namespace WatchWord.Entities
         public string Image { get; set; }
 
         /// <summary>Gets or sets the creator of the material.</summary>
+        public long OwnerId { get; set; }
         public virtual User Owner { get; set; }
 
         /// <summary>Gets or sets the collection of words.</summary>

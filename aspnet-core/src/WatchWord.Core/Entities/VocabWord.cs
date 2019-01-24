@@ -13,6 +13,7 @@ namespace WatchWord.Entities
         public string Translation { get; set; }
 
         /// <summary>Gets or sets the owner of the vocabulary word.</summary>
+        public long OwnerId { get; set; }
         public virtual User Owner { get; set; }
 
         /// <summary>Gets or sets the type of the vocabulary word. NewWord, LearnWord or KnownWord.</summary>

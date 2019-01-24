@@ -6,6 +6,7 @@ namespace WatchWord.Entities
     public class Composition : Entity<long>
     {
         /// <summary>Gets or sets link to the words table.</summary>
+        public long WordId { get; set; }
         public virtual Word Word { get; set; }
 
         /// <summary>Gets or sets the serial number of the line that contains the word.</summary>

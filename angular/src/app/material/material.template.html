@@ -27,7 +27,7 @@
         <div class="two fields">
             <div id="material-files" class="field">
                 <label>Subtitles:</label>
-                <ww-subtitles-input required [(ngModel)]="vocabWords" [(words)]="material.words"
+                <ww-subtitles-input name="subtitles" required [(ngModel)]="vocabWords" [(words)]="material.words"
                                     [(vocabWords)]="vocabWords" #subtitles="ngModel"></ww-subtitles-input>
 
                 <div *ngIf="(formSubmitted || subtitles.dirty) && subtitles.invalid">
@@ -39,7 +39,7 @@
 
             <div class="field">
                 <label>Image:</label>
-                <ww-image-input mimeTypes="image/jpeg;image/png" required [(ngModel)]="material.image"
+                <ww-image-input name="image" mimeTypes="image/jpeg;image/png" required [(ngModel)]="material.image"
                                 [(image)]="material.image" #image="ngModel"></ww-image-input>
 
                 <div *ngIf="(formSubmitted || image.dirty) && image.invalid">

@@ -6,8 +6,7 @@ using WatchWord.Pictures;
 
 namespace WatchWord.Web.Core.Controllers
 {
-    // TODO: Implement auth for file controllers
-    // [AbpAuthorize("Member")]
+    [AbpAuthorize("Member")]
     [Route("api/[controller]")]
     public class ImageController : WatchWordAppServiceBase
     {

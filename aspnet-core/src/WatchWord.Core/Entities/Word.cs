@@ -7,6 +7,7 @@ namespace WatchWord.Entities
     public class Word : Entity<long>
     {
         /// <summary>Gets or sets the material.</summary>
+        public long MaterialId { get; set; }
         public virtual Material Material { get; set; }
 
         /// <summary>Gets or sets the Good, the bad and the word.</summary>

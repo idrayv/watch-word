@@ -25,7 +25,7 @@ namespace WatchWord.Vocabulary
         public async Task<List<VocabWord>> GetVocabWordsAsync(User account)
         {
             var vocabWords = await _vocabWordsRepository.GetAll()
-            .Where(v => v.Owner.Id == account.Id)
+            .Where(v => v.OwnerId == account.Id)
             .Select(v => new VocabWord
             {
                 Id = v.Id,
@@ -44,7 +44,7 @@ namespace WatchWord.Vocabulary
                 vocabWord.Owner = account;
 
                 var existingVocabWord = await _vocabWordsRepository.GetAll()
-                    .Where(v => v.Word == vocabWord.Word && v.Owner.Id == account.Id)
+                    .Where(v => v.Word == vocabWord.Word && v.OwnerId == account.Id)
                     .FirstOrDefaultAsync();
 
                 if (existingVocabWord != null)
@@ -52,6 +52,7 @@ namespace WatchWord.Vocabulary
                     existingVocabWord.Word = vocabWord.Word;
                     existingVocabWord.Translation = vocabWord.Translation;
                     existingVocabWord.Type = vocabWord.Type;
+
                     await _vocabWordsRepository.UpdateAsync(existingVocabWord);
                 }
                 else
@@ -82,8 +83,8 @@ namespace WatchWord.Vocabulary
             try
             {
                 var existingVocabWords = await _vocabWordsRepository.GetAll()
-                    .Where(v => words.Contains(v.Word) && v.Owner.Id == account.Id)
-                    .Include(v => v.Owner).ToListAsync();
+                    .Where(v => words.Contains(v.Word) && v.OwnerId == account.Id)
+                    .ToListAsync();
 
                 foreach (var existingVocabWord in existingVocabWords)
                 {
@@ -116,8 +117,8 @@ namespace WatchWord.Vocabulary
                 var vocabWordsWords = vocabWords.Select(w => w.Word).ToList();
 
                 var existingVocabWords = await _vocabWordsRepository.GetAll()
-                    .Where(v => vocabWordsWords.Contains(v.Word) && v.Owner.Id == account.Id)
-                    .Include(v => v.Owner).ToListAsync();
+                    .Where(v => vocabWordsWords.Contains(v.Word) && v.OwnerId == account.Id)
+                    .ToListAsync();
 
                 foreach (var vocabWord in vocabWords)
                 {
@@ -150,7 +151,7 @@ namespace WatchWord.Vocabulary
             var ownerId = account?.Id ?? 0;
             var vocabWords = await _vocabWordsRepository
                 .GetAll()
-                .Where(v => v.Owner.Id == ownerId && arrayOfWords.Contains(v.Word))
+                .Where(v => v.OwnerId == ownerId && arrayOfWords.Contains(v.Word))
                 .Select(v => new VocabWord
                 {
                     Translation = v.Translation,

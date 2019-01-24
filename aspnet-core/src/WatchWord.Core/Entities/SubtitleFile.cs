@@ -6,6 +6,7 @@ namespace WatchWord.Entities
     public class SubtitleFile : Entity<long>
     {
         /// <summary>Gets or sets the material.</summary>
+        public long MaterialId { get; set; }
         public virtual Material Material { get; set; }
 
         /// <summary>Gets or sets subtitle text.</summary>
