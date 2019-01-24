@@ -26,7 +26,8 @@ namespace WatchWord.Vocabulary
         {
             var vocabWords = await _vocabWordsRepository.GetAll()
             .Where(v => v.Owner.Id == account.Id)
-            .Select(v => new VocabWord {
+            .Select(v => new VocabWord
+            {
                 Id = v.Id,
                 Translation = v.Translation,
                 Type = v.Type,
@@ -43,8 +44,8 @@ namespace WatchWord.Vocabulary
                 vocabWord.Owner = account;
 
                 var existingVocabWord = await _vocabWordsRepository.GetAll()
-                    .Where(v => v.Word == vocabWord.Word && v.Owner.Id == vocabWord.Owner.Id)
-                    .Include(v => v.Owner).FirstOrDefaultAsync();
+                    .Where(v => v.Word == vocabWord.Word && v.Owner.Id == account.Id)
+                    .FirstOrDefaultAsync();
 
                 if (existingVocabWord != null)
                 {
@@ -59,6 +60,11 @@ namespace WatchWord.Vocabulary
                 }
 
                 await CurrentUnitOfWork.SaveChangesAsync();
+
+                if (existingVocabWord != null)
+                {
+                    return existingVocabWord.Id;
+                }
 
                 return vocabWord.Id;
             }
@@ -145,7 +151,8 @@ namespace WatchWord.Vocabulary
             var vocabWords = await _vocabWordsRepository
                 .GetAll()
                 .Where(v => v.Owner.Id == ownerId && arrayOfWords.Contains(v.Word))
-                .Select(v => new VocabWord {
+                .Select(v => new VocabWord
+                {
                     Translation = v.Translation,
                     Word = v.Word,
                     Type = v.Type,
