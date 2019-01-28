@@ -40,7 +40,21 @@ namespace WatchWord.Vocabulary
         public async Task<List<VocabWord>> Get()
         {
             var account = await GetCurrentUserOrNullAsync();
-            return await _vocabularyService.GetVocabWordsAsync(account);
+            return await _vocabularyService.GetVocabWordsAsync(account.Id);
+        }
+
+        [AbpAuthorize("Member")]
+        public async Task<List<VocabWord>> GetKnownWords()
+        {
+            var account = await GetCurrentUserOrNullAsync();
+            return await _vocabularyService.GetKnownWordsAsync(account.Id);
+        }
+
+        [AbpAuthorize("Member")]
+        public async Task<List<VocabWord>> GetLearnWords()
+        {
+            var account = await GetCurrentUserOrNullAsync();
+            return await _vocabularyService.GetLearnWordsAsync(account.Id);
         }
     }
 }

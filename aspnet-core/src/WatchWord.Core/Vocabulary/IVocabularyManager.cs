@@ -7,7 +7,11 @@ namespace WatchWord.Vocabulary
 {
     public interface IVocabularyService
     {
-        Task<List<VocabWord>> GetVocabWordsAsync(User account);
+        Task<List<VocabWord>> GetVocabWordsAsync(long accountId);
+
+        Task<List<VocabWord>> GetKnownWordsAsync(long accountId);
+
+        Task<List<VocabWord>> GetLearnWordsAsync(long accountId);
 
         Task<long> InsertVocabWordAsync(VocabWord vocabWord, User account);
 

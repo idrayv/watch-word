@@ -7717,14 +7717,6 @@ fieldset[disabled] .form-control {
         .sidebar .menu .list .ml-menu li.active a.toggled:not(.menu-toggle) {
           font-weight: 600;
           margin-left: 5px; }
-          .sidebar .menu .list .ml-menu li.active a.toggled:not(.menu-toggle):before {
-            content: '\E315';
-            font-family: 'Material Icons';
-            position: relative;
-            font-size: 21px;
-            height: 20px;
-            top: -5px;
-            right: 0px; }
         .sidebar .menu .list .ml-menu li .ml-menu li a {
           padding-left: 80px; }
         .sidebar .menu .list .ml-menu li .ml-menu .ml-menu li a {

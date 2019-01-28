@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Abp;
+using Abp.UI;
 using Abp.Domain.Repositories;
 using Abp.Dependency;
 using WatchWord.Entities;
 using WatchWord.Authorization.Users;
-using Abp.UI;
 
 namespace WatchWord.Vocabulary
 {
@@ -22,17 +24,29 @@ namespace WatchWord.Vocabulary
             _vocabWordsRepository = vocabWordsRepository;
         }
 
-        public async Task<List<VocabWord>> GetVocabWordsAsync(User account)
+        public async Task<List<VocabWord>> GetVocabWordsAsync(long accountId)
         {
             var vocabWords = await _vocabWordsRepository.GetAll()
-            .Where(v => v.OwnerId == account.Id)
-            .Select(v => new VocabWord
-            {
-                Id = v.Id,
-                Translation = v.Translation,
-                Type = v.Type,
-                Word = v.Word
-            }).ToListAsync();
+            .Where(v => v.OwnerId == accountId)
+            .Select(SimplifyVocabWord()).ToListAsync();
+
+            return vocabWords;
+        }
+
+        public async Task<List<VocabWord>> GetKnownWordsAsync(long accountId)
+        {
+            var vocabWords = await _vocabWordsRepository.GetAll()
+            .Where(v => v.OwnerId == accountId && v.Type == VocabType.KnownWord)
+            .Select(SimplifyVocabWord()).ToListAsync();
+
+            return vocabWords;
+        }
+
+        public async Task<List<VocabWord>> GetLearnWordsAsync(long accountId)
+        {
+            var vocabWords = await _vocabWordsRepository.GetAll()
+            .Where(v => v.OwnerId == accountId && v.Type == VocabType.LearnWord)
+            .Select(SimplifyVocabWord()).ToListAsync();
 
             return vocabWords;
         }
@@ -152,18 +166,23 @@ namespace WatchWord.Vocabulary
             var vocabWords = await _vocabWordsRepository
                 .GetAll()
                 .Where(v => v.OwnerId == ownerId && arrayOfWords.Contains(v.Word))
-                .Select(v => new VocabWord
-                {
-                    Translation = v.Translation,
-                    Word = v.Word,
-                    Type = v.Type,
-                    Id = v.Id
-                }).ToListAsync();
+                .Select(SimplifyVocabWord()).ToListAsync();
 
             vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
                 .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));
 
             return vocabWords.OrderBy(w => w.Type);
+        }
+
+        private Expression<Func<VocabWord, VocabWord>> SimplifyVocabWord()
+        {
+            return (v) => new VocabWord
+            {
+                Id = v.Id,
+                Translation = v.Translation,
+                Type = v.Type,
+                Word = v.Word
+            };
         }
     }
 }
