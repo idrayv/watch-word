@@ -406,6 +406,12 @@ export class ImageServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -794,6 +800,12 @@ export class ParseServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = resultData200 !== undefined ? resultData200 : <any>null;
             return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
@@ -2001,6 +2013,118 @@ export class VocabularyServiceProxy {
         }
         return Observable.of<VocabWord[]>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    getKnownWords(): Observable<VocabWord[]> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/GetKnownWords";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processGetKnownWords(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetKnownWords(<any>response_);
+                } catch (e) {
+                    return <Observable<VocabWord[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<VocabWord[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetKnownWords(response: Response): Observable<VocabWord[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(VocabWord.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<VocabWord[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getLearnWords(): Observable<VocabWord[]> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/GetLearnWords";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processGetLearnWords(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetLearnWords(<any>response_);
+                } catch (e) {
+                    return <Observable<VocabWord[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<VocabWord[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetLearnWords(response: Response): Observable<VocabWord[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(VocabWord.fromJS(item));
+            }
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<VocabWord[]>(<any>null);
+    }
 }
 
 export class IsTenantAvailableInput implements IIsTenantAvailableInput {
@@ -2454,6 +2578,7 @@ export interface IMaterialDto {
 export class VocabWord implements IVocabWord {
     word: string;
     translation: string;
+    ownerId: number;
     owner: User;
     type: VocabWordType;
     id: number;
@@ -2471,6 +2596,7 @@ export class VocabWord implements IVocabWord {
         if (data) {
             this.word = data["word"];
             this.translation = data["translation"];
+            this.ownerId = data["ownerId"];
             this.owner = data["owner"] ? User.fromJS(data["owner"]) : <any>undefined;
             this.type = data["type"];
             this.id = data["id"];
@@ -2488,6 +2614,7 @@ export class VocabWord implements IVocabWord {
         data = typeof data === 'object' ? data : {};
         data["word"] = this.word;
         data["translation"] = this.translation;
+        data["ownerId"] = this.ownerId;
         data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
         data["type"] = this.type;
         data["id"] = this.id;
@@ -2505,6 +2632,7 @@ export class VocabWord implements IVocabWord {
 export interface IVocabWord {
     word: string;
     translation: string;
+    ownerId: number;
     owner: User;
     type: VocabWordType;
     id: number;
@@ -2598,6 +2726,7 @@ export interface IUserDto {
 }
 
 export class Word implements IWord {
+    materialId: number;
     material: Material;
     theWord: string;
     count: number;
@@ -2615,6 +2744,7 @@ export class Word implements IWord {
 
     init(data?: any) {
         if (data) {
+            this.materialId = data["materialId"];
             this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
             this.theWord = data["theWord"];
             this.count = data["count"];
@@ -2636,6 +2766,7 @@ export class Word implements IWord {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["materialId"] = this.materialId;
         data["material"] = this.material ? this.material.toJSON() : <any>undefined;
         data["theWord"] = this.theWord;
         data["count"] = this.count;
@@ -2657,6 +2788,7 @@ export class Word implements IWord {
 }
 
 export interface IWord {
+    materialId: number;
     material: Material;
     theWord: string;
     count: number;
@@ -2916,6 +3048,7 @@ export class Material implements IMaterial {
     name: string;
     description: string;
     image: string;
+    ownerId: number;
     owner: User;
     words: Word[];
     subtitleFiles: SubtitleFile[];
@@ -2937,6 +3070,7 @@ export class Material implements IMaterial {
             this.name = data["name"];
             this.description = data["description"];
             this.image = data["image"];
+            this.ownerId = data["ownerId"];
             this.owner = data["owner"] ? User.fromJS(data["owner"]) : <any>undefined;
             if (data["words"] && data["words"].constructor === Array) {
                 this.words = [];
@@ -2970,6 +3104,7 @@ export class Material implements IMaterial {
         data["name"] = this.name;
         data["description"] = this.description;
         data["image"] = this.image;
+        data["ownerId"] = this.ownerId;
         data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
         if (this.words && this.words.constructor === Array) {
             data["words"] = [];
@@ -3003,6 +3138,7 @@ export interface IMaterial {
     name: string;
     description: string;
     image: string;
+    ownerId: number;
     owner: User;
     words: Word[];
     subtitleFiles: SubtitleFile[];
@@ -3011,6 +3147,7 @@ export interface IMaterial {
 }
 
 export class Composition implements IComposition {
+    wordId: number;
     word: Word;
     line: number;
     column: number;
@@ -3027,6 +3164,7 @@ export class Composition implements IComposition {
 
     init(data?: any) {
         if (data) {
+            this.wordId = data["wordId"];
             this.word = data["word"] ? Word.fromJS(data["word"]) : <any>undefined;
             this.line = data["line"];
             this.column = data["column"];
@@ -3043,6 +3181,7 @@ export class Composition implements IComposition {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["wordId"] = this.wordId;
         data["word"] = this.word ? this.word.toJSON() : <any>undefined;
         data["line"] = this.line;
         data["column"] = this.column;
@@ -3059,6 +3198,7 @@ export class Composition implements IComposition {
 }
 
 export interface IComposition {
+    wordId: number;
     word: Word;
     line: number;
     column: number;
@@ -3460,6 +3600,7 @@ export interface ISetting {
 }
 
 export class SubtitleFile implements ISubtitleFile {
+    materialId: number;
     material: Material;
     subtitleText: string;
     id: number;
@@ -3475,6 +3616,7 @@ export class SubtitleFile implements ISubtitleFile {
 
     init(data?: any) {
         if (data) {
+            this.materialId = data["materialId"];
             this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
             this.subtitleText = data["subtitleText"];
             this.id = data["id"];
@@ -3490,6 +3632,7 @@ export class SubtitleFile implements ISubtitleFile {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["materialId"] = this.materialId;
         data["material"] = this.material ? this.material.toJSON() : <any>undefined;
         data["subtitleText"] = this.subtitleText;
         data["id"] = this.id;
@@ -3505,13 +3648,16 @@ export class SubtitleFile implements ISubtitleFile {
 }
 
 export interface ISubtitleFile {
+    materialId: number;
     material: Material;
     subtitleText: string;
     id: number;
 }
 
 export class FavoriteMaterial implements IFavoriteMaterial {
+    materialId: number;
     material: Material;
+    accountId: number;
     account: User;
     id: number;
 
@@ -3526,7 +3672,9 @@ export class FavoriteMaterial implements IFavoriteMaterial {
 
     init(data?: any) {
         if (data) {
+            this.materialId = data["materialId"];
             this.material = data["material"] ? Material.fromJS(data["material"]) : <any>undefined;
+            this.accountId = data["accountId"];
             this.account = data["account"] ? User.fromJS(data["account"]) : <any>undefined;
             this.id = data["id"];
         }
@@ -3541,7 +3689,9 @@ export class FavoriteMaterial implements IFavoriteMaterial {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["materialId"] = this.materialId;
         data["material"] = this.material ? this.material.toJSON() : <any>undefined;
+        data["accountId"] = this.accountId;
         data["account"] = this.account ? this.account.toJSON() : <any>undefined;
         data["id"] = this.id;
         return data; 
@@ -3556,7 +3706,9 @@ export class FavoriteMaterial implements IFavoriteMaterial {
 }
 
 export interface IFavoriteMaterial {
+    materialId: number;
     material: Material;
+    accountId: number;
     account: User;
     id: number;
 }
