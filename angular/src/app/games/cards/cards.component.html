@@ -1,3 +1,32 @@
-<p>
-  cards works!
-</p>
+<div *ngIf="initialized">
+    <div *ngIf="!randomWord">
+        Please add some words to your vocabulary as Lean Words to play cards.
+    </div>
+
+    <div *ngIf="randomWord" class="game-card">
+        <div class="card-words">
+            <div class="card-translation" *ngIf="isTranslationVisible">
+                {{randomWord.translation}}
+            </div>
+            <div class="card-word">
+                {{randomWord.word}}
+            </div>
+        </div>
+
+        <div class="card-stats">
+            <div>Correct guesses: {{0}}</div>
+            <div>Wrong guesses: {{0}}</div>
+        </div>
+
+        <div class="" *ngIf="!isTranslationVisible">
+            <button class="btn btn-info card-btn" (click)="showTranslation()">Show translation</button>
+            <button class="btn btn-light card-btn" (click)="nextWord()">Next word</button>
+        </div>
+
+        <div class="" *ngIf="isTranslationVisible">
+            <button class="btn btn-info card-btn" (click)="correct()">I know!</button>
+            <button class="btn btn-light card-btn" (click)="incorrect()">Still learning</button>
+            <button class="btn btn-success card-btn" (click)="markAsKnown()">Mark as known</button>
+        </div>
+    </div>
+</div>

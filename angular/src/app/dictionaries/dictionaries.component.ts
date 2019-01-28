@@ -9,7 +9,6 @@ import { AppEnums } from '@shared/AppEnums';
   templateUrl: 'dictionaries.template.html'
 })
 export class DictionariesComponent extends AppComponentBase implements OnInit, OnDestroy {
-
   public learnWordsCount = 0;
   public knownWordsCount = 0;
 

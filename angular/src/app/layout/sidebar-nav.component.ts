@@ -13,11 +13,11 @@ export class SideBarNavComponent extends AppComponentBase {
     new MenuItem(this.l('Create material'), 'Member', 'add', '/app/material'),
     new MenuItem(this.l('Materials'), '', 'local_movies', '/app/materials'),
     new MenuItem(this.l('Dictionaries'), 'Member', 'school', '/app/dictionaries'),
-    new MenuItem(this.l('Users'), 'Pages.Users', 'person', '/app/users'),
-    new MenuItem(this.l('Roles'), 'Pages.Roles', 'group', '/app/roles'),
     new MenuItem(this.l('Games'), '', 'extension', '', [
-      new MenuItem(this.l('Cards'), 'Member', 'bookmarks', '/app/cards'),
-    ])
+      new MenuItem(this.l('Flashcards'), 'Member', 'bookmarks', '/app/cards'),
+    ]),
+    new MenuItem(this.l('Users'), 'Pages.Users', 'person', '/app/users'),
+    new MenuItem(this.l('Roles'), 'Pages.Roles', 'group', '/app/roles')
   ];
 
   constructor(injector: Injector) {
