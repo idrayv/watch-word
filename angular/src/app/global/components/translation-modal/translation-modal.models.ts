@@ -1,6 +1,6 @@
-﻿import {VocabWord} from '@shared/service-proxies/service-proxies';
+﻿import { VocabWord } from '@shared/service-proxies/service-proxies';
 
 export class TranslationModalModel {
-    public vocabWord: VocabWord = new VocabWord();
-    public translations: string[] = [];
+  public vocabWord: VocabWord = new VocabWord();
+  public translations: string[] = [];
 }
