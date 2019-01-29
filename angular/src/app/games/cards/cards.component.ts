@@ -12,14 +12,14 @@ export class CardsComponent extends AppComponentBase implements OnInit {
   public initialized = false;
   public isTranslationVisible = false;
 
-  constructor(private dictionariesService: VocabularyServiceProxy,
+  constructor(private vocabularyService: VocabularyServiceProxy,
               injector: Injector) {
     super(injector);
   }
 
   ngOnInit() {
     abp.ui.setBusy();
-    this.dictionariesService.getLearnWords()
+    this.vocabularyService.getLearnWords()
       .finally(() => abp.ui.clearBusy())
       .subscribe((vocabWords) => {
         this.learnWords = vocabWords;
@@ -49,7 +49,21 @@ export class CardsComponent extends AppComponentBase implements OnInit {
 
   public markAsKnown(): void {
     // TODO: Mark as known
-    this.nextWord();
+    abp.message.confirm('Do you really want to mark \'' + this.randomWord.word
+      + '\' as a known word? This action will remove this word from the flashcard game.',
+      this.performMarkAsKnown.bind(this));
+  }
+
+  private performMarkAsKnown(isConfirmed) {
+    if (isConfirmed) {
+      abp.ui.setBusy();
+      this.vocabularyService.markAsKnown([this.randomWord.word])
+        .finally(() => {
+          this.nextWord();
+          abp.ui.clearBusy();
+        }).subscribe(() => {
+      });
+    }
   }
 
   private initiateNewRandomWord(): void {

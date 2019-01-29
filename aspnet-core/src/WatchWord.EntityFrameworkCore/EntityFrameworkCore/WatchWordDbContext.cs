@@ -40,6 +40,9 @@ namespace WatchWord.EntityFrameworkCore
         /// <summary>Gets or sets favorite materials.</summary>
         public DbSet<FavoriteMaterial> FavoriteMaterials { get; set; }
 
+        /// <summary>Gets or sets vocab word statistics.</summary>
+        public DbSet<VocabWordStatistic> VocabWordStatistics { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -103,6 +106,15 @@ namespace WatchWord.EntityFrameworkCore
                 wordStatistic.Property(w => w.TotalCount).IsRequired();
                 wordStatistic.Property(w => w.KnownCount).IsRequired();
                 wordStatistic.Property(w => w.LearnCount).IsRequired();
+            });
+
+            modelBuilder.Entity<VocabWordStatistic>(vocabWordStatistic =>
+            {
+                vocabWordStatistic.ToTable("VocabWordStatistics");
+                vocabWordStatistic.Property(w => w.Id).ValueGeneratedOnAdd();
+                vocabWordStatistic.Property(w => w.Word).IsRequired();
+                vocabWordStatistic.Property(w => w.CorrectGuesses).IsRequired();
+                vocabWordStatistic.Property(w => w.WrongGuesses).IsRequired();
             });
 
             modelBuilder.Entity<FavoriteMaterial>(favoriteMaterial =>

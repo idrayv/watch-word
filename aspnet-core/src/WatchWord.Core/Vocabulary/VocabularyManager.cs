@@ -16,40 +16,19 @@ namespace WatchWord.Vocabulary
     public class VocabularyService : AbpServiceBase, IVocabularyService, ITransientDependency
     {
         private readonly IRepository<VocabWord, long> _vocabWordsRepository;
+        private readonly IRepository<VocabWordStatistic, long> _vocabWordStatisticsRepository;
 
         /// <summary>Initializes a new instance of the <see cref="VocabularyService"/> class.</summary>
         /// <param name="vocabWordsRepository">Vocabulary words repository.</param>
-        public VocabularyService(IRepository<VocabWord, long> vocabWordsRepository)
+        public VocabularyService(
+            IRepository<VocabWord, long> vocabWordsRepository,
+            IRepository<VocabWordStatistic, long> vocabWordStatisticsRepository)
         {
             _vocabWordsRepository = vocabWordsRepository;
+            _vocabWordStatisticsRepository = vocabWordStatisticsRepository;
         }
 
-        public async Task<List<VocabWord>> GetVocabWordsAsync(long accountId)
-        {
-            var vocabWords = await _vocabWordsRepository.GetAll()
-            .Where(v => v.OwnerId == accountId)
-            .Select(SimplifyVocabWord()).ToListAsync();
-
-            return vocabWords;
-        }
-
-        public async Task<List<VocabWord>> GetKnownWordsAsync(long accountId)
-        {
-            var vocabWords = await _vocabWordsRepository.GetAll()
-            .Where(v => v.OwnerId == accountId && v.Type == VocabType.KnownWord)
-            .Select(SimplifyVocabWord()).ToListAsync();
-
-            return vocabWords;
-        }
-
-        public async Task<List<VocabWord>> GetLearnWordsAsync(long accountId)
-        {
-            var vocabWords = await _vocabWordsRepository.GetAll()
-            .Where(v => v.OwnerId == accountId && v.Type == VocabType.LearnWord)
-            .Select(SimplifyVocabWord()).ToListAsync();
-
-            return vocabWords;
-        }
+        #region CREATE
 
         public async Task<long> InsertVocabWordAsync(VocabWord vocabWord, User account)
         {
@@ -87,43 +66,6 @@ namespace WatchWord.Vocabulary
             return 0;
         }
 
-        public async Task MarkWordsAsKnownAsync(List<string> words, User account)
-        {
-            if (account == null)
-            {
-                throw new UserFriendlyException("Please log in to the application!");
-            }
-
-            try
-            {
-                var existingVocabWords = await _vocabWordsRepository.GetAll()
-                    .Where(v => words.Contains(v.Word) && v.OwnerId == account.Id)
-                    .ToListAsync();
-
-                foreach (var existingVocabWord in existingVocabWords)
-                {
-                    await _vocabWordsRepository.DeleteAsync(existingVocabWord);
-                }
-
-                foreach (var word in words)
-                {
-                    await _vocabWordsRepository.InsertAsync(new VocabWord
-                    {
-                        Owner = account,
-                        Type = VocabType.KnownWord,
-                        Translation = "",
-                        Word = word
-                    });
-                }
-
-                await CurrentUnitOfWork.SaveChangesAsync();
-            }
-            catch
-            {
-                throw new UserFriendlyException("Words wasn't inserted into vocabulary!");
-            }
-        }
-
         public async Task InsertVocabWordsAsync(List<VocabWord> vocabWords, User account)
         {
             if (account != null)
@@ -155,6 +97,37 @@ namespace WatchWord.Vocabulary
             }
         }
 
+        #endregion
+
+        #region READ
+
+        public async Task<List<VocabWord>> GetVocabWordsAsync(long accountId)
+        {
+            var vocabWords = await _vocabWordsRepository.GetAll()
+            .Where(v => v.OwnerId == accountId)
+            .Select(SimplifyVocabWord()).ToListAsync();
+
+            return vocabWords;
+        }
+
+        public async Task<List<VocabWord>> GetKnownWordsAsync(long accountId)
+        {
+            var vocabWords = await _vocabWordsRepository.GetAll()
+            .Where(v => v.OwnerId == accountId && v.Type == VocabType.KnownWord)
+            .Select(SimplifyVocabWord()).ToListAsync();
+
+            return vocabWords;
+        }
+
+        public async Task<List<VocabWord>> GetLearnWordsAsync(long accountId)
+        {
+            var vocabWords = await _vocabWordsRepository.GetAll()
+            .Where(v => v.OwnerId == accountId && v.Type == VocabType.LearnWord)
+            .Select(SimplifyVocabWord()).ToListAsync();
+
+            return vocabWords;
+        }
+
         // TODO: Optimize for SQL: use material id instead of words list
         public async Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, User account)
         {
@@ -174,6 +147,54 @@ namespace WatchWord.Vocabulary
             return vocabWords.OrderBy(w => w.Type);
         }
 
+        #endregion
+
+        #region UPDATE
+
+        public async Task MarkWordsAsKnownAsync(List<string> words, User account)
+        {
+            if (account == null)
+            {
+                throw new UserFriendlyException("Please log in to the application!");
+            }
+
+            try
+            {
+                var existingVocabWords = await _vocabWordsRepository.GetAll()
+                    .Where(v => words.Contains(v.Word) && v.OwnerId == account.Id)
+                    .ToListAsync();
+
+                foreach (var existingVocabWord in existingVocabWords)
+                {
+                    existingVocabWord.Type = VocabType.KnownWord;
+                    await _vocabWordsRepository.UpdateAsync(existingVocabWord);
+                }
+
+                var newWords = words.Where(w => !existingVocabWords.Any(v => v.Word == w));
+
+                foreach (var word in newWords)
+                {
+                    await _vocabWordsRepository.InsertAsync(new VocabWord
+                    {
+                        Owner = account,
+                        Type = VocabType.KnownWord,
+                        Translation = "",
+                        Word = word
+                    });
+                }
+
+                await CurrentUnitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new UserFriendlyException("Words wasn't inserted into vocabulary!");
+            }
+        }
+
+        #endregion
+
+        #region PRIVATE
+
         private Expression<Func<VocabWord, VocabWord>> SimplifyVocabWord()
         {
             return (v) => new VocabWord
@@ -184,5 +205,7 @@ namespace WatchWord.Vocabulary
                 Word = v.Word
             };
         }
+
+        #endregion
     }
 }

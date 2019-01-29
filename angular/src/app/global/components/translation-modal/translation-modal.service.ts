@@ -9,16 +9,13 @@ import { AppSessionService } from '@shared/session/app-session.service';
 
 @Injectable()
 export class TranslationModalService {
-
-  private _originElementRef: any;
-  private _translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
-
-  // TODO: delete TranslationModalResponseModel, use link to original VocabWord instead
+  private originElementRef: any;
+  private translationModel: Subject<TranslationModalModel> = new Subject<TranslationModalModel>();
   private responseModel: Subject<VocabWord> = new Subject<VocabWord>();
 
-  public constructor(private _vocabularyService: VocabularyServiceProxy,
-                     private _translationService: TranslationServiceProxy,
-                     private readonly _appSessionService: AppSessionService) {
+  public constructor(private vocabularyService: VocabularyServiceProxy,
+                     private translationService: TranslationServiceProxy,
+                     private readonly appSessionService: AppSessionService) {
   }
 
   public get translationModalResponseObservable(): Observable<VocabWord> {
@@ -26,26 +23,26 @@ export class TranslationModalService {
   }
 
   public get translationModalObservable(): Observable<TranslationModalModel> {
-    return this._translationModel.asObservable();
+    return this.translationModel.asObservable();
   }
 
   public getTranslation(word: string): Observable<string[]> {
-    return this._translationService.translate(word);
+    return this.translationService.translate(word);
   }
 
   public pushToModal(vocabWord: VocabWord, elementRef: ElementRef): void {
-    this._originElementRef = elementRef.nativeElement.children[0].children[1];
-    const originElementRef = this._originElementRef;
+    this.originElementRef = elementRef.nativeElement.children[0].children[1];
+    const originElementRef = this.originElementRef;
     abp.ui.setBusy(originElementRef);
 
     if (vocabWord.type === AppEnums.VocabType.UnsignedWord) {
-      vocabWord.type = this._appSessionService.lastPickedVocabType;
+      vocabWord.type = this.appSessionService.lastPickedVocabType;
     }
 
     this.getTranslation(vocabWord.word)
       .finally(() => abp.ui.clearBusy(originElementRef))
       .subscribe(translations => {
-        this._translationModel.next({
+        this.translationModel.next({
           vocabWord: vocabWord,
           translations: translations
         });
@@ -53,15 +50,14 @@ export class TranslationModalService {
   }
 
   public saveToVocabulary(vocabWord: VocabWord): void {
-    const originElementRef = this._originElementRef;
+    const originElementRef = this.originElementRef;
     abp.ui.setBusy(originElementRef);
-    this._appSessionService.lastPickedVocabType = vocabWord.type;
-    this._vocabularyService.post(vocabWord)
+    this.appSessionService.lastPickedVocabType = vocabWord.type;
+    this.vocabularyService.post(vocabWord)
       .finally(() => abp.ui.clearBusy(originElementRef))
       .subscribe(() => this.responseModel.next(vocabWord));
   }
 
-  // TODO: delete updateVocabWordInCollection, use link to original VocabWord instead
   public updateVocabWordInCollection(vocabWord: VocabWord, vocabWords: VocabWord[]) {
     const existingVocabWord = vocabWords.find(v => v.word === vocabWord.word);
     existingVocabWord.type = vocabWord.type;
