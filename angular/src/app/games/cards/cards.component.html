@@ -6,10 +6,10 @@
     <div *ngIf="randomWord" class="game-card">
         <div class="card-words">
             <div class="card-translation" *ngIf="isTranslationVisible">
-                {{randomWord.translation}}
+                <span>{{randomWord.translation}}</span>
             </div>
             <div class="card-word">
-                {{randomWord.word}}
+                <span>{{randomWord.word}}</span>
             </div>
         </div>
 
