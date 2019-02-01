@@ -11,6 +11,11 @@
   <PropertyGroup>
     <DefineConstants>FEATURE_SIGNALR_ASPNETCORE</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <StartAction>Project</StartAction>
+    <LaunchUrl>http://localhost:21022</LaunchUrl>
+    <ApplicationURL>http://localhost:21022/</ApplicationURL>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Update="Dockerfile">
