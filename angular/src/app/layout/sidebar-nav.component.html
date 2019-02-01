@@ -3,7 +3,7 @@
         <ng-template ngFor let-menuItem [ngForOf]="menuItems" let-mainMenuItemIndex="index">
             <li *ngIf="showMenuItem(menuItem)" routerLinkActive="active">
                 <!-- route name -->
-                <a [routerLink]="[menuItem.route]" *ngIf="!menuItem.items && menuItem.route.indexOf('http') != 0">
+                <a [routerLink]="[menuItem.route]" *ngIf="!menuItem.items && menuItem.route.indexOf('http') != 0" (click)="hideSidebar()">
                     <i *ngIf="menuItem.icon" class="material-icons">{{menuItem.icon}}</i>
                     <span>{{menuItem.name}}</span>
                 </a>
@@ -22,7 +22,7 @@
                     <ng-template ngFor let-subMenuItem [ngForOf]="menuItem.items" let-mainMenuItemIndex="index">
                         <li *ngIf="showMenuItem(subMenuItem)" routerLinkActive="active">
                             <!-- route name -->
-                            <a [routerLink]="[subMenuItem.route]" class="toggled"
+                            <a [routerLink]="[subMenuItem.route]" class="toggled" (click)="hideSidebar()"
                                *ngIf="!subMenuItem.items && subMenuItem.route.indexOf('http') != 0">
                                 <i *ngIf="subMenuItem.icon" class="material-icons">{{subMenuItem.icon}}</i>
                                 <span>{{subMenuItem.name}}</span>

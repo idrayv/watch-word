@@ -31,4 +31,9 @@ export class SideBarNavComponent extends AppComponentBase {
 
     return true;
   }
+
+  hideSidebar(): void {
+    $('body').removeClass('overlay-open');;
+    $('.overlay').fadeOut();
+  }
 }
