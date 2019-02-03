@@ -16,4 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WatchWord.Core\WatchWord.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Vocabulary\Dto\LearnWord.cs" />
+  </ItemGroup>
 </Project>

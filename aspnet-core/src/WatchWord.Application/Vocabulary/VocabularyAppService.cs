@@ -15,11 +15,13 @@ namespace WatchWord.Vocabulary
             _vocabularyService = vocabularyService;
         }
 
-        [AbpAuthorize("Member")]
+        #region CREATE
+
+        [AbpAuthorize(AppConsts.Member)]
         public async Task<long> Post(VocabWord vocabWord)
         {
-            var account = await GetCurrentUserOrNullAsync();
-            var result = await _vocabularyService.InsertVocabWordAsync(vocabWord, account);
+            var accountId = GetCurrentUserId();
+            var result = await _vocabularyService.InsertVocabWordAsync(vocabWord, accountId);
 
             if (result <= 0)
             {
@@ -29,32 +31,56 @@ namespace WatchWord.Vocabulary
             return result;
         }
 
-        [AbpAuthorize("Member")]
-        public async Task MarkAsKnown(List<string> words)
-        {
-            var account = await GetCurrentUserOrNullAsync();
-            await _vocabularyService.MarkWordsAsKnownAsync(words, account);
-        }
+        #endregion
 
-        [AbpAuthorize("Member")]
+        #region READ
+
+        [AbpAuthorize(AppConsts.Member)]
         public async Task<List<VocabWord>> Get()
         {
-            var account = await GetCurrentUserOrNullAsync();
-            return await _vocabularyService.GetVocabWordsAsync(account.Id);
+            var accountId = GetCurrentUserId();
+            return await _vocabularyService.GetVocabWordsAsync(accountId);
         }
 
-        [AbpAuthorize("Member")]
+        [AbpAuthorize(AppConsts.Member)]
         public async Task<List<VocabWord>> GetKnownWords()
         {
-            var account = await GetCurrentUserOrNullAsync();
-            return await _vocabularyService.GetKnownWordsAsync(account.Id);
+            var accountId = GetCurrentUserId();
+            return await _vocabularyService.GetKnownWordsAsync(accountId);
         }
 
-        [AbpAuthorize("Member")]
-        public async Task<List<VocabWord>> GetLearnWords()
+        [AbpAuthorize(AppConsts.Member)]
+        public async Task<List<LearnWord>> GetLearnWords()
         {
-            var account = await GetCurrentUserOrNullAsync();
-            return await _vocabularyService.GetLearnWordsAsync(account.Id);
+            var accountId = GetCurrentUserId();
+            return await _vocabularyService.GetLearnWordsAsync(accountId);
         }
+
+        #endregion
+
+        #region UPDATE
+
+        [AbpAuthorize(AppConsts.Member)]
+        public async Task IncreaseCorrectGuessesCount(string word)
+        {
+            var accountId = GetCurrentUserId();
+            await _vocabularyService.IncreaseCorrectGuessesCountAsync(word, accountId);
+        }
+
+        [AbpAuthorize(AppConsts.Member)]
+        public async Task IncreaseWrongGuessesCount(string word)
+        {
+            var accountId = GetCurrentUserId();
+            await _vocabularyService.IncreaseWrongGuessesCountAsync(word, accountId);
+        }
+
+        [AbpAuthorize(AppConsts.Member)]
+        public async Task MarkAsKnown(List<string> words)
+        {
+            var accountId = GetCurrentUserId();
+            await _vocabularyService.MarkWordsAsKnownAsync(words, accountId);
+        }
+
+        #endregion
     }
 }

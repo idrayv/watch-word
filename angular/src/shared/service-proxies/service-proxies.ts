@@ -1907,58 +1907,6 @@ export class VocabularyServiceProxy {
     }
 
     /**
-     * @words (optional) 
-     * @return Success
-     */
-    markAsKnown(words: string[]): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/Vocabulary/MarkAsKnown";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(words);
-
-        let options_ : any = {
-            body: content_,
-            method: "post",
-            headers: new Headers({
-                "Content-Type": "application/json", 
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_ : any) => {
-            return this.processMarkAsKnown(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processMarkAsKnown(<any>response_);
-                } catch (e) {
-                    return <Observable<void>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<void>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processMarkAsKnown(response: Response): Observable<void> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            return Observable.of<void>(<any>null);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<void>(<any>null);
-    }
-
-    /**
      * @return Success
      */
     get(): Observable<VocabWord[]> {
@@ -2073,7 +2021,7 @@ export class VocabularyServiceProxy {
     /**
      * @return Success
      */
-    getLearnWords(): Observable<VocabWord[]> {
+    getLearnWords(): Observable<LearnWord[]> {
         let url_ = this.baseUrl + "/api/services/app/Vocabulary/GetLearnWords";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2092,14 +2040,14 @@ export class VocabularyServiceProxy {
                 try {
                     return this.processGetLearnWords(<any>response_);
                 } catch (e) {
-                    return <Observable<VocabWord[]>><any>Observable.throw(e);
+                    return <Observable<LearnWord[]>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<VocabWord[]>><any>Observable.throw(response_);
+                return <Observable<LearnWord[]>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetLearnWords(response: Response): Observable<VocabWord[]> {
+    protected processGetLearnWords(response: Response): Observable<LearnWord[]> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -2110,7 +2058,7 @@ export class VocabularyServiceProxy {
             if (resultData200 && resultData200.constructor === Array) {
                 result200 = [];
                 for (let item of resultData200)
-                    result200.push(VocabWord.fromJS(item));
+                    result200.push(LearnWord.fromJS(item));
             }
             return Observable.of(result200);
         } else if (status === 401) {
@@ -2123,7 +2071,161 @@ export class VocabularyServiceProxy {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<VocabWord[]>(<any>null);
+        return Observable.of<LearnWord[]>(<any>null);
+    }
+
+    /**
+     * @word (optional) 
+     * @return Success
+     */
+    increaseCorrectGuessesCount(word: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/IncreaseCorrectGuessesCount?";
+        if (word !== undefined)
+            url_ += "word=" + encodeURIComponent("" + word) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processIncreaseCorrectGuessesCount(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processIncreaseCorrectGuessesCount(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processIncreaseCorrectGuessesCount(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @word (optional) 
+     * @return Success
+     */
+    increaseWrongGuessesCount(word: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/IncreaseWrongGuessesCount?";
+        if (word !== undefined)
+            url_ += "word=" + encodeURIComponent("" + word) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processIncreaseWrongGuessesCount(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processIncreaseWrongGuessesCount(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processIncreaseWrongGuessesCount(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @words (optional) 
+     * @return Success
+     */
+    markAsKnown(words: string[]): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Vocabulary/MarkAsKnown";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(words);
+
+        let options_ : any = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json", 
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_ : any) => {
+            return this.processMarkAsKnown(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processMarkAsKnown(<any>response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processMarkAsKnown(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
     }
 }
 
@@ -4770,6 +4872,77 @@ export interface IPagedResultDtoOfUserDto {
     items: UserDto[];
 }
 
+export class LearnWord implements ILearnWord {
+    correctGuessesCount: number;
+    wrongGuessesCount: number;
+    word: string;
+    translation: string;
+    ownerId: number;
+    owner: User;
+    type: LearnWordType;
+    id: number;
+
+    constructor(data?: ILearnWord) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.correctGuessesCount = data["correctGuessesCount"];
+            this.wrongGuessesCount = data["wrongGuessesCount"];
+            this.word = data["word"];
+            this.translation = data["translation"];
+            this.ownerId = data["ownerId"];
+            this.owner = data["owner"] ? User.fromJS(data["owner"]) : <any>undefined;
+            this.type = data["type"];
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): LearnWord {
+        data = typeof data === 'object' ? data : {};
+        let result = new LearnWord();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["correctGuessesCount"] = this.correctGuessesCount;
+        data["wrongGuessesCount"] = this.wrongGuessesCount;
+        data["word"] = this.word;
+        data["translation"] = this.translation;
+        data["ownerId"] = this.ownerId;
+        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
+        data["type"] = this.type;
+        data["id"] = this.id;
+        return data; 
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new LearnWord();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ILearnWord {
+    correctGuessesCount: number;
+    wrongGuessesCount: number;
+    word: string;
+    translation: string;
+    ownerId: number;
+    owner: User;
+    type: LearnWordType;
+    id: number;
+}
+
 export enum IsTenantAvailableOutputState {
     _1 = 1, 
     _2 = 2, 
@@ -4791,6 +4964,13 @@ export enum VocabWordType {
 export enum MaterialType {
     _0 = 0, 
     _1 = 1, 
+}
+
+export enum LearnWordType {
+    _0 = 0, 
+    _1 = 1, 
+    _2 = 2, 
+    _3 = 3, 
 }
 
 export class SwaggerException extends Error {

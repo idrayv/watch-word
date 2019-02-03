@@ -9,7 +9,6 @@ using Abp.UI;
 using Abp.Domain.Repositories;
 using Abp.Dependency;
 using WatchWord.Entities;
-using WatchWord.Authorization.Users;
 
 namespace WatchWord.Vocabulary
 {
@@ -30,71 +29,63 @@ namespace WatchWord.Vocabulary
 
         #region CREATE
 
-        public async Task<long> InsertVocabWordAsync(VocabWord vocabWord, User account)
+        public async Task<long> InsertVocabWordAsync(VocabWord vocabWord, long accountId)
         {
-            if (account != null)
+            vocabWord.OwnerId = accountId;
+
+            var existingVocabWord = await _vocabWordsRepository.GetAll()
+                .Where(v => v.Word == vocabWord.Word && v.OwnerId == accountId)
+                .FirstOrDefaultAsync();
+
+            if (existingVocabWord != null)
             {
-                vocabWord.Owner = account;
+                existingVocabWord.Word = vocabWord.Word;
+                existingVocabWord.Translation = vocabWord.Translation;
+                existingVocabWord.Type = vocabWord.Type;
 
-                var existingVocabWord = await _vocabWordsRepository.GetAll()
-                    .Where(v => v.Word == vocabWord.Word && v.OwnerId == account.Id)
-                    .FirstOrDefaultAsync();
+                await _vocabWordsRepository.UpdateAsync(existingVocabWord);
+            }
+            else
+            {
+                await _vocabWordsRepository.InsertAsync(vocabWord);
+            }
 
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            if (existingVocabWord != null)
+            {
+                return existingVocabWord.Id;
+            }
+
+            return vocabWord.Id;
+        }
+
+        public async Task InsertVocabWordsAsync(List<VocabWord> vocabWords, long accountId)
+        {
+            var vocabWordsWords = vocabWords.Select(w => w.Word).ToList();
+
+            var existingVocabWords = await _vocabWordsRepository.GetAll()
+                .Where(v => vocabWordsWords.Contains(v.Word) && v.OwnerId == accountId)
+                .ToListAsync();
+
+            foreach (var vocabWord in vocabWords)
+            {
+                var existingVocabWord = existingVocabWords.FirstOrDefault(v => v.Word == vocabWord.Word);
                 if (existingVocabWord != null)
                 {
                     existingVocabWord.Word = vocabWord.Word;
                     existingVocabWord.Translation = vocabWord.Translation;
                     existingVocabWord.Type = vocabWord.Type;
-
                     await _vocabWordsRepository.UpdateAsync(existingVocabWord);
                 }
                 else
                 {
+                    vocabWord.OwnerId = accountId;
                     await _vocabWordsRepository.InsertAsync(vocabWord);
                 }
-
-                await CurrentUnitOfWork.SaveChangesAsync();
-
-                if (existingVocabWord != null)
-                {
-                    return existingVocabWord.Id;
-                }
-
-                return vocabWord.Id;
             }
 
-            return 0;
-        }
-
-        public async Task InsertVocabWordsAsync(List<VocabWord> vocabWords, User account)
-        {
-            if (account != null)
-            {
-                var vocabWordsWords = vocabWords.Select(w => w.Word).ToList();
-
-                var existingVocabWords = await _vocabWordsRepository.GetAll()
-                    .Where(v => vocabWordsWords.Contains(v.Word) && v.OwnerId == account.Id)
-                    .ToListAsync();
-
-                foreach (var vocabWord in vocabWords)
-                {
-                    var existingVocabWord = existingVocabWords.FirstOrDefault(v => v.Word == vocabWord.Word);
-                    if (existingVocabWord != null)
-                    {
-                        existingVocabWord.Word = vocabWord.Word;
-                        existingVocabWord.Translation = vocabWord.Translation;
-                        existingVocabWord.Type = vocabWord.Type;
-                        await _vocabWordsRepository.UpdateAsync(existingVocabWord);
-                    }
-                    else
-                    {
-                        vocabWord.Owner = account;
-                        await _vocabWordsRepository.InsertAsync(vocabWord);
-                    }
-                }
-
-                await CurrentUnitOfWork.SaveChangesAsync();
-            }
+            await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         #endregion
@@ -119,26 +110,44 @@ namespace WatchWord.Vocabulary
             return vocabWords;
         }
 
-        public async Task<List<VocabWord>> GetLearnWordsAsync(long accountId)
+        public async Task<List<LearnWord>> GetLearnWordsAsync(long accountId)
         {
-            var vocabWords = await _vocabWordsRepository.GetAll()
-            .Where(v => v.OwnerId == accountId && v.Type == VocabType.LearnWord)
-            .Select(SimplifyVocabWord()).ToListAsync();
+            var query = from vocab in _vocabWordsRepository.GetAll()
+                        .Where(v => v.OwnerId == accountId && v.Type == VocabType.LearnWord)
+                        join stat in _vocabWordStatisticsRepository.GetAll()
+                        .Where(s => s.OwnerId == accountId)
+                        on vocab.Word equals stat.Word into learn
+                        from stats in learn.DefaultIfEmpty()
+                        select new
+                        {
+                            vocab.Id,
+                            vocab.Word,
+                            vocab.Translation,
+                            stats
+                        };
+
+            var vocabWords = (await query.ToListAsync()).Select(v => new LearnWord
+            {
+                Id = v.Id,
+                Word = v.Word,
+                Translation = v.Translation,
+                CorrectGuessesCount = v.stats?.CorrectGuesses ?? 0,
+                WrongGuessesCount = v.stats?.WrongGuesses ?? 0,
+            }).ToList();
 
             return vocabWords;
         }
 
         // TODO: Optimize for SQL: use material id instead of words list
-        public async Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, User account)
+        public async Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, long accountId)
         {
             var arrayOfWords = materialWords == null
                 ? new string[0]
                 : materialWords.Select(n => n.TheWord).ToArray();
 
-            var ownerId = account?.Id ?? 0;
             var vocabWords = await _vocabWordsRepository
                 .GetAll()
-                .Where(v => v.OwnerId == ownerId && arrayOfWords.Contains(v.Word))
+                .Where(v => v.OwnerId == accountId && arrayOfWords.Contains(v.Word))
                 .Select(SimplifyVocabWord()).ToListAsync();
 
             vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
@@ -151,17 +160,56 @@ namespace WatchWord.Vocabulary
 
         #region UPDATE
 
-        public async Task MarkWordsAsKnownAsync(List<string> words, User account)
+        public async Task IncreaseCorrectGuessesCountAsync(string word, long accountId)
         {
-            if (account == null)
-            {
-                throw new UserFriendlyException("Please log in to the application!");
-            }
+            var existingStats = await _vocabWordStatisticsRepository
+                .FirstOrDefaultAsync(v => v.Word == word && v.OwnerId == accountId);
 
+            if (existingStats == null)
+            {
+                await _vocabWordStatisticsRepository.InsertAsync(new VocabWordStatistic
+                {
+                    OwnerId = accountId,
+                    Word = word,
+                    CorrectGuesses = 1,
+                    WrongGuesses = 0
+                });
+            }
+            else
+            {
+                existingStats.CorrectGuesses += 1;
+                await _vocabWordStatisticsRepository.UpdateAsync(existingStats);
+            }
+        }
+
+        public async Task IncreaseWrongGuessesCountAsync(string word, long accountId)
+        {
+            var existingStats = await _vocabWordStatisticsRepository
+                .FirstOrDefaultAsync(v => v.Word == word && v.OwnerId == accountId);
+
+            if (existingStats == null)
+            {
+                await _vocabWordStatisticsRepository.InsertAsync(new VocabWordStatistic
+                {
+                    OwnerId = accountId,
+                    Word = word,
+                    CorrectGuesses = 0,
+                    WrongGuesses = 1
+                });
+            }
+            else
+            {
+                existingStats.WrongGuesses += 1;
+                await _vocabWordStatisticsRepository.UpdateAsync(existingStats);
+            }
+        }
+
+        public async Task MarkWordsAsKnownAsync(List<string> words, long accountId)
+        {
             try
             {
                 var existingVocabWords = await _vocabWordsRepository.GetAll()
-                    .Where(v => words.Contains(v.Word) && v.OwnerId == account.Id)
+                    .Where(v => words.Contains(v.Word) && v.OwnerId == accountId)
                     .ToListAsync();
 
                 foreach (var existingVocabWord in existingVocabWords)
@@ -176,7 +224,7 @@ namespace WatchWord.Vocabulary
                 {
                     await _vocabWordsRepository.InsertAsync(new VocabWord
                     {
-                        Owner = account,
+                        OwnerId = accountId,
                         Type = VocabType.KnownWord,
                         Translation = "",
                         Word = word

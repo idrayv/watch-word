@@ -47,8 +47,8 @@ namespace WatchWord.Web.Core.Controllers
                     {
                         var stream = file.OpenReadStream();
                         var words = _parser.ParseUnigueWordsInFile(new Material(), new StreamReader(stream));
-                        var account = await GetCurrentUserOrNullAsync();
-                        var vocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(words, account);
+                        var accountId = GetCurrentUserId();
+                        var vocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(words, accountId);
 
                         if (words.Count > 0)
                         {

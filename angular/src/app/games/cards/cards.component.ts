@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { VocabularyServiceProxy, VocabWord } from '@shared/service-proxies/service-proxies';
+import { LearnWord, VocabularyServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/app-component-base';
 
 @Component({
@@ -7,8 +7,8 @@ import { AppComponentBase } from '@shared/app-component-base';
   styleUrls: ['./cards.component.less']
 })
 export class CardsComponent extends AppComponentBase implements OnInit {
-  public learnWords: VocabWord[] = [];
-  public randomWord: VocabWord;
+  public learnWords: LearnWord[] = [];
+  public randomWord: LearnWord;
   public initialized = false;
   public isTranslationVisible = false;
 
@@ -37,18 +37,29 @@ export class CardsComponent extends AppComponentBase implements OnInit {
     this.isTranslationVisible = true;
   }
 
-  public correct(): void {
-    // TODO: Save statistic
-    this.nextWord();
+  public increaseCorrectGuessesCount(): void {
+    abp.ui.setBusy();
+    this.randomWord.correctGuessesCount += 1;
+    this.vocabularyService.increaseCorrectGuessesCount(this.randomWord.word)
+      .finally(() => {
+        this.nextWord();
+        abp.ui.clearBusy();
+      }).subscribe(() => {
+    });
   }
 
-  public incorrect(): void {
-    // TODO: Save statistic
-    this.nextWord();
+  public increaseWrongGuessesCount(): void {
+    abp.ui.setBusy();
+    this.randomWord.wrongGuessesCount += 1;
+    this.vocabularyService.increaseWrongGuessesCount(this.randomWord.word)
+      .finally(() => {
+        this.nextWord();
+        abp.ui.clearBusy();
+      }).subscribe(() => {
+    });
   }
 
   public markAsKnown(): void {
-    // TODO: Mark as known
     abp.message.confirm('Do you really want to mark \'' + this.randomWord.word
       + '\' as a known word? This action will remove this word from the flashcard game.',
       this.performMarkAsKnown.bind(this));

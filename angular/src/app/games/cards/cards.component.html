@@ -14,8 +14,8 @@
         </div>
 
         <div class="card-stats">
-            <div>Correct guesses: {{0}}</div>
-            <div>Wrong guesses: {{0}}</div>
+            <div>Correct guesses: {{randomWord.correctGuessesCount}}</div>
+            <div>Wrong guesses: {{randomWord.wrongGuessesCount}}</div>
         </div>
 
         <div class="" *ngIf="!isTranslationVisible">
@@ -24,8 +24,8 @@
         </div>
 
         <div class="" *ngIf="isTranslationVisible">
-            <button class="btn btn-info card-btn" (click)="correct()">I know!</button>
-            <button class="btn btn-light card-btn" (click)="incorrect()">Still learning</button>
+            <button class="btn btn-info card-btn" (click)="increaseCorrectGuessesCount()">I know!</button>
+            <button class="btn btn-light card-btn" (click)="increaseWrongGuessesCount()">Still learning</button>
             <button class="btn btn-success card-btn" (click)="markAsKnown()">Mark as known</button>
         </div>
     </div>

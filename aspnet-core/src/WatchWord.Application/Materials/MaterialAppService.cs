@@ -47,8 +47,8 @@ namespace WatchWord.Materials
                 throw new UserFriendlyException("Material with key " + id + " does not exist!");
             }
 
-            var account = await GetCurrentUserOrNullAsync();
-            response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, account);
+            var accountId = GetCurrentUserId();
+            response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, accountId);
 
             return response;
         }

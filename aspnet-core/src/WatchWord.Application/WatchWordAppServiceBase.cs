@@ -23,6 +23,18 @@ namespace WatchWord
             LocalizationSourceName = WatchWordConsts.LocalizationSourceName;
         }
 
+        protected virtual long GetCurrentUserId()
+        {
+            try
+            {
+                return AbpSession.GetUserId();
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         protected virtual Task<User> GetCurrentUserAsync()
         {
             var user = UserManager.FindByIdAsync(AbpSession.GetUserId().ToString());
