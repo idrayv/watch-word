@@ -120,15 +120,15 @@
 
 <div *ngIf="material.words">
     <input id="learnWords" type="checkbox" [checked]="filtration.showLearnWords"
-           (change)="filtration = filtration.invertLearnWord()">
+           (change)="invertLearnWord()">
     <label for="learnWords" class="filter-label">Display learn words</label>
 
     <input id="knownWords" type="checkbox" [checked]="filtration.showKnownWords"
-           (change)="filtration = filtration.invertKnownWord()">
+           (change)="invertKnownWord()">
     <label for="knownWords" class="filter-label">Display known words</label>
 
     <input id="unsignedWords" type="checkbox" [checked]="filtration.showUnsignedWords"
-           (change)="filtration = filtration.invertUnsignedWord()">
+           (change)="invertUnsignedWord()">
     <label for="unsignedWords" class="filter-label">Display unsigned words</label>
 </div>
 
