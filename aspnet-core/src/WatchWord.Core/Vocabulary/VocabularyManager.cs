@@ -96,7 +96,7 @@ namespace WatchWord.Vocabulary
         {
             var vocabWords = await _vocabWordsRepository.GetAll()
             .Where(v => v.OwnerId == accountId)
-            .Select(SimplifyVocabWord()).ToListAsync();
+            .Select(v => SimplifyVocabWord(v)).ToListAsync();
 
             return vocabWords;
         }
@@ -105,37 +105,31 @@ namespace WatchWord.Vocabulary
         {
             var vocabWords = await _vocabWordsRepository.GetAll()
             .Where(v => v.OwnerId == accountId && v.Type == VocabType.KnownWord)
-            .Select(SimplifyVocabWord()).ToListAsync();
+            .Select(v => SimplifyVocabWord(v)).ToListAsync();
 
             return vocabWords;
         }
 
         public async Task<List<LearnWord>> GetLearnWordsAsync(long accountId)
         {
-            var query = from vocab in _vocabWordsRepository.GetAll()
-                        .Where(v => v.OwnerId == accountId && v.Type == VocabType.LearnWord)
-                        join stat in _vocabWordStatisticsRepository.GetAll()
-                        .Where(s => s.OwnerId == accountId)
-                        on vocab.Word equals stat.Word into learn
-                        from stats in learn.DefaultIfEmpty()
-                        select new
-                        {
-                            vocab.Id,
-                            vocab.Word,
-                            vocab.Translation,
-                            stats
-                        };
+            var query = _vocabWordsRepository.GetAll()
+                .Where(v => v.OwnerId == accountId && v.Type == VocabType.LearnWord)
+                .GroupJoin(_vocabWordStatisticsRepository.GetAll(),
+                    vocab => new { vocab.Word, vocab.OwnerId },
+                    stats => new { stats.Word, stats.OwnerId },
+                    (vocab, stats) => new { vocab, stats });
 
-            var vocabWords = (await query.ToListAsync()).Select(v => new LearnWord
-            {
-                Id = v.Id,
-                Word = v.Word,
-                Translation = v.Translation,
-                CorrectGuessesCount = v.stats?.CorrectGuesses ?? 0,
-                WrongGuessesCount = v.stats?.WrongGuesses ?? 0,
-            }).ToList();
+            var learnWordsQuery = query.SelectMany(e => e.stats.DefaultIfEmpty(), (e, stat) =>
+                new LearnWord
+                {
+                    Id = e.vocab.Id,
+                    Word = e.vocab.Word,
+                    Translation = e.vocab.Translation,
+                    CorrectGuessesCount = stat == null ? 0 : stat.CorrectGuesses,
+                    WrongGuessesCount = stat == null ? 0 : stat.WrongGuesses
+                });
 
-            return vocabWords;
+            return await learnWordsQuery.ToListAsync();
         }
 
         // TODO: Optimize for SQL: use material id instead of words list
@@ -148,7 +142,7 @@ namespace WatchWord.Vocabulary
             var vocabWords = await _vocabWordsRepository
                 .GetAll()
                 .Where(v => v.OwnerId == accountId && arrayOfWords.Contains(v.Word))
-                .Select(SimplifyVocabWord()).ToListAsync();
+                .Select(v => SimplifyVocabWord(v)).ToListAsync();
 
             vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
                 .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));
@@ -243,9 +237,9 @@ namespace WatchWord.Vocabulary
 
         #region PRIVATE
 
-        private Expression<Func<VocabWord, VocabWord>> SimplifyVocabWord()
+        private VocabWord SimplifyVocabWord(VocabWord v)
         {
-            return (v) => new VocabWord
+            return new VocabWord
             {
                 Id = v.Id,
                 Translation = v.Translation,

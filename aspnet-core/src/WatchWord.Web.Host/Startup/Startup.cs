@@ -40,6 +40,10 @@ namespace WatchWord.Web.Host.Startup
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+#if DEBUG
+            services.AddMiniProfiler().AddEntityFramework();
+#endif
+
             services.AddResponseCompression();
 
             // MVC
@@ -100,6 +104,10 @@ namespace WatchWord.Web.Host.Startup
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+#if DEBUG
+            app.UseMiniProfiler();
+#endif
+
             app.UseResponseCompression();
 
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.

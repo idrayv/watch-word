@@ -12,7 +12,6 @@ namespace WatchWord.EntityFrameworkCore
         public WatchWordDbContext(DbContextOptions<WatchWordDbContext> options)
             : base(options)
         {
-            Database.Migrate();
             Database.SetCommandTimeout(120);
         }
 
