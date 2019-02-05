@@ -48,7 +48,7 @@ namespace WatchWord.Materials
             }
 
             var accountId = GetCurrentUserId();
-            response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(response.Material.Words, accountId);
+            response.VocabWords = await _vocabularyService.GetSpecifiedVocabWordsAsync(id, accountId);
 
             return response;
         }
@@ -104,6 +104,8 @@ namespace WatchWord.Materials
             }
 
             // TODO: Separate Insert and Update
+            // TODO: Save only distinct words
+            // TODO: Save total words count as Material field
             await _materialsRepository.InsertOrUpdateAsync(material);
             await CurrentUnitOfWork.SaveChangesAsync();
 

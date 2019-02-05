@@ -17,6 +17,8 @@ namespace WatchWord.Vocabulary
 
         Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, long accountId);
 
+        Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(long materialId, long accountId);
+
         Task IncreaseCorrectGuessesCountAsync(string word, long accountId);
 
         Task IncreaseWrongGuessesCountAsync(string word, long accountId);

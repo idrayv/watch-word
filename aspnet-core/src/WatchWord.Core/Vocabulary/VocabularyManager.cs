@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +12,18 @@ namespace WatchWord.Vocabulary
 {
     public class VocabularyService : AbpServiceBase, IVocabularyService, ITransientDependency
     {
+        private readonly IRepository<Word, long> _wordRepository;
         private readonly IRepository<VocabWord, long> _vocabWordsRepository;
         private readonly IRepository<VocabWordStatistic, long> _vocabWordStatisticsRepository;
 
         /// <summary>Initializes a new instance of the <see cref="VocabularyService"/> class.</summary>
         /// <param name="vocabWordsRepository">Vocabulary words repository.</param>
         public VocabularyService(
+            IRepository<Word, long> wordRepository,
             IRepository<VocabWord, long> vocabWordsRepository,
             IRepository<VocabWordStatistic, long> vocabWordStatisticsRepository)
         {
+            _wordRepository = wordRepository;
             _vocabWordsRepository = vocabWordsRepository;
             _vocabWordStatisticsRepository = vocabWordStatisticsRepository;
         }
@@ -132,7 +133,6 @@ namespace WatchWord.Vocabulary
             return await learnWordsQuery.ToListAsync();
         }
 
-        // TODO: Optimize for SQL: use material id instead of words list
         public async Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(ICollection<Word> materialWords, long accountId)
         {
             var arrayOfWords = materialWords == null
@@ -145,6 +145,28 @@ namespace WatchWord.Vocabulary
                 .Select(v => SimplifyVocabWord(v)).ToListAsync();
 
             vocabWords.AddRange(arrayOfWords.Except(vocabWords.Select(n => n.Word))
+                .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));
+
+            return vocabWords.OrderBy(w => w.Type);
+        }
+
+        // TODO: Return Distinct
+        public async Task<IEnumerable<VocabWord>> GetSpecifiedVocabWordsAsync(long materialId, long accountId)
+        {
+            var vocabWords = await _vocabWordsRepository.GetAll()
+                .Where(v => v.OwnerId == accountId).Join(
+                    _wordRepository.GetAll().Where(w => w.MaterialId == materialId),
+                    v => v.Word,
+                    w => w.TheWord,
+                    (v, w) => SimplifyVocabWord(v)
+            ).ToListAsync();
+
+            var materialWords = await _wordRepository.GetAll()
+                .Where(w => w.MaterialId == materialId)
+                .Select(w => w.TheWord)
+                .ToListAsync();
+                
+            vocabWords.AddRange(materialWords.Except(vocabWords.Select(n => n.Word))
                 .Select(w => new VocabWord { Type = VocabType.UnsignedWord, Word = w }));
 
             return vocabWords.OrderBy(w => w.Type);
