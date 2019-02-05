@@ -10,6 +10,7 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { Word, VocabWord, MaterialDto, VocabularyServiceProxy } from 'shared/service-proxies/service-proxies';
 import { MaterialServiceProxy, FavoriteMaterialServiceProxy } from 'shared/service-proxies/service-proxies';
 import { AppEnums } from '@shared/AppEnums';
+import { runInThisContext } from 'vm';
 
 @Component({
   templateUrl: 'material.template.html'
@@ -175,6 +176,24 @@ export class MaterialComponent extends AppComponentBase implements OnInit, OnDes
     this.favoriteMaterialsService.delete(this.material.id)
       .finally(() => abp.ui.clearBusy())
       .subscribe(resp => this.isFavorite = !this.isFavorite);
+  }
+
+  public invertLearnWord(): void {
+    const newFiltration = this.filtration.clone();
+    newFiltration.showLearnWords = !newFiltration.showLearnWords;
+    this.filtration = newFiltration;
+  }
+
+  public invertKnownWord(): void {
+    const newFiltration = this.filtration.clone();
+    newFiltration.showKnownWords = !newFiltration.showKnownWords;
+    this.filtration = newFiltration;
+  }
+
+  public invertUnsignedWord(): void {
+    const newFiltration = this.filtration.clone();
+    newFiltration.showUnsignedWords = !newFiltration.showUnsignedWords;
+    this.filtration = newFiltration;
   }
 
   private onRouteChanged(param: string): void {
